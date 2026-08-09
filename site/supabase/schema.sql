@@ -22,6 +22,7 @@ create table if not exists jazn.menu_items (
   name         text not null,
   note         text,                            -- المعالجة والإيحاءات (اختياري)
   price        numeric(6,2) not null,
+  image_url    text,                            -- صورة الصنف، يرفعها المدير من اللوحة
   is_available boolean not null default true,   -- إظهار/إخفاء الصنف
   sort_order   integer not null default 0,
   created_at   timestamptz not null default now()
@@ -116,6 +117,27 @@ insert into jazn.site_settings (key, value) values
   ('google_rating', '{"rating": 4.8, "count": 440, "url": "https://maps.app.goo.gl/vQsRaDumDRTAAFv6A"}'::jsonb)
 on conflict (key) do nothing;
 
+-- ─── تخزين صور الأصناف ───
+-- سطل مستقل لجَازن، وسياساته مقيدة بـ bucket_id فلا تمس أي سطل آخر
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('jazn-menu', 'jazn-menu', true, 5242880, array['image/webp','image/jpeg','image/png','image/avif'])
+on conflict (id) do nothing;
+
+drop policy if exists jazn_menu_read   on storage.objects;
+drop policy if exists jazn_menu_insert on storage.objects;
+drop policy if exists jazn_menu_update on storage.objects;
+drop policy if exists jazn_menu_delete on storage.objects;
+
+create policy jazn_menu_read on storage.objects for select
+  using (bucket_id = 'jazn-menu');
+create policy jazn_menu_insert on storage.objects for insert to authenticated
+  with check (bucket_id = 'jazn-menu' and jazn.is_staff());
+create policy jazn_menu_update on storage.objects for update to authenticated
+  using (bucket_id = 'jazn-menu' and jazn.is_staff())
+  with check (bucket_id = 'jazn-menu' and jazn.is_staff());
+create policy jazn_menu_delete on storage.objects for delete to authenticated
+  using (bucket_id = 'jazn-menu' and jazn.is_staff());
+
 -- ─── تقييم قوقل ───
 -- القيمة أعلاه ثابتة، والتحديث الآلي اليومي عبر SerpApi منفصل في
 -- rating-cron.optional.sql ولا يُنفَّذ إلا بعد توفر مفتاح SerpApi.
@@ -167,3 +189,18 @@ insert into jazn.menu_items (category, name, note, price, sort_order) values
   ('sweets', 'كرانشي', null, 9, 5),
   -- متجر جَازن
   ('store', 'كوب اسبريسو', null, 79, 1);
+
+-- ─── ربط كل صنف بصورته الحالية في المستودع ───
+-- المدير يقدر يستبدلها من اللوحة بعدين، وقتها تصير الصورة في سطل jazn-menu
+update jazn.menu_items set image_url = '/assets/img/menu/p' || lpad((sort_order - 1)::text, 2, '0') || '.webp' where category = 'espresso';
+update jazn.menu_items set image_url = '/assets/img/menu/p' || lpad((sort_order + 6)::text, 2, '0') || '.webp'  where category = 'freddo';
+update jazn.menu_items set image_url = '/assets/img/menu/p' || lpad((sort_order + 12)::text, 2, '0') || '.webp' where category = 'v60';
+update jazn.menu_items set image_url = '/assets/img/menu/p19.webp' where category = 'milk';
+update jazn.menu_items set image_url = '/assets/img/menu/p25.webp' where category = 'store';
+update jazn.menu_items set image_url = case sort_order
+  when 1 then '/assets/img/menu/p22.webp'
+  when 2 then '/assets/img/menu/p23.webp'
+  when 3 then '/assets/img/menu/p24.webp'
+  when 4 then '/assets/img/menu/p20.webp'
+  when 5 then '/assets/img/menu/p21.webp'
+end where category = 'sweets';

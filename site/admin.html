@@ -15,7 +15,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png" />
   <link rel="apple-touch-icon" href="assets/img/favicon-180.png" />
   <link rel="stylesheet" href="assets/css/fonts.css?v=1" />
-  <link rel="stylesheet" href="assets/css/admin.css?v=2" />
+  <link rel="stylesheet" href="assets/css/admin.css?v=3" />
 </head>
 <body class="adm">
 
@@ -100,6 +100,23 @@
       </header>
 
       <form id="itemForm" novalidate>
+        <div class="adm-field adm-imgfield">
+          <span class="adm-imgfield__label">صورة الصنف</span>
+          <div class="adm-imgfield__row">
+            <div class="adm-imgpreview" id="imgPreview">
+              <img id="imgPreviewImg" alt="" hidden />
+              <span class="adm-imgpreview__empty" id="imgPreviewEmpty">بلا صورة</span>
+              <span class="adm-imgpreview__busy" id="imgBusy" hidden>جارٍ الرفع…</span>
+            </div>
+            <div class="adm-imgfield__actions">
+              <input id="fImageFile" type="file" accept="image/*" hidden />
+              <button class="adm-btn adm-btn--ghost" type="button" id="imgPickBtn">اختر صورة</button>
+              <button class="adm-btn adm-btn--ghost" type="button" id="imgClearBtn" hidden>إزالة الصورة</button>
+              <span class="adm-hint">تُصغَّر تلقائياً وتُحفظ بصيغة WebP</span>
+            </div>
+          </div>
+        </div>
+
         <div class="adm-field">
           <label for="fName">اسم الصنف <b>*</b></label>
           <input id="fName" type="text" required maxlength="60" />
@@ -225,6 +242,6 @@
   <div class="adm-toasts" id="toasts" aria-live="polite"></div>
 
   <script src="assets/js/config.js?v=2"></script>
-  <script type="module" src="assets/js/admin.js?v=2"></script>
+  <script type="module" src="assets/js/admin.js?v=3"></script>
 </body>
 </html>

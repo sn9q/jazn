@@ -795,13 +795,6 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .mp-item__price .sar { color: var(--ink-soft); }
 
 /* الحلويات: بطاقات بصور */
-.mp-sweets {
-  margin-top: 18px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(14px, 2vw, 22px);
-  list-style: none;
-}
 
 .mp-foot {
   padding-block: 36px 60px;
@@ -846,7 +839,6 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .store-copy { padding: 22px; padding-top: 0; }
   .footer-top { grid-template-columns: 1fr 1fr; }
   .footer-brand { grid-column: 1 / -1; }
-  .mp-sweets { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
@@ -857,5 +849,4 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .sweet-grid { grid-template-columns: repeat(2, 1fr); }
   .sign { padding-inline: clamp(62px, 20vw, 104px); }
   .place-gallery { grid-template-columns: repeat(2, 1fr); }
-  .mp-sweets { grid-template-columns: 1fr; }
 }

@@ -185,6 +185,7 @@
             <input type="checkbox" data-act="toggle" data-id="${it.id}" ${it.is_available ? "checked" : ""} />
             <i></i>
           </label>
+          <img class="adm-item__thumb" src="${esc(it.image_url || "/assets/img/logo-badge.webp")}" alt="" loading="lazy" decoding="async" width="44" height="44">
           <div class="adm-item__info">
             <div class="adm-item__name">
               ${esc(it.name)}
@@ -271,9 +272,96 @@
     } catch (err) { toast("تعذر تغيير الترتيب: " + err.message, true); }
   }
 
+  /* ─── صور الأصناف ───
+     الصورة تُصغَّر وتُحوَّل WebP في المتصفح قبل الرفع، عشان صورة الجوال
+     الكبيرة ما تثقّل صفحة المنيو على الطاولة. تُرفع في bucket «jazn-menu»
+     المخصص لجَازن وحده، وسياساته تمنع أي كتابة خارجه. */
+  const BUCKET = "jazn-menu";
+  const IMG_MAX = 900;      // أطول ضلع بالبكسل
+  const IMG_QUALITY = 0.85;
+
+  const isUploaded = (url) => typeof url === "string" && url.includes(`/${BUCKET}/`);
+
+  const shrinkToWebp = (file) => new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, IMG_MAX / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * scale);
+      c.height = Math.round(img.height * scale);
+      const ctx = c.getContext("2d");
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob((b) => (b ? resolve(b) : reject(new Error("تعذر تجهيز الصورة"))), "image/webp", IMG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("الملف ليس صورة صالحة")); };
+    img.src = url;
+  });
+
+  const storage = {
+    async upload(blob) {
+      const path = `items/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+      const { error } = await supabase.storage.from(BUCKET)
+        .upload(path, blob, { contentType: "image/webp", cacheControl: "31536000" });
+      if (error) throw new Error(error.message);
+      return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+    },
+    async remove(url) {
+      if (!isUploaded(url)) return;             // صور المستودع الأصلية لا تُحذف
+      const path = url.split(`/${BUCKET}/`)[1];
+      if (path) await supabase.storage.from(BUCKET).remove([decodeURIComponent(path)]);
+    },
+  };
+
   /* ─── نافذة الإضافة/التعديل ─── */
   const modal = $("#itemModal");
   let editing = null;
+  let imageUrl = null;        // الصورة الحالية في النافذة
+  let imageWasReplaced = null; // الصورة القديمة اللي تُحذف بعد حفظ ناجح
+
+  function paintImage() {
+    const img = $("#imgPreviewImg");
+    const empty = $("#imgPreviewEmpty");
+    if (imageUrl) {
+      img.src = imageUrl; img.hidden = false; empty.hidden = true;
+      $("#imgClearBtn").hidden = false;
+    } else {
+      img.removeAttribute("src"); img.hidden = true; empty.hidden = false;
+      $("#imgClearBtn").hidden = true;
+    }
+  }
+
+  $("#imgPickBtn").addEventListener("click", () => $("#fImageFile").click());
+
+  $("#fImageFile").addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = "";                        // عشان اختيار نفس الملف مرة ثانية يشتغل
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return toast("اختر ملف صورة", true);
+
+    $("#imgBusy").hidden = false;
+    $("#imgPickBtn").disabled = true;
+    try {
+      const blob = await shrinkToWebp(file);
+      const url = await storage.upload(blob);
+      if (isUploaded(imageUrl) && !imageWasReplaced) imageWasReplaced = imageUrl;
+      imageUrl = url;
+      paintImage();
+    } catch (ex) {
+      toast("تعذر رفع الصورة: " + ex.message, true);
+    } finally {
+      $("#imgBusy").hidden = true;
+      $("#imgPickBtn").disabled = false;
+    }
+  });
+
+  $("#imgClearBtn").addEventListener("click", () => {
+    if (isUploaded(imageUrl) && !imageWasReplaced) imageWasReplaced = imageUrl;
+    imageUrl = null;
+    paintImage();
+  });
 
   function openModal(it) {
     editing = it || null;
@@ -283,11 +371,22 @@
     $("#fNote").value = (it && it.note) || "";
     $("#fPrice").value = it && it.price != null ? it.price : "";
     $("#fAvailable").checked = it ? !!it.is_available : true;
+    imageUrl = (it && it.image_url) || null;
+    imageWasReplaced = null;
+    paintImage();
     $("#formError").hidden = true;
     modal.hidden = false;
     $("#fName").focus();
   }
-  const closeModal = () => { modal.hidden = true; editing = null; };
+
+  const closeModal = async () => {
+    /* أُلغي التعديل بعد رفع صورة: تُحذف المرفوعة الجديدة لا القديمة */
+    if (isUploaded(imageUrl) && imageUrl !== (editing && editing.image_url)) {
+      await storage.remove(imageUrl).catch(() => {});
+    }
+    modal.hidden = true;
+    editing = null; imageUrl = null; imageWasReplaced = null;
+  };
 
   $("#addBtn").addEventListener("click", () => openModal(null));
 
@@ -308,6 +407,7 @@
       note: $("#fNote").value.trim() || null,
       price,
       is_available: $("#fAvailable").checked,
+      image_url: imageUrl,
     };
 
     const btn = $("#saveBtn");
@@ -321,7 +421,10 @@
         await db.insert({ ...row, sort_order: maxSort + 1 });
         toast("تمت إضافة الصنف");
       }
-      closeModal();
+      /* الصورة القديمة تُحذف بعد نجاح الحفظ فقط، عشان لا نخسرها لو فشل */
+      if (imageWasReplaced) await storage.remove(imageWasReplaced).catch(() => {});
+      imageUrl = null; imageWasReplaced = null;
+      await closeModal();
       await refresh();
     } catch (ex) {
       fail("تعذر الحفظ: " + ex.message);
@@ -341,7 +444,10 @@
   $("#confirmDeleteBtn").addEventListener("click", async () => {
     if (!deleting) return;
     try {
+      const orphan = deleting.image_url;
       await db.remove(deleting.id);
+      /* صورة الصنف المحذوف ما لها مكان، تُشال من التخزين حتى لا تتراكم */
+      await storage.remove(orphan).catch(() => {});
       toast("تم حذف الصنف");
       delModal.hidden = true; deleting = null;
       await refresh();
@@ -489,8 +595,10 @@
 
   /* إغلاق النوافذ */
   const closeAll = () => {
-    modal.hidden = true; delModal.hidden = true; staffModal.hidden = true; seModal.hidden = true;
-    editing = deleting = seEditing = null;
+    /* نافذة الصنف لها إغلاق خاص: ينظف أي صورة رُفعت ثم أُلغي التعديل */
+    if (!modal.hidden) { closeModal(); }
+    delModal.hidden = true; staffModal.hidden = true; seModal.hidden = true;
+    deleting = seEditing = null;
   };
   $$("[data-close]").forEach((el) => el.addEventListener("click", closeAll));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(); });
