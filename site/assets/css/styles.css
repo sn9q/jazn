@@ -64,7 +64,8 @@ body {
   overflow-x: hidden;
 }
 
-img { max-width: 100%; display: block; }
+/* height:auto إلزامي: بدونه تفوز سمة height في الـHTML على aspect-ratio فتمتد الصور */
+img { max-width: 100%; height: auto; display: block; }
 
 a { color: inherit; }
 
@@ -263,14 +264,12 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   margin-top: 7px;
   padding-inline-start: 2px;
 }
+/* حروف «جَازن» مقصوصة من لوقوهم نفسه، لا خط نصي، عشان تطابق اللافتة حرفاً بحرف */
 .sign-ar {
-  display: flex;
-  align-items: center;
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: clamp(2rem, 6vw, 3.3rem);
-  line-height: 1;
-  padding-bottom: 0.12em; /* موازنة بصرية لهبوط النسخ */
+  align-self: center;
+  width: auto;
+  height: clamp(2.6rem, 7.6vw, 3.9rem);
+  /* نسبة ارتفاعها للاتيني مأخوذة من اللافتة الحقيقية في صورة الواجهة */
 }
 
 /* اشتعال اللافتة: ومضات فلورسنت قصيرة ثم ثبات */
