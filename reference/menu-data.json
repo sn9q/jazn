@@ -1,0 +1,170 @@
+{
+ "الاسبريسو": [
+  {
+   "name": "اثيوبيا- يرغاتشيف",
+   "desc": "المعالجة:مجففة الإيحاءات : ازهار - خوخ -حلاوة - توت ازرق",
+   "price": "12.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/52128e4461fedb8fe1d20e68802ecfbd/a2dDDTczScPjjUTthTYUnp6bvQERs0KLrPHQ4cXeY2mHlh8qTwA0fN8zclNQ47MF841HgWzddX6AcnPjyVQwDIz8ZKOUxEDEbk5dOSLu73dfmZL6Oayt0LgbhA2NYUEAavvyWlDmy0Q7ruS9rH7Y8X.jpeg"
+  },
+  {
+   "name": "كولومبيا - كاتورا",
+   "desc": "المعالجة: تجفيف مطول الإيحاءات : توفي - فواكة حمراء - عنب",
+   "price": "12.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/ab8e9a62da39a66c42c5ead22c74551a/GwUx4kiYR51vA1KRQIN684f6cPvL2xQUYfAQ1FuGz4rrhpQrHFtDKxxWlcK8CsPZxUaEEzWuCxI8biQ2M6Ay9vwHl5IzvHgDy1UdghrY8Awr5Li2G6zviLPWF9e1nMpCt8URYWpqfqCr0nZgIaojnL.jpeg"
+  },
+  {
+   "name": "اليمن - بلقيس",
+   "desc": "المعالجة:مجفف لاهوائي الإيحاءات : توت - برتقال - حلاوه",
+   "price": "17.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/3a22690254654771c5b0c8a4d82be80b/zGdIYsjTeH3NEVUZ7lLplK6IXabYgjWEpJBnhtJyceeTjCGly0ZhYjael4vyDKsLYZbiYtsWvMFNeUsvpGOcaFwmgE6RwJMC3J2aFLrqPUOx6u7JG9JB4tLcVipADoC2ZjnQJ98q3zFUCgDQxrsK36.jpeg"
+  },
+  {
+   "name": "عنب & شمام",
+   "desc": "المعالجة:تخمير اللاهوائي الإيحاءات : شمام - عنب - عسل",
+   "price": "16.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/e121c7a96979e8755f4495bfe845d612/FY05q0E376tzfwkqfWA7HbYc9fYKzotWeeqfGSgPSsIgt4VqY74TPtITIRnwOzvvxUH4FsZd0AY68FTl1anX9aMfI12yet5HBbgKTXxr0VGqg9YvYCqQPJuKLr2pa8AcX361Nb7Nxtf138jjTxjenM.jpeg"
+  },
+  {
+   "name": "مانجو",
+   "desc": "المعالجة:تخمير اللاهوائي الإيحاءات : مانجو - توت ازرق - كراميل",
+   "price": "16.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/e80f133a018e460bb704a79c3ed2de89/JKOZJMZO01J47hd5HlKvzvNAzREdPDyjCWMhgJRe9QGRn5lgy3g8Dq5YtprbY11NC5w3KUcXvcLx8WOzgCA5s5CSeMIRuOdCydEDxdKcjCYF8MjnRkA1nFmhliQ5b1AAme74Vivh3hOooG6I4nhrAu.jpeg"
+  },
+  {
+   "name": "كرز",
+   "desc": "المعالجة: تنقيع الإيحاءات : كرز - عسل - مستكة",
+   "price": "16.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/c5a2a1f2a1aef77a31943c09ac29ce7d/oWLHjBWlqt5RIGMDfV2fARo9sVrqbcgHzkaJSbiQ1NEHWZxmvhyqZkkHJGaM9hi5FnsX9VA3RPqinIV4m4uE6aD8HJaTc9tDV3SmWHS2Z0DJ2E5WR8DCOLiSUte2nqZhDQvWuNu3WEQpnobwVxiBMI.jpeg"
+  },
+  {
+   "name": "امريكانو",
+   "desc": "",
+   "price": "13.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/409e1221141b1569bb54b50d01df837b/w78VNTep7Ri8aoKJsKJXWLGTFe5IOtsubQ4YiFCE0WA2lPWDcrUuJYoqp408ZQmMUNozGCvQzKyAQmLdufrQ5pi09rDFKTortdB3HSypuyLoTO1TinGeVeMcqU6dPcuDAfQDseCODgR9P7hnAGfiED.jpeg"
+  }
+ ],
+ "اسبريسو فريدو": [
+  {
+   "name": "اثيوبيا- يرغاتشيف",
+   "desc": "المعالجة:مجففة الإيحاءات : ازهار - خوخ -حلاوة - توت ازرق",
+   "price": "13.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/5a5ab01b4e4aedcff05b6ef58b391b58/cCIsRzTnMcPT69CMOlLSwYL7WkHVGzZqaXYgKBfqshlsdIDLOWCdPY6obBMpCH5brhuE9REjJ8EnUnNoZR5s1DKM5KAm13P2mA0lwZR9iW3Korh6D1WEmUQVuL2LKxaDyMRNidwFrOvouNrdr98iEQ.jpeg"
+  },
+  {
+   "name": "كولومبيا- كاتورا",
+   "desc": "المعالجة: تجفيف مطول الإيحاءات : توفي - فواكة حمراء - عنب",
+   "price": "13.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/24b1db77922cdb3591b2095e5aeedb88/t74DYQxg8tZNkuC22moR0LoskO8jGgHbklfwP1ihxBGYgZFlA0AWjAczI64uW5HkjWraGQGJsseKcxPXQo2UmVPFT4Pdk1QeLb05wRKkR1Lexwie1QgHP2f9jtiimBzcsFcbkgeDU42jBaAG1fbSV7.jpeg"
+  },
+  {
+   "name": "اليمن - بلقيس",
+   "desc": "المعالجة:مجفف لاهوائي الإيحاءات : توت - برتقال - حلاوه",
+   "price": "18.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/459887e9e7233fe0c1f9901ddd33253c/j4DVoJirCbXMlmcdm7JuYDGx0MhnMpfXxbnKsNv7kZ3QEqWjrdFmfLXzWxprdsh5F5iwIQRIuqCR8oUW1DJcpuYM8Wb4GWZijPwQuKcC7lZKxYOtUku2K6rJ5LOp88MzhutXNJhqqFdesXB7zfkXJh.jpeg"
+  },
+  {
+   "name": "عنب & شمام",
+   "desc": "المعالجة:تخمير اللاهوائي الإيحاءات : شمام - عنب - عسل",
+   "price": "17.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/a8950325827acfe4f86e00d654949cda/FneT2gjk9IR1geDvqGmyDiwcE9vfGfAPEAiWasuWdVv43ZCjiSU2FiDMu5DdNNTmLxiCZ5w7SUyihZufdiOw4G6VjIN4RbmYlHZ80x8BtdP71SkKtmJ1KudGCoNjCnuIVkqW8m2unt8EvBvlkSyNBi.jpeg"
+  },
+  {
+   "name": "مانجو",
+   "desc": "المعالجة:تخمير اللاهوائي الإيحاءات : مانجو - توت ازرق - كراميل",
+   "price": "17.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/7a4141a15bf64d1aff42e793bce87e3e/tf4teaTMaVGLFJwGv1VcrtALwjOVXeD9xCuSri8g8iG1IBH4f7ZxD1Gg9HJdmcIbOw9lhIUyESaQrl0NcaYw2z8iHkQnkbeuhsIkfiiGO9gMQoyygIJJ4yaFAKF7mVyBREHhGagBJe6k3dKrtIIAAG.jpeg"
+  },
+  {
+   "name": "كرز",
+   "desc": "المعالجة: تنقيع الإيحاءات : كرز - عسل - مستكة",
+   "price": "17.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/c603ddb66bcc84af229f40e7c2658d9f/uAQxkdFRLUJ5ywPSOzxDO9x0jwAycI7Ex72hy0p561eU9TDDGEFrdlXbJjTXrBDO5OYE16H5YlLO9zWmfMdfljwMukhKsgsyYyDExnB0tz75vSYQ1FChTSIF9qIVGRCmVj7KxkucD2gqFYIGUHHWy4.jpeg"
+  }
+ ],
+ "القهوة المقطرة": [
+  {
+   "name": "V60 ICE - HOT",
+   "desc": "اثيوبيا- يرغاتشيف المعالجة:مجففة الإيحاءات : ازهار - خوخ -حلاوة - توت ازرق",
+   "price": "18.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/eea76b6935c16ae10d598aaaba634707/NDOGAmh818tiIMdZk2pXbTsWU0glgI9CUDv5e2AYHFX5difvXqPfVaYkyMoMQc6DNTxEdWO3JQfKQoxMyTUNVPxKfvKTv1zzSCReNwuaKlqrR5fUkwOf314qgHZoyty5EU70xKCZBJOzm4MRNiBaKh.jpeg"
+  },
+  {
+   "name": "V60 ICE -HOT",
+   "desc": "كولومبيا - كاتورا المعالجة: تجفيف مطول الإيحاءات : توفي - فواكة حمراء - عنب 19﷼",
+   "price": "19.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/1a5d2ba35a175ec2c3ea9af449bd61f9/K6lNVS7vlwRdCEP4FHi0o2ofmxHm9FhBYkt2Vns7zaxxzdhAvgJSjEKyc7KzkfqYlkl4TRFo3SWzja8ZIv2VLXH2dx9gR9NfkI2ITBmUQmkrgfspLwo1UvkCbylVlwVIknlDg642P1cGWPjsEhjcdW.jpeg"
+  },
+  {
+   "name": "V60 ICE -HOT",
+   "desc": "اليمن - بلقيس المعالجة:مجفف لاهوائي الإيحاءات : توت - برتقال - حلاوه",
+   "price": "25.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/0f982b04ce471995b5ebab64ff0cfd3e/5KHJP6pfIpyjOvHgBhOaItnb07uEUlDVgyEr7iwBrQHhyFvPTOVJqLevr6GAvyaQTnlmianQY9q3uq8MGFUaLQErOKSUUlrvdsz4XyAQHAdg2NK3ukwwW7GH6AzsKIOxq9ZD3SkciXLUJNZRRFTsC3.jpeg"
+  },
+  {
+   "name": "V60 ICE -HOT",
+   "desc": "عنب & شمام المعالجة:تخمير اللاهوائي الإيحاءات : شمام - عنب - عسل",
+   "price": "24.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/8879a07d66c8715091c47e75aee3aded/UvPbNpgNWFLYWA4hNPE5MzFEyczEw1VXhQ35eqEiJshbhO8K9tIYLviY2Lj08cIDr1yLlMswaINgOZSHtqu9EtYTRUgiUmgTy4VFQeDRCI0oCo3GtBAE2wSTCHKWjY6eG0UrELRpv6rEhsTRetSRAQ.jpeg"
+  },
+  {
+   "name": "V60 ICE -HOT",
+   "desc": "مانجو المعالجة:تخمير اللاهوائي الإيحاءات : مانجو - توت ازرق - كراميل",
+   "price": "24.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/79916184555b350679dc78c0ea2c95e9/Mr10kOqPEa5bGinmF0hy6aKltvLzdZl2PQQuSxosmtUsjwSPXaILgsenBxoQjunBHqhBFdRq07C5nZoU784C3SadmFGQPGYqXstObAxS6eRcgdR0Ewzpsz5Ui3cSwDOAzLAUyXLyADxqXyfz1OJgH6.jpeg"
+  },
+  {
+   "name": "V60 ICE -HOT",
+   "desc": "كولمبيا - كرز المعالجة: تنقيع الإيحاءات : كرز - عسل - مستكة",
+   "price": "24.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/ea7fb1c942867db49f5981f6e2cb986b/mOLSxcl1X8oDMh9LQxR1XzgWjZbKHNpxOgrF2ZXjlUdPIdAFfwxT2DFbO61SCabBZZi8mIfCYEcXn2opGBumc0ez5l50T23l2O81UD355kCLGDovBVp8bWPTMuD8mg3yPfmKDfnHVssOuTt5Exak11.jpeg"
+  }
+ ],
+ "مشروبات الحليب": [
+  {
+   "name": "ماتشا",
+   "desc": "",
+   "price": "21.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/f065b2225a454ca07c4430bb213a7e45/UWtrBHYiK3Vty1YLT8LjexyTlEl5gIOO7wq5py5Xi4CXfvjt1wkJuAMwfYrMxuowIlV4Qu8be7eZwhyLyOXXM6ctNwGU3JpYZL4dYxjVQdHAUZ1vMlwuHJu8FLBha14yAxo2KuGFnqQ9i9cBzV0GRz.jpeg"
+  }
+ ],
+ "الحلويات": [
+  {
+   "name": "كوكيز",
+   "desc": "",
+   "price": "9.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/30c0e1e12e4987575e812e90236f0fc8/Ir8SnspUSVkV7HKUYgf72XVX29cljCgFSTDfW8OqPZXEdlCeGkBAf1IDuSysrG6NuWacHlpOJCvvqLC4fGm5dDk1q9fJlpG8vWk3D6uFjQ8oHd3X6koBjX7yQu6x3QIP3L8WnEryrqQQ0Ds7KRiL7a.jpeg"
+  },
+  {
+   "name": "كرانشي",
+   "desc": "",
+   "price": "9.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/20da93420dd86d43995d23c5debeb220/YlQDDbfe5hvk2zHev9zveauEf2jlY080up1s4vPjKXm2exRsLFWMr3h96PbA4gDs16bq0w2QxDFNi7XEwRmprAbwvpYbFYGpnQXcsntJM3yOc0H0XyvUcl0uwNJ22hG5Ik47Wcwa52NhBgBoDGrGtb.jpeg"
+  },
+  {
+   "name": "تشيز مدريد",
+   "desc": "",
+   "price": "23.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/07d1a535d6f2ca61a8986981bdd42b67/makPtduSggefHaz4Fn3t2QgJTAgu37rxNOQlkJY72d3SN8u2H1oF89u0M5jsOQf6WWJdhxt6t54mZ6kNTlxtNXfUslculsRGibQfUHr826HH3SziWghbqiHNPvRUw2qC8Fn83xDPttcuShF5hWE0kY.jpeg"
+  },
+  {
+   "name": "دولتشي بيكان",
+   "desc": "",
+   "price": "22.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/bc2f27f8a8172044a2f1a3f9c12e593f/CoPD2m8154BMRgoNByWIzGrIpuG4UyrbyA0CYj8s3a81GLCWSYVlcrBVwFxz0OMZx9uBiUHMx2JOcJ9rO22YyrkQf6YQYapyAkk9wPaUEl376RGdqOfHq6DVqV16crSb3u7S1TTysijQclP2lPcnbX.jpeg"
+  },
+  {
+   "name": "بودينق شوكليت",
+   "desc": "",
+   "price": "22.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/615e2c7d098f6fa9109c851cb3ea9454/XsZyuEdOIy1oRiYFhQp5k6o0huT2L0WKtCdE4102NXGpUcn8neh0guArxubTbo3b3aoUbghPoj8ZLuHSFuComwS9M9FeGXcpaBfGZ84MIdfYHhSayTecsa4k8OBfxmppXLpo8UMafUtJd58mpaGeSO.jpeg"
+  }
+ ],
+ "متجر جَازن": [
+  {
+   "name": "كوب اسبريسو",
+   "desc": "",
+   "price": "79.00",
+   "img": "https://menus.sfo3.cdn.digitaloceanspaces.com/82fc1a232f4d8e89349bd87deb835827/lhKTgrZHVgOXLFhRIaHmfuC8jVhyiNf0eT1EbVvsZTuJ3MWiG3G7vMcfcN9x95ueK1SLCxfWLBoRGTBbut6EMB24MZTjWLEVWeo7i0QaTdmLz0FH5cwNLOcbo4fVXZWHBTuDqnrB5lUqD6ljPBvhP0.jpeg"
+  }
+ ]
+}
