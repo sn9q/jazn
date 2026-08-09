@@ -8,10 +8,8 @@
 --  «مهم» بعد التنفيذ:
 --  1. Settings → API → Exposed schemas: أضف jazn إلى القائمة
 --  2. Authentication → Users → Add user:
---     الإيميل jazn.mng@jazn.local وكلمة مرور قوية
---     (الدخول في admin.html يكون باسم المستخدم jazn.mng فقط)
---  3. عبّئ YOUR_SERPAPI_KEY في دالة التقييم قبل تنفيذها، أو
---     احذف قسم التقييم الآلي كاملاً لو ما تحتاجه.
+--     الإيميل jazn@jazn.local وكلمة مرور قوية
+--     (الدخول في admin.html يكون باسم المستخدم Jazn فقط)
 -- ═══════════════════════════════════════════════════════════
 
 create schema if not exists jazn;
@@ -74,6 +72,9 @@ begin
   if length(new_password) < 8 then raise exception 'كلمة المرور 8 خانات على الأقل'; end if;
   if new_password !~ '[A-Z]' then raise exception 'كلمة المرور تحتاج حرفاً كبيراً واحداً على الأقل (A-Z)'; end if;
   if new_password !~ '[^a-zA-Z0-9]' then raise exception 'كلمة المرور تحتاج رمزاً مميزاً مثل @'; end if;
+  -- حاجز صلب: هذي الدالة تكتب في auth.users المشتركة مع سونق،
+  -- فتُمنع من لمس أي إيميل خارج نطاق jazn.local مهما كان محتوى jazn.staff
+  if lower(target_email) not like '%@jazn.local' then raise exception 'out of scope'; end if;
   select true, is_owner into target_exists, target_is_owner from jazn.staff where lower(email) = lower(target_email);
   if target_exists is null then raise exception 'target not staff'; end if;
   caller_is_owner := jazn.is_owner();
@@ -92,7 +93,7 @@ revoke all on function jazn.set_staff_password(text, text) from anon;
 grant execute on function jazn.set_staff_password(text, text) to authenticated;
 
 -- المالك أول الموظفين (email = <username>@jazn.local)
-insert into jazn.staff (email, name, is_owner) values ('jazn.mng@jazn.local', 'المدير', true) on conflict do nothing;
+insert into jazn.staff (email, name, is_owner) values ('jazn@jazn.local', 'المدير', true) on conflict do nothing;
 
 -- ─── إعدادات الموقع (تقييم قوقل) ───
 create table if not exists jazn.site_settings (
@@ -115,40 +116,9 @@ insert into jazn.site_settings (key, value) values
   ('google_rating', '{"rating": 4.8, "count": 440, "url": "https://maps.app.goo.gl/vQsRaDumDRTAAFv6A"}'::jsonb)
 on conflict (key) do nothing;
 
--- ─── التحديث الآلي اليومي لتقييم قوقل (عبر SerpApi) ───
--- الامتدادات مفعلة مسبقاً في مشروع سونق، الأسطر التالية آمنة للتكرار
-create extension if not exists http with schema extensions;
-create extension if not exists pg_cron;
-
--- استبدل YOUR_SERPAPI_KEY بمفتاحك قبل التنفيذ (placeId جَازن مضبوط)
-create or replace function jazn.refresh_google_rating()
-returns void language plpgsql security definer set search_path = jazn, extensions
-as $$
-declare j jsonb; r numeric; c int;
-begin
-  perform extensions.http_set_curlopt('CURLOPT_TIMEOUT', '25');
-  select content::jsonb into j from extensions.http_get(
-    'https://serpapi.com/search.json?engine=google_maps&type=place&hl=ar&place_id=ChIJvSp0YmrjBxYR1_CFyBOXpoY&api_key=YOUR_SERPAPI_KEY');
-  r := nullif(j->'place_results'->>'rating','')::numeric;
-  c := nullif(j->'place_results'->>'reviews','')::int;
-  if r is not null and c is not null and r between 0 and 5 then
-    update jazn.site_settings
-       set value = value || jsonb_build_object('rating', r, 'count', c),
-           updated_at = now()
-     where key = 'google_rating';
-  end if;
-end $$;
-
--- الدالة لا تستدعى من الخارج إطلاقاً (حماية رصيد SerpApi)
-revoke all on function jazn.refresh_google_rating() from public;
-revoke all on function jazn.refresh_google_rating() from anon;
-revoke all on function jazn.refresh_google_rating() from authenticated;
-
--- جدولة يومية: 03:20 UTC = 06:20 صباحاً بتوقيت السعودية
-select cron.schedule('jazn-refresh-google-rating', '20 3 * * *', 'select jazn.refresh_google_rating()');
-
--- ملاحظة: لا نحتاج جدولة keepalive جديدة،
--- جدولة supabase-keepalive حقت سونق تبقي المشروع كله نشطاً.
+-- ─── تقييم قوقل ───
+-- القيمة أعلاه ثابتة، والتحديث الآلي اليومي عبر SerpApi منفصل في
+-- rating-cron.optional.sql ولا يُنفَّذ إلا بعد توفر مفتاح SerpApi.
 
 -- ─── الحماية (RLS) على المنيو ───
 alter table jazn.menu_items enable row level security;
