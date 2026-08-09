@@ -443,6 +443,8 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-size: 1.03rem;
 }
 .place-copy p strong { color: var(--cream); font-weight: 600; }
+/* الجملة الختامية تُقفل الفقرة، فتُرفع درجة على بقية النص */
+.place-copy .place-close { margin-top: 20px; color: var(--cream); font-weight: 600; }
 
 .place-gallery {
   display: grid;
