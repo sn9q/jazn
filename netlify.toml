@@ -1,0 +1,37 @@
+# إعداد نشر Netlify — الموقع ثابت داخل مجلد site
+[build]
+  publish = "site"
+  command = ""
+
+# صفحات HTML تُقدَّم دائماً طازجة (لا كاش قديم على الجوال)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# CSS/JS مُدارة بأرقام إصدارات (?v=N) — كاش سنة كاملة، وأي تعديل يرفع الرقم
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# الصور: كاش أسبوع مع إعادة تحقق بالخلفية
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"

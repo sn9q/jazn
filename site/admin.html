@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!--
+  جَازن اسبريسو بار، لوحة تحكم المنيو
+  تسجيل دخول عبر Supabase Auth، وإدارة كاملة لأصناف المنيو (إضافة/تعديل/حذف/إخفاء/ترتيب) والموظفين.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#241811" />
+  <title>لوحة تحكم المنيو | جَازن اسبريسو بار</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png" />
+  <link rel="apple-touch-icon" href="assets/img/favicon-180.png" />
+  <link rel="stylesheet" href="assets/css/fonts.css?v=1" />
+  <link rel="stylesheet" href="assets/css/admin.css?v=1" />
+</head>
+<body class="adm">
+
+  <!-- ═══ شاشة تسجيل الدخول ═══ -->
+  <section class="adm-gate" id="loginView" hidden>
+    <div class="adm-card">
+      <img class="adm-card__logo" src="assets/img/logo-badge.webp" alt="جَازن اسبريسو بار" />
+      <h1>لوحة تحكم المنيو</h1>
+      <p class="adm-gate__lead">سجل الدخول بحساب الإدارة</p>
+
+      <form id="loginForm" novalidate>
+        <div class="adm-field">
+          <label for="loginUser">اسم المستخدم</label>
+          <input id="loginUser" type="text" autocomplete="username" required dir="ltr" />
+        </div>
+        <div class="adm-field">
+          <label for="loginPassword">كلمة المرور</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" required dir="ltr" />
+        </div>
+        <p class="adm-error" id="loginError" role="alert" hidden></p>
+        <button class="adm-btn adm-btn--primary adm-btn--block" id="loginBtn" type="submit">دخول</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══ لوحة التحكم ═══ -->
+  <section id="dashView" hidden>
+    <header class="adm-topbar">
+      <div class="adm-topbar__brand">
+        <img src="assets/img/logo-badge.webp" alt="" />
+        <div>
+          <strong>جَازن اسبريسو بار</strong>
+          <small>لوحة تحكم المنيو</small>
+        </div>
+      </div>
+      <div class="adm-topbar__actions">
+        <a class="adm-btn adm-btn--ghost" href="menu.html" target="_blank" rel="noopener">معاينة المنيو</a>
+        <button class="adm-btn adm-btn--ghost" id="staffBtn" type="button">الموظفون</button>
+        <button class="adm-btn adm-btn--ghost" id="logoutBtn" type="button">خروج</button>
+      </div>
+    </header>
+
+    <main class="adm-main">
+      <div class="adm-stats" id="stats"></div>
+
+      <div class="adm-toolbar">
+        <div class="adm-filters" id="filters" role="tablist" aria-label="تصفية الأقسام">
+          <button data-cat="all" class="is-active" role="tab" aria-selected="true">الكل</button>
+          <button data-cat="espresso" role="tab" aria-selected="false">الاسبريسو</button>
+          <button data-cat="freddo" role="tab" aria-selected="false">فريدو</button>
+          <button data-cat="v60" role="tab" aria-selected="false">V60</button>
+          <button data-cat="milk" role="tab" aria-selected="false">حليب</button>
+          <button data-cat="sweets" role="tab" aria-selected="false">حلويات</button>
+          <button data-cat="store" role="tab" aria-selected="false">المتجر</button>
+        </div>
+        <button class="adm-btn adm-btn--primary" id="addBtn" type="button">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          صنف جديد
+        </button>
+      </div>
+
+      <div class="adm-list" id="itemsList" aria-live="polite"></div>
+    </main>
+  </section>
+
+  <!-- ═══ نافذة إضافة/تعديل صنف ═══ -->
+  <div class="adm-modal" id="itemModal" hidden>
+    <div class="adm-modal__backdrop" data-close></div>
+    <div class="adm-modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="adm-modal__head">
+        <h2 id="modalTitle">صنف جديد</h2>
+        <button class="adm-modal__x" type="button" data-close aria-label="إغلاق">&times;</button>
+      </header>
+
+      <form id="itemForm" novalidate>
+        <div class="adm-field">
+          <label for="fName">اسم الصنف <b>*</b></label>
+          <input id="fName" type="text" required maxlength="60" />
+        </div>
+
+        <div class="adm-grid2">
+          <div class="adm-field">
+            <label for="fCategory">القسم <b>*</b></label>
+            <select id="fCategory" required>
+              <option value="espresso">الاسبريسو</option>
+              <option value="freddo">اسبريسو فريدو</option>
+              <option value="v60">القهوة المقطرة</option>
+              <option value="milk">مشروبات الحليب</option>
+              <option value="sweets">الحلويات</option>
+              <option value="store">متجر جَازن</option>
+            </select>
+          </div>
+          <div class="adm-field">
+            <label for="fPrice">السعر (ر.س) <b>*</b></label>
+            <input id="fPrice" type="number" inputmode="decimal" min="0" step="0.5" dir="ltr" required />
+          </div>
+        </div>
+
+        <div class="adm-field">
+          <label for="fNote">وصف صغير <span class="adm-hint">اختياري، مثل: المعالجة والإيحاءات</span></label>
+          <input id="fNote" type="text" maxlength="120" />
+        </div>
+
+        <div class="adm-switches">
+          <label class="adm-check"><input type="checkbox" id="fAvailable" checked /><span>ظاهر في المنيو</span></label>
+        </div>
+
+        <p class="adm-error" id="formError" role="alert" hidden></p>
+
+        <footer class="adm-modal__foot">
+          <button class="adm-btn adm-btn--ghost" type="button" data-close>إلغاء</button>
+          <button class="adm-btn adm-btn--primary" id="saveBtn" type="submit">حفظ</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ إدارة الموظفين ═══ -->
+  <div class="adm-modal" id="staffModal" hidden>
+    <div class="adm-modal__backdrop" data-close></div>
+    <div class="adm-modal__panel" role="dialog" aria-modal="true" aria-labelledby="staffTitle">
+      <header class="adm-modal__head">
+        <h2 id="staffTitle">الموظفون</h2>
+        <button class="adm-modal__x" type="button" data-close aria-label="إغلاق">&times;</button>
+      </header>
+
+      <p class="adm-staff__lead">الحسابات المصرح لها بتعديل المنيو:</p>
+      <div class="adm-staff__list" id="staffList" aria-live="polite"></div>
+
+      <form id="staffForm" novalidate>
+        <h3 class="adm-staff__sub">إضافة موظف</h3>
+        <div class="adm-field">
+          <label for="sName">اسم الموظف <b>*</b></label>
+          <input id="sName" type="text" required maxlength="40" autocomplete="off" />
+        </div>
+        <div class="adm-field">
+          <label for="sUser">اسم المستخدم <b>*</b> <span class="adm-hint">حروف وأرقام بدون مسافات</span></label>
+          <input id="sUser" type="text" required dir="ltr" autocomplete="off" />
+        </div>
+        <div class="adm-field">
+          <label for="sPassword">كلمة مرور مؤقتة <b>*</b> <span class="adm-hint">8 خانات فأكثر، فيها حرف كبير ورمز مثل @، أرسلها للموظف</span></label>
+          <input id="sPassword" type="text" required minlength="8" dir="ltr" autocomplete="off" />
+        </div>
+        <p class="adm-error" id="staffError" role="alert" hidden></p>
+        <footer class="adm-modal__foot">
+          <button class="adm-btn adm-btn--ghost" type="button" data-close>إغلاق</button>
+          <button class="adm-btn adm-btn--primary" id="staffSaveBtn" type="submit">إضافة</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ تعديل موظف (الاسم + كلمة المرور) ═══ -->
+  <div class="adm-modal" id="staffEditModal" hidden>
+    <div class="adm-modal__backdrop" data-close></div>
+    <div class="adm-modal__panel adm-modal__panel--sm" role="dialog" aria-modal="true" aria-labelledby="seTitle">
+      <header class="adm-modal__head">
+        <h2 id="seTitle">تعديل موظف</h2>
+        <button class="adm-modal__x" type="button" data-close aria-label="إغلاق">&times;</button>
+      </header>
+
+      <form id="staffEditForm" novalidate>
+        <p class="adm-staff__target" id="seEmailShow" dir="ltr"></p>
+        <div class="adm-field">
+          <label for="seName">الاسم</label>
+          <input id="seName" type="text" maxlength="40" autocomplete="off" />
+        </div>
+        <div class="adm-field" id="sePassField">
+          <label for="sePassword">كلمة مرور جديدة <span class="adm-hint">اتركها فارغة إذا ما تبي تغييرها. الشروط: 8 خانات، حرف كبير، رمز مثل @</span></label>
+          <input id="sePassword" type="text" minlength="8" dir="ltr" autocomplete="off" />
+        </div>
+        <p class="adm-error" id="seError" role="alert" hidden></p>
+        <footer class="adm-modal__foot">
+          <button class="adm-btn adm-btn--ghost" type="button" data-close>إلغاء</button>
+          <button class="adm-btn adm-btn--primary" id="seSaveBtn" type="submit">حفظ</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ تأكيد الحذف ═══ -->
+  <div class="adm-modal" id="deleteModal" hidden>
+    <div class="adm-modal__backdrop" data-close></div>
+    <div class="adm-modal__panel adm-modal__panel--sm" role="dialog" aria-modal="true">
+      <header class="adm-modal__head">
+        <h2>حذف الصنف</h2>
+        <button class="adm-modal__x" type="button" data-close aria-label="إغلاق">&times;</button>
+      </header>
+      <p class="adm-delete__msg">متأكد من حذف «<span id="deleteName"></span>»؟ لا يمكن التراجع.</p>
+      <footer class="adm-modal__foot">
+        <button class="adm-btn adm-btn--ghost" type="button" data-close>إلغاء</button>
+        <button class="adm-btn adm-btn--danger" id="confirmDeleteBtn" type="button">حذف نهائي</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- التنبيهات -->
+  <div class="adm-toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="assets/js/config.js?v=1"></script>
+  <script type="module" src="assets/js/admin.js?v=1"></script>
+</body>
+</html>
