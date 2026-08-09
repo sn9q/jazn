@@ -69,6 +69,17 @@ img { max-width: 100%; height: auto; display: block; }
 
 a { color: inherit; }
 
+/* رمز الريال السعودي: مُعرَّف مرة في الصفحة ويُستدعى بـ use */
+.svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sar {
+  display: inline-block;
+  font-size: 0.95em;
+  line-height: 0;
+  vertical-align: -0.03em;
+  margin-inline-start: 0.1em;
+}
+.sar svg { width: 0.9em; height: 1em; fill: currentColor; display: block; }
+
 ::selection { background: var(--amber); color: var(--night); }
 
 :focus-visible {
@@ -232,9 +243,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   --glow: 0 0 44px 6px color-mix(in srgb, var(--amber) 42%, transparent),
           0 0 120px 20px color-mix(in srgb, var(--amber) 20%, transparent);
   display: flex;
-  align-items: stretch;
-  gap: clamp(18px, 4vw, 44px);
-  padding: clamp(14px, 2.6vw, 22px) clamp(22px, 4.5vw, 46px);
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 3.4vw, 32px) clamp(52px, 11vw, 118px);
   border-radius: 10px;
   background:
     radial-gradient(85% 130% at 50% 45%, var(--amber-core) 0%, var(--amber) 55%, var(--amber-deep) 100%);
@@ -242,34 +253,10 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   color: var(--sign-red);
   user-select: none;
 }
-.sign-latin {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  line-height: 1;
-}
-.sign-latin b {
-  font-family: var(--font-latin);
-  font-weight: 500;
-  font-size: clamp(2rem, 6vw, 3.4rem);
-  letter-spacing: 0.06em;
-}
-.sign-latin small {
-  font-family: var(--font-latin);
-  font-weight: 400;
-  font-size: clamp(0.72rem, 1.6vw, 0.95rem);
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  margin-top: 7px;
-  padding-inline-start: 2px;
-}
-/* حروف «جَازن» مقصوصة من لوقوهم نفسه، لا خط نصي، عشان تطابق اللافتة حرفاً بحرف */
-.sign-ar {
-  align-self: center;
+/* اللوقو نفسه مقصوصاً من وردماركهم وملوّناً بأحمر اللافتة، لا خط نصي */
+.sign-mark {
   width: auto;
-  height: clamp(2.6rem, 7.6vw, 3.9rem);
-  /* نسبة ارتفاعها للاتيني مأخوذة من اللافتة الحقيقية في صورة الواجهة */
+  height: clamp(4.6rem, 13vw, 7rem);
 }
 
 /* اشتعال اللافتة: ومضات فلورسنت قصيرة ثم ثبات */
@@ -388,7 +375,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-weight: 700;
   font-size: 1.06rem;
 }
-.crop-prices small { font-size: 0.7rem; font-weight: 400; color: var(--ink-soft); }
+.crop-prices .sar { color: var(--ink-soft); }
 
 .crops-note {
   margin-top: 22px;
@@ -431,7 +418,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-size: 0.97rem;
 }
 .sweet .price { color: var(--sign-red); font-weight: 700; white-space: nowrap; }
-.sweet .price small { font-weight: 400; font-size: 0.72rem; color: var(--ink-soft); }
+.sweet .price .sar { color: var(--ink-soft); }
 
 /* ---------- المكان ---------- */
 
@@ -527,7 +514,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-size: 1.3rem;
   color: var(--sign-red);
 }
-.store-price small { font-weight: 400; font-size: 0.8rem; color: var(--ink-soft); }
+.store-price .sar { color: var(--ink-soft); }
 
 /* ---------- الزيارة ---------- */
 
@@ -554,12 +541,102 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 .visit-actions { margin-top: clamp(24px, 3vw, 34px); display: flex; flex-wrap: wrap; gap: 12px; }
 
-.visit-figure {
+/* الخريطة نفسها بدل صورة الواجهة: الزائر يشوف مكانهم فوراً */
+.visit-map {
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--wood) 40%, transparent);
+  background: var(--cream);
+  aspect-ratio: 4 / 3;
 }
-.visit-figure img { width: 100%; display: block; }
+.visit-map iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+/* ---------- زر التواصل العائم ---------- */
+/* شخصيته مأخوذة من اللافتة: قرص أمبر متوهج، وأقراص ليلية تطلع منه بالتتابع */
+
+.social-fab {
+  position: fixed;
+  inset-block-end: 22px;
+  inset-inline-end: 22px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.social-fab__btn {
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--sign-red);
+  background: radial-gradient(80% 110% at 50% 40%, var(--amber-core) 0%, var(--amber) 58%, var(--amber-deep) 100%);
+  box-shadow:
+    0 0 26px 3px color-mix(in srgb, var(--amber) 40%, transparent),
+    0 10px 24px -8px rgba(20, 12, 6, 0.55);
+  transition: transform var(--t-ui) var(--ease-out), box-shadow var(--t-ui) var(--ease-out);
+}
+.social-fab__btn svg { width: 25px; height: 25px; grid-area: 1 / 1; transition: opacity 180ms var(--ease-out), transform 240ms var(--ease-out); }
+.social-fab__btn .i-close { opacity: 0; transform: rotate(-45deg); }
+.social-fab__btn:hover { transform: translateY(-2px); box-shadow: 0 0 34px 5px color-mix(in srgb, var(--amber) 52%, transparent), 0 14px 28px -8px rgba(20, 12, 6, 0.6); }
+.social-fab__btn:active { transform: scale(0.94); }
+
+.social-fab.is-open .social-fab__btn .i-open { opacity: 0; transform: rotate(45deg); }
+.social-fab.is-open .social-fab__btn .i-close { opacity: 1; transform: rotate(0deg); }
+
+.social-fab__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  visibility: hidden; /* يشيلها من ترتيب التركيز وهي مقفلة */
+}
+.social-fab__list a {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: var(--amber);
+  background: color-mix(in srgb, var(--night) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--amber) 48%, transparent);
+  /* حلقة داكنة تفصلها عن الكريم، وتوهج خافت يفصلها عن الليل */
+  box-shadow:
+    0 0 0 1px rgba(20, 12, 6, 0.22),
+    0 0 14px 1px color-mix(in srgb, var(--amber) 16%, transparent),
+    0 10px 22px -8px rgba(20, 12, 6, 0.7);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(10px) scale(0.94);
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 240ms var(--ease-out),
+    background 180ms var(--ease-out),
+    color 180ms var(--ease-out);
+}
+.social-fab__list svg { width: 21px; height: 21px; }
+.social-fab__list a:hover {
+  background: var(--amber);
+  color: var(--night);
+  border-color: var(--amber);
+}
+.social-fab__list a:active { transform: scale(0.95); }
+
+.social-fab.is-open .social-fab__list { visibility: visible; }
+.social-fab.is-open .social-fab__list a {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i) * 45ms);
+}
+
+@media (max-width: 640px) {
+  .social-fab { inset-block-end: 16px; inset-inline-end: 16px; }
+  .social-fab__btn { width: 52px; height: 52px; }
+}
 
 /* ---------- التذييل ---------- */
 
@@ -712,7 +789,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   color: var(--sign-red);
   white-space: nowrap;
 }
-.mp-item__price small { font-weight: 400; font-size: 0.72rem; color: var(--ink-soft); }
+.mp-item__price .sar { color: var(--ink-soft); }
 
 /* الحلويات: بطاقات بصور */
 .mp-sweets {
@@ -748,6 +825,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .reveal { opacity: 1; transform: none; transition: none; }
   .sign.is-on { animation: none; }
   .btn, .crop, .brand, .site-nav a { transition: none; }
+  /* الزر العائم يفتح فوراً بلا انزلاق ولا تتابع */
+  .social-fab__btn, .social-fab__btn svg, .social-fab__list a { transition: none; }
+  .social-fab.is-open .social-fab__list a { transition-delay: 0s; }
 }
 
 /* ---------- استجابة ---------- */
@@ -757,7 +837,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .sweet-grid { grid-template-columns: repeat(2, 1fr); }
   .place-grid { grid-template-columns: 1fr; }
   .visit-grid { grid-template-columns: 1fr; }
-  .visit-figure { max-width: 460px; }
+  .visit-map { aspect-ratio: 16 / 11; }
   .store-card { grid-template-columns: 1fr; }
   .store-card img { aspect-ratio: 16 / 10; }
   .store-copy { padding: 22px; padding-top: 0; }
@@ -772,7 +852,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .brand img { height: 38px; }
   .crop-grid { grid-template-columns: 1fr; }
   .sweet-grid { grid-template-columns: repeat(2, 1fr); }
-  .sign { flex-direction: row; gap: 18px; }
+  .sign { padding-inline: clamp(34px, 12vw, 60px); }
   .place-gallery { grid-template-columns: repeat(2, 1fr); }
   .mp-sweets { grid-template-columns: 1fr; }
 }

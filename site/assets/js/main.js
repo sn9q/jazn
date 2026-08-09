@@ -42,6 +42,30 @@
     }, 2500);
   }
 
+  /* زر التواصل العائم: يفتح وينغلق، ويقفل بالخارج وبالإسكيب */
+  var fab = document.getElementById("socialFab");
+  var fabBtn = document.getElementById("socialFabBtn");
+  if (fab && fabBtn) {
+    var setFab = function (open) {
+      fab.classList.toggle("is-open", open);
+      fabBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+
+    fabBtn.addEventListener("click", function () {
+      setFab(fabBtn.getAttribute("aria-expanded") !== "true");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!fab.contains(e.target)) setFab(false);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape" || fabBtn.getAttribute("aria-expanded") !== "true") return;
+      setFab(false);
+      fabBtn.focus();
+    });
+  }
+
   /* حد الهيدر عند مغادرة الهيرو، بمراقبة حارس لا بمستمع تمرير */
   var header = document.querySelector(".site-header");
   var sentinel = document.querySelector("[data-header-sentinel]");

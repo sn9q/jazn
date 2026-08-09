@@ -192,7 +192,7 @@
             </div>
             ${it.note ? `<div class="adm-item__meta">${esc(it.note)}</div>` : ""}
           </div>
-          <div class="adm-item__price">${Number(it.price)} <small>ر.س</small></div>
+          <div class="adm-item__price">${Number(it.price)} <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
           <div class="adm-item__actions">
             <button class="adm-icon-btn" data-act="up" data-id="${it.id}" ${idx === 0 ? "disabled" : ""} aria-label="تحريك لأعلى">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>

@@ -29,7 +29,7 @@
   <link rel="preload" href="/assets/fonts/noto-naskh-arabic-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=1">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=3">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=7">
 
   <script type="application/ld+json">
   {
@@ -69,6 +69,15 @@
 </head>
 <body>
 
+  <!-- رمز الريال السعودي الرسمي، مُعرَّف مرة ويُستدعى في كل سعر -->
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="sar" viewBox="0 0 1124.14 1256.39">
+      <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+      <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+    </symbol>
+  </svg>
+
+
   <header class="site-header">
     <div class="container header-inner">
       <a href="#top" class="brand" aria-label="جَازن، الرئيسية">
@@ -92,12 +101,8 @@
 
         <!-- لافتتهم الحقيقية معاد بناؤها: أمبر متوهج وحروف حمراء -->
         <div class="sign" id="sign" role="img" aria-label="لافتة جَازن اسبريسو بار المضيئة">
-          <img class="sign-ar" src="/assets/img/sign-jazn.webp" alt="" aria-hidden="true"
-               width="393" height="230" fetchpriority="high" decoding="async">
-          <span class="sign-latin" aria-hidden="true">
-            <b lang="en">JAZN</b>
-            <small lang="en">Espresso Bar</small>
-          </span>
+          <img class="sign-mark" src="/assets/img/sign-lockup.webp" alt="" aria-hidden="true"
+               width="393" height="319" fetchpriority="high" decoding="async">
         </div>
 
         <p class="hero-badge">
@@ -134,9 +139,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>ازهار</span><span>خوخ</span><span>حلاوة</span><span>توت ازرق</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>12 <small>ر.س</small></b></div>
-              <div><i>فريدو</i><b>13 <small>ر.س</small></b></div>
-              <div><i>V60</i><b>18 <small>ر.س</small></b></div>
+              <div><i>اسبريسو</i><b>12 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b>13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b>18 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
@@ -150,9 +155,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>توفي</span><span>فواكة حمراء</span><span>عنب</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>12 <small>ر.س</small></b></div>
-              <div><i>فريدو</i><b>13 <small>ر.س</small></b></div>
-              <div><i>V60</i><b>19 <small>ر.س</small></b></div>
+              <div><i>اسبريسو</i><b>12 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b>13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b>19 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
@@ -166,9 +171,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>توت</span><span>برتقال</span><span>حلاوه</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>17 <small>ر.س</small></b></div>
-              <div><i>فريدو</i><b>18 <small>ر.س</small></b></div>
-              <div><i>V60</i><b>25 <small>ر.س</small></b></div>
+              <div><i>اسبريسو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b>18 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b>25 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
@@ -182,9 +187,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>شمام</span><span>عنب</span><span>عسل</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>16 <small>ر.س</small></b></div>
-              <div><i>فريدو</i><b>17 <small>ر.س</small></b></div>
-              <div><i>V60</i><b>24 <small>ر.س</small></b></div>
+              <div><i>اسبريسو</i><b>16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b>24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
@@ -198,9 +203,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>مانجو</span><span>توت ازرق</span><span>كراميل</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>16 <small>ر.س</small></b></div>
-              <div><i>فريدو</i><b>17 <small>ر.س</small></b></div>
-              <div><i>V60</i><b>24 <small>ر.س</small></b></div>
+              <div><i>اسبريسو</i><b>16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b>24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
@@ -214,9 +219,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>كرز</span><span>عسل</span><span>مستكة</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>16 <small>ر.س</small></b></div>
-              <div><i>فريدو</i><b>17 <small>ر.س</small></b></div>
-              <div><i>V60</i><b>24 <small>ر.س</small></b></div>
+              <div><i>اسبريسو</i><b>16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b>24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
         </div>
@@ -239,19 +244,19 @@
         <div class="sweet-grid">
           <figure class="sweet reveal">
             <img src="/assets/img/menu/p22.webp" alt="تشيز مدريد" loading="lazy" decoding="async" width="400" height="400">
-            <figcaption>تشيز مدريد <span class="price">23 <small>ر.س</small></span></figcaption>
+            <figcaption>تشيز مدريد <span class="price">23 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
           </figure>
           <figure class="sweet reveal" style="--d:60ms">
             <img src="/assets/img/menu/p23.webp" alt="دولتشي بيكان" loading="lazy" decoding="async" width="400" height="400">
-            <figcaption>دولتشي بيكان <span class="price">22 <small>ر.س</small></span></figcaption>
+            <figcaption>دولتشي بيكان <span class="price">22 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
           </figure>
           <figure class="sweet reveal" style="--d:120ms">
             <img src="/assets/img/menu/p24.webp" alt="بودينق شوكليت" loading="lazy" decoding="async" width="400" height="400">
-            <figcaption>بودينق شوكليت <span class="price">22 <small>ر.س</small></span></figcaption>
+            <figcaption>بودينق شوكليت <span class="price">22 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
           </figure>
           <figure class="sweet reveal" style="--d:180ms">
             <img src="/assets/img/menu/p20.webp" alt="كوكيز" loading="lazy" decoding="async" width="400" height="400">
-            <figcaption>كوكيز <span class="price">9 <small>ر.س</small></span></figcaption>
+            <figcaption>كوكيز <span class="price">9 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
           </figure>
         </div>
       </div>
@@ -299,7 +304,7 @@
             <h2 class="section-title">متجر جَازن</h2>
             <p>تقدر تاخذ من جَازن شيئاً يبقى معك بعد الكوب.</p>
             <h3>كوب اسبريسو</h3>
-            <p class="store-price">79 <small>ر.س</small></p>
+            <p class="store-price">79 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></p>
           </div>
         </div>
       </div>
@@ -344,9 +349,12 @@
           </div>
         </div>
 
-        <figure class="visit-figure reveal" style="--d:120ms">
-          <img src="/assets/img/g07.webp" alt="واجهة جَازن ليلاً بلافتتها المضيئة وشباك البار" loading="lazy" decoding="async" width="810" height="1080">
-        </figure>
+        <div class="visit-map reveal" style="--d:120ms">
+          <iframe
+            src="https://maps.google.com/maps?q=16.8758627,42.5769932&amp;hl=ar&amp;z=17&amp;output=embed"
+            title="موقع جَازن اسبريسو بار على خريطة قوقل"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
       </div>
     </section>
 
@@ -404,6 +412,33 @@
     </div>
   </footer>
 
-  <script src="/assets/js/main.js?v=1" defer></script>
+  <!-- زر التواصل العائم: قرص مضيء بنفس توهج اللافتة -->
+  <div class="social-fab" id="socialFab">
+    <ul class="social-fab__list" id="socialFabList">
+      <li style="--i:0">
+        <a href="https://www.instagram.com/jazn.sa/" target="_blank" rel="noopener" aria-label="إنستقرام جَازن">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </li>
+      <li style="--i:1">
+        <a href="https://www.tiktok.com/@jazn.sa" target="_blank" rel="noopener" aria-label="تيك توك جَازن">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3c-1.24 0-2.42-.53-3.24-1.48z"/></svg>
+        </a>
+      </li>
+      <li style="--i:2">
+        <a href="https://wa.me/966545755683" target="_blank" rel="noopener" aria-label="واتساب جَازن">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"/><path d="M8.8 8.6c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .5.4l.7 1.6c.1.2 0 .4-.1.5l-.4.5c-.1.2-.1.3 0 .5.4.7 1.3 1.6 2.2 2 .2.1.4.1.5-.1l.5-.6c.1-.2.3-.2.5-.1l1.6.7c.3.1.4.3.4.5v.6c0 .2-.1.4-.5.6-.5.2-1.6.4-3.2-.5a8.4 8.4 0 0 1-3.5-3.5c-.8-1.5-.6-2.4-.3-2.6z"/></svg>
+        </a>
+      </li>
+    </ul>
+
+    <button class="social-fab__btn" id="socialFabBtn" type="button"
+            aria-expanded="false" aria-controls="socialFabList" aria-label="تواصل معنا">
+      <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2-.9 0-1.8-.1-2.6-.35L4.4 20.2l1.3-3.4A6.9 6.9 0 0 1 3.5 11.6c0-4 3.8-7.2 8.5-7.2s8.5 3.2 8.5 7.2z"/><circle cx="8.6" cy="11.6" r="1.05" fill="currentColor" stroke="none"/><circle cx="12" cy="11.6" r="1.05" fill="currentColor" stroke="none"/><circle cx="15.4" cy="11.6" r="1.05" fill="currentColor" stroke="none"/></svg>
+      <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <script src="/assets/js/main.js?v=2" defer></script>
 </body>
 </html>

@@ -22,9 +22,18 @@
   <link rel="preload" href="/assets/fonts/noto-naskh-arabic-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=1">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=3">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=7">
 </head>
 <body class="menu-page">
+
+  <!-- رمز الريال السعودي الرسمي، مُعرَّف مرة ويُستدعى في كل سعر -->
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="sar" viewBox="0 0 1124.14 1256.39">
+      <path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/>
+      <path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.69l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.35,56.77-24.4,73.83-49.24l68.78-101.97v-.02c7.14-10.55,11.3-23.27,11.3-36.97v-149.98l132.25-28.11v270.4l424.53-90.28Z"/>
+    </symbol>
+  </svg>
+
 
   <header class="mp-header on-night">
     <div class="container mp-header-inner">
@@ -63,7 +72,7 @@
             <div class="mp-item__name">اثيوبيا- يرغاتشيف</div>
             <div class="mp-item__note">المعالجة: مجففة، الإيحاءات: ازهار - خوخ - حلاوة - توت ازرق</div>
           </div>
-          <div class="mp-item__price">12 <small>ر.س</small></div>
+          <div class="mp-item__price">12 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p01.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -71,7 +80,7 @@
             <div class="mp-item__name">كولومبيا - كاتورا</div>
             <div class="mp-item__note">المعالجة: تجفيف مطول، الإيحاءات: توفي - فواكة حمراء - عنب</div>
           </div>
-          <div class="mp-item__price">12 <small>ر.س</small></div>
+          <div class="mp-item__price">12 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p02.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -79,7 +88,7 @@
             <div class="mp-item__name">اليمن - بلقيس</div>
             <div class="mp-item__note">المعالجة: مجفف لاهوائي، الإيحاءات: توت - برتقال - حلاوه</div>
           </div>
-          <div class="mp-item__price">17 <small>ر.س</small></div>
+          <div class="mp-item__price">17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p03.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -87,7 +96,7 @@
             <div class="mp-item__name">عنب &amp; شمام</div>
             <div class="mp-item__note">المعالجة: تخمير لاهوائي، الإيحاءات: شمام - عنب - عسل</div>
           </div>
-          <div class="mp-item__price">16 <small>ر.س</small></div>
+          <div class="mp-item__price">16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p04.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -95,7 +104,7 @@
             <div class="mp-item__name">مانجو</div>
             <div class="mp-item__note">المعالجة: تخمير لاهوائي، الإيحاءات: مانجو - توت ازرق - كراميل</div>
           </div>
-          <div class="mp-item__price">16 <small>ر.س</small></div>
+          <div class="mp-item__price">16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p05.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -103,14 +112,14 @@
             <div class="mp-item__name">كرز</div>
             <div class="mp-item__note">المعالجة: تنقيع، الإيحاءات: كرز - عسل - مستكة</div>
           </div>
-          <div class="mp-item__price">16 <small>ر.س</small></div>
+          <div class="mp-item__price">16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p06.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
           <div class="mp-item__body">
             <div class="mp-item__name">امريكانو</div>
           </div>
-          <div class="mp-item__price">13 <small>ر.س</small></div>
+          <div class="mp-item__price">13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
       </ul>
     </section>
@@ -127,7 +136,7 @@
             <div class="mp-item__name">اثيوبيا- يرغاتشيف</div>
             <div class="mp-item__note">المعالجة: مجففة، الإيحاءات: ازهار - خوخ - حلاوة - توت ازرق</div>
           </div>
-          <div class="mp-item__price">13 <small>ر.س</small></div>
+          <div class="mp-item__price">13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p08.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -135,7 +144,7 @@
             <div class="mp-item__name">كولومبيا- كاتورا</div>
             <div class="mp-item__note">المعالجة: تجفيف مطول، الإيحاءات: توفي - فواكة حمراء - عنب</div>
           </div>
-          <div class="mp-item__price">13 <small>ر.س</small></div>
+          <div class="mp-item__price">13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p09.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -143,7 +152,7 @@
             <div class="mp-item__name">اليمن - بلقيس</div>
             <div class="mp-item__note">المعالجة: مجفف لاهوائي، الإيحاءات: توت - برتقال - حلاوه</div>
           </div>
-          <div class="mp-item__price">18 <small>ر.س</small></div>
+          <div class="mp-item__price">18 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p10.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -151,7 +160,7 @@
             <div class="mp-item__name">عنب &amp; شمام</div>
             <div class="mp-item__note">المعالجة: تخمير لاهوائي، الإيحاءات: شمام - عنب - عسل</div>
           </div>
-          <div class="mp-item__price">17 <small>ر.س</small></div>
+          <div class="mp-item__price">17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p11.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -159,7 +168,7 @@
             <div class="mp-item__name">مانجو</div>
             <div class="mp-item__note">المعالجة: تخمير لاهوائي، الإيحاءات: مانجو - توت ازرق - كراميل</div>
           </div>
-          <div class="mp-item__price">17 <small>ر.س</small></div>
+          <div class="mp-item__price">17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p12.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -167,7 +176,7 @@
             <div class="mp-item__name">كرز</div>
             <div class="mp-item__note">المعالجة: تنقيع، الإيحاءات: كرز - عسل - مستكة</div>
           </div>
-          <div class="mp-item__price">17 <small>ر.س</small></div>
+          <div class="mp-item__price">17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
       </ul>
     </section>
@@ -184,7 +193,7 @@
             <div class="mp-item__name">V60 ICE - HOT</div>
             <div class="mp-item__note">اثيوبيا- يرغاتشيف، المعالجة: مجففة، الإيحاءات: ازهار - خوخ - حلاوة - توت ازرق</div>
           </div>
-          <div class="mp-item__price">18 <small>ر.س</small></div>
+          <div class="mp-item__price">18 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p14.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -192,7 +201,7 @@
             <div class="mp-item__name">V60 ICE -HOT</div>
             <div class="mp-item__note">كولومبيا - كاتورا، المعالجة: تجفيف مطول، الإيحاءات: توفي - فواكة حمراء - عنب</div>
           </div>
-          <div class="mp-item__price">19 <small>ر.س</small></div>
+          <div class="mp-item__price">19 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p15.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -200,7 +209,7 @@
             <div class="mp-item__name">V60 ICE -HOT</div>
             <div class="mp-item__note">اليمن - بلقيس، المعالجة: مجفف لاهوائي، الإيحاءات: توت - برتقال - حلاوه</div>
           </div>
-          <div class="mp-item__price">25 <small>ر.س</small></div>
+          <div class="mp-item__price">25 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p16.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -208,7 +217,7 @@
             <div class="mp-item__name">V60 ICE -HOT</div>
             <div class="mp-item__note">عنب &amp; شمام، المعالجة: تخمير لاهوائي، الإيحاءات: شمام - عنب - عسل</div>
           </div>
-          <div class="mp-item__price">24 <small>ر.س</small></div>
+          <div class="mp-item__price">24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p17.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -216,7 +225,7 @@
             <div class="mp-item__name">V60 ICE -HOT</div>
             <div class="mp-item__note">مانجو، المعالجة: تخمير لاهوائي، الإيحاءات: مانجو - توت ازرق - كراميل</div>
           </div>
-          <div class="mp-item__price">24 <small>ر.س</small></div>
+          <div class="mp-item__price">24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
         <li class="mp-item">
           <img src="/assets/img/menu/p18.webp" alt="" loading="lazy" decoding="async" width="58" height="58">
@@ -224,7 +233,7 @@
             <div class="mp-item__name">V60 ICE -HOT</div>
             <div class="mp-item__note">كولمبيا - كرز، المعالجة: تنقيع، الإيحاءات: كرز - عسل - مستكة</div>
           </div>
-          <div class="mp-item__price">24 <small>ر.س</small></div>
+          <div class="mp-item__price">24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
       </ul>
     </section>
@@ -239,7 +248,7 @@
           <div class="mp-item__body">
             <div class="mp-item__name">ماتشا</div>
           </div>
-          <div class="mp-item__price">21 <small>ر.س</small></div>
+          <div class="mp-item__price">21 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
       </ul>
     </section>
@@ -252,23 +261,23 @@
       <ul class="mp-sweets">
         <li class="sweet">
           <img src="/assets/img/menu/p22.webp" alt="تشيز مدريد" loading="lazy" decoding="async" width="400" height="400">
-          <figcaption>تشيز مدريد <span class="price">23 <small>ر.س</small></span></figcaption>
+          <figcaption>تشيز مدريد <span class="price">23 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
         </li>
         <li class="sweet">
           <img src="/assets/img/menu/p23.webp" alt="دولتشي بيكان" loading="lazy" decoding="async" width="400" height="400">
-          <figcaption>دولتشي بيكان <span class="price">22 <small>ر.س</small></span></figcaption>
+          <figcaption>دولتشي بيكان <span class="price">22 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
         </li>
         <li class="sweet">
           <img src="/assets/img/menu/p24.webp" alt="بودينق شوكليت" loading="lazy" decoding="async" width="400" height="400">
-          <figcaption>بودينق شوكليت <span class="price">22 <small>ر.س</small></span></figcaption>
+          <figcaption>بودينق شوكليت <span class="price">22 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
         </li>
         <li class="sweet">
           <img src="/assets/img/menu/p20.webp" alt="كوكيز" loading="lazy" decoding="async" width="400" height="400">
-          <figcaption>كوكيز <span class="price">9 <small>ر.س</small></span></figcaption>
+          <figcaption>كوكيز <span class="price">9 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
         </li>
         <li class="sweet">
           <img src="/assets/img/menu/p21.webp" alt="كرانشي" loading="lazy" decoding="async" width="400" height="400">
-          <figcaption>كرانشي <span class="price">9 <small>ر.س</small></span></figcaption>
+          <figcaption>كرانشي <span class="price">9 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
         </li>
       </ul>
     </section>
@@ -283,7 +292,7 @@
           <div class="mp-item__body">
             <div class="mp-item__name">كوب اسبريسو</div>
           </div>
-          <div class="mp-item__price">79 <small>ر.س</small></div>
+          <div class="mp-item__price">79 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
         </li>
       </ul>
     </section>
@@ -293,6 +302,6 @@
   <p class="mp-foot container">نستقبلكم 24 ساعة، طوال أيام الأسبوع</p>
 
   <script src="/assets/js/config.js?v=1"></script>
-  <script type="module" src="/assets/js/menu.js?v=1"></script>
+  <script type="module" src="/assets/js/menu.js?v=2"></script>
 </body>
 </html>

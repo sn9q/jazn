@@ -52,7 +52,7 @@
         <div class="mp-item__name">${esc(it.name)}</div>
         ${it.note ? `<div class="mp-item__note">${esc(it.note)}</div>` : ""}
       </div>
-      <div class="mp-item__price">${Number(it.price)} <small>ر.س</small></div>
+      <div class="mp-item__price">${Number(it.price)} <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></div>
     </li>`;
   };
 
@@ -61,7 +61,7 @@
     const src = key ? `/assets/img/menu/${key}.webp` : "/assets/img/logo-badge.webp";
     return `<li class="sweet">
       <img src="${src}" alt="${esc(it.name)}" loading="lazy" decoding="async" width="400" height="400">
-      <figcaption>${esc(it.name)} <span class="price">${Number(it.price)} <small>ر.س</small></span></figcaption>
+      <figcaption>${esc(it.name)} <span class="price">${Number(it.price)} <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></span></figcaption>
     </li>`;
   };
 
