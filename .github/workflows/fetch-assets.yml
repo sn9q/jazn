@@ -1,0 +1,31 @@
+# جلب مواد العميل المرجعية (صور المنيو من منصتهم + صور قوقل ماب)
+# يعمل يدويا أو عند تعديل قائمة الروابط، ويدفع الناتج إلى reference/
+name: fetch-assets
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/**"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python scripts/fetch_assets.py
+      - name: commit
+        run: |
+          git config user.name "asset-fetcher"
+          git config user.email "actions@users.noreply.github.com"
+          git add reference/
+          git diff --cached --quiet && echo "لا جديد" && exit 0
+          git commit -m "جلب مواد العميل المرجعية (صور المنيو وقوقل ماب)"
+          git push
