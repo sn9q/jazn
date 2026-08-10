@@ -29,7 +29,7 @@
   <link rel="preload" href="/assets/fonts/noto-naskh-arabic-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=1">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=10">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=11">
 
   <script type="application/ld+json">
   {
@@ -120,6 +120,14 @@
           <a class="btn btn-line-cream" href="#visit">وين مكاننا</a>
         </div>
       </div>
+    </section>
+
+    <!-- ليلة تمرّ: الساعة تتحرك مع التمرير والليل ينسحب للفجر، وكلمة
+         «مفتوح» وحدها ما تتغير. القيم المكتوبة هنا هي حالة النهاية،
+         فبدون JS يبقى الشريط لوحة فجر مقروءة لا فراغاً. -->
+    <section class="night-pass" id="nightPass" aria-label="جَازن مفتوح 24 ساعة، طوال أيام الأسبوع">
+      <p class="night-pass__clock" id="nightClock" aria-hidden="true">٦:٠٠ ص</p>
+      <p class="night-pass__word" aria-hidden="true">مفتوح</p>
     </section>
 
     <!-- المحصول: قائمتهم تبدأ من الحبة لا من المشروب -->
@@ -442,6 +450,6 @@
     </button>
   </div>
 
-  <script src="/assets/js/main.js?v=2" defer></script>
+  <script src="/assets/js/main.js?v=3" defer></script>
 </body>
 </html>

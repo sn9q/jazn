@@ -78,6 +78,86 @@
     ).observe(sentinel);
   }
 
+  /* ليلة تمرّ بين الهيرو والمحصول.
+     التمرير يحرّك الساعة من ٩:٥٠ م إلى ٦:٠٠ ص وينسحب الليل للفجر،
+     وكلمة «مفتوح» ما تتغير. الرسم يشتغل فقط والشريط على الشاشة،
+     ومع prefers-reduced-motion نخلي الشريط على حالة الفجر الثابتة
+     المكتوبة أصلاً في HTML وCSS. */
+  var pass = document.getElementById("nightPass");
+  var clock = document.getElementById("nightClock");
+  if (pass && clock && !reduced) {
+    /* ساعات الليل الميتة، اللي ما يفتح فيها غيرهم: من ٢:٥٥ ص إلى ٧:٠٥ ص.
+       المدى مضبوط عشان الضوء يطابق الساعة: أول خيط فجر يجي عند ٤:١٠
+       والشروق يكتمل عند ٥:٥٥، وهي بالضبط حدود منحنى الفجر تحت. */
+    var AR = "٠١٢٣٤٥٦٧٨٩";
+    var START_MIN = 2 * 60 + 55;
+    var SPAN_MIN = 250;
+
+    var arabic = function (n, pad) {
+      var s = String(n);
+      while (pad && s.length < pad) s = "0" + s;
+      return s.replace(/[0-9]/g, function (d) { return AR[+d]; });
+    };
+
+    var clockAt = function (p) {
+      var total = (START_MIN + Math.round(p * SPAN_MIN)) % 1440;
+      var h24 = Math.floor(total / 60);
+      var h = h24 % 12 || 12;
+      return arabic(h) + ":" + arabic(total % 60, 2) + (h24 < 12 ? " ص" : " م");
+    };
+
+    /* 0 = الشريط داخل من أسفل الشاشة، 1 = خرج من فوقها */
+    var passProgress = function () {
+      var r = pass.getBoundingClientRect();
+      var vh = window.innerHeight || 1;
+      return Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+    };
+
+    /* الليل يطول والفجر يجي بسرعة في آخره، مثل الفجر الحقيقي.
+       ينتهي عند 0.72 لا عند 1: الشريط لسه ظاهراً على الشاشة وقتها،
+       فالزائر يشوف الليلة وهي تكتمل لا وهي تطلع من فوق */
+    var dawnCurve = function (p) {
+      var d = Math.max(0, Math.min(1, (p - 0.30) / 0.42));
+      return d * d * (3 - 2 * d);
+    };
+
+    /* انقلابة لون الكلمة: نافذة ضيقة عند اللحظة اللي تصير فيها السماء
+       خلفها فاتحة فعلاً، فالعبور بين الكريمي والحبر يمرّ في لمح */
+    var wordFlip = function (d) {
+      var w = Math.max(0, Math.min(1, (d - 0.62) / 0.16));
+      return w * w * (3 - 2 * w);
+    };
+
+    var passRunning = false;
+    var lastText = "";
+    var paint = function () {
+      if (!passRunning) return;
+      var p = passProgress();
+      var d = dawnCurve(p);
+      pass.style.setProperty("--p", d.toFixed(3));
+      /* الأفق يوصل الكريم قبل السماء بكثير، فالحد بين الشريط وقسم
+         المحصول ما يبين كخط في منتصف الانتقال */
+      pass.style.setProperty("--pb", Math.min(1, d * 1.7).toFixed(3));
+      pass.style.setProperty("--pw", wordFlip(d).toFixed(3));
+      var text = clockAt(p);
+      if (text !== lastText) { clock.textContent = text; lastText = text; }
+      window.requestAnimationFrame(paint);
+    };
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        function (entries) {
+          if (entries[0].isIntersecting) {
+            if (!passRunning) { passRunning = true; window.requestAnimationFrame(paint); }
+          } else {
+            passRunning = false;
+          }
+        },
+        { rootMargin: "120px" }
+      ).observe(pass);
+    }
+  }
+
   /* القسم النشط في التنقل: يضيء بلون اللافتة */
   if ("IntersectionObserver" in window) {
     var spied = [];
