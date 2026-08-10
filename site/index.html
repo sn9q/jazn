@@ -29,7 +29,7 @@
   <link rel="preload" href="/assets/fonts/noto-naskh-arabic-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=1">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=11">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=12">
 
   <script type="application/ld+json">
   {
@@ -122,12 +122,12 @@
       </div>
     </section>
 
-    <!-- ليلة تمرّ: الساعة تتحرك مع التمرير والليل ينسحب للفجر، وكلمة
-         «مفتوح» وحدها ما تتغير. القيم المكتوبة هنا هي حالة النهاية،
-         فبدون JS يبقى الشريط لوحة فجر مقروءة لا فراغاً. -->
-    <section class="night-pass" id="nightPass" aria-label="جَازن مفتوح 24 ساعة، طوال أيام الأسبوع">
-      <p class="night-pass__clock" id="nightClock" aria-hidden="true">٦:٠٠ ص</p>
-      <p class="night-pass__word" aria-hidden="true">مفتوح</p>
+    <!-- ٢٥ ثانية: شوت اسبريسو ينسحب مع التمرير، والكريما في آخره تبتلع
+         الكادر وتصير كريم قسم المحصول. زخرفة بحتة، فيبقى الشريط مخفياً
+         إذا تعذّر الرسم، ويوصل الهيرو قسم المحصول مباشرة. -->
+    <section class="shot-band" id="shotBand" aria-label="سحب شوت اسبريسو في جَازن، خمس وعشرون ثانية">
+      <canvas id="shotCanvas" aria-hidden="true"></canvas>
+      <p class="shot-band__timer" id="shotTimer" aria-hidden="true"><b dir="ltr">0.0</b> ثانية</p>
     </section>
 
     <!-- المحصول: قائمتهم تبدأ من الحبة لا من المشروب -->
@@ -451,5 +451,6 @@
   </div>
 
   <script src="/assets/js/main.js?v=3" defer></script>
+  <script src="/assets/js/shot.js?v=1" defer></script>
 </body>
 </html>

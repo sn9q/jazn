@@ -301,90 +301,48 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 
-/* ---------- ليلة تمرّ: الجسر بين ليل الهيرو وكريم المحصول ----------
-   المكان مفتوح 24 ساعة، فالانتقال بين القسمين هو الليلة نفسها وهي
-   تمرّ: الساعة تتحرك، والعتمة تنسحب للفجر، وكلمة «مفتوح» ثابتة.
-   كل شيء دالة في --p (0 = أول الليل، 1 = الفجر) يضبطها main.js.
-   قيمتها الافتراضية 1: بدون JS يظهر الشريط لوحةَ فجر مكتملة مقروءة. */
+/* ---------- ٢٥ ثانية: شوت الاسبريسو ----------
+   المحل اسبريسو بار، والعملية اللي مسمّى عليها هي هذي. الشريط كله
+   يرسمه shot.js على canvas، وCSS ما تعطيه غير الصندوق واللون تحته.
 
-.night-pass {
-  --p: 1;
+   مخفي افتراضياً ولا يكشفه إلا shot.js بعد ما يتأكد أن canvas شغال:
+   المشهد زخرفة بحتة، فلو تعذّر الرسم الأنظف أن يوصل الهيرو قسم
+   المحصول مباشرة بدل فراغ بطول شاشة. */
+
+.shot-band {
+  display: none;
   position: relative;
   overflow: hidden;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: clamp(6px, 1.4vw, 12px);
-  min-height: clamp(360px, 78vh, 520px);
-  padding-block: clamp(48px, 8vw, 80px);
-  text-align: center;
-  /* الأسفل يفتح خطياً والأعلى تربيعياً، فالضوء يطلع من الأفق لا من كل
-     مكان مرة وحدة — ويختفي الخط الحاد بين الشريط وقسم المحصول لأن
-     أسفله يوصل الكريم قبل أعلاه بكثير */
-  background: linear-gradient(180deg,
-    color-mix(in srgb, var(--cream-2) calc(var(--p) * var(--p) * 100%), var(--night)) 0%,
-    color-mix(in srgb, var(--cream) calc(var(--pb, 1) * 100%), var(--night-2)) 100%);
+  /* المشهد شبه مربع، فعلى الجوال يحدّه العرض لا الطول: لو ربطنا
+     الارتفاع بـsvh وحده يقعد الفنجان صغيراً وسط فراغ ليلي طويل.
+     فالارتفاع يتبع العرض على الضيق، والشاشة على الواسع. */
+  height: clamp(430px, 118vw, 720px);
+  background: var(--night);
 }
+@media (min-width: 700px) {
+  .shot-band { height: clamp(560px, 90svh, 720px); }
+}
+.shot-band.on { display: block; }
+.shot-band canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
-/* توهج اللافتة ينسكب من الهيرو فوق، ويخفت كل ما طلع النهار */
-.night-pass::before {
-  content: "";
+/* العدّاد: قراءة الميزان تحت الفنجان. أمبر اللافتة فوق الليل
+   (10.5:1)، وتراكوتا جدارهم بعد ما تبتلع الكريما الكادر (4.8:1
+   على الكريم، بينما أحمر اللافتة يهبط لـ3.97 هناك) */
+.shot-band__timer {
   position: absolute;
   inset-inline: 0;
-  top: 0;
-  height: 55%;
-  pointer-events: none;
-  opacity: calc(1 - var(--p));
-  background: radial-gradient(70% 100% at 50% 0%,
-    color-mix(in srgb, var(--amber) 26%, transparent) 0%, transparent 72%);
-}
-
-/* حرارة الشروق من الأفق. قوّتها قوس يبلغ ذروته في منتصف الانتقال
-   (‎4p(1−p)‎)، لأن مزج الليل بالكريم يمرّ برماديٍّ ميت في نصفه —
-   فنمرّره على تراكوتا جدارهم وأمبر لافتتهم بدل الرمادي. */
-.night-pass::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: calc(4 * var(--p) * (1 - var(--p)));
-  /* المركز تحت حافة الشريط بشوي، فذروة الوهج تطلع خارج الكادر ويبقى
-     آخر بكسل من الشريط هادئاً يلاقي كريم قسم المحصول بلا خط */
-  background: radial-gradient(150% 74% at 50% 108%,
-    color-mix(in srgb, var(--amber-deep) 72%, transparent) 0%,
-    color-mix(in srgb, var(--terra) 45%, transparent) 46%,
-    transparent 80%);
-}
-
-.night-pass__clock {
-  position: relative;
-  z-index: 1;
-  font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+  bottom: clamp(18px, 4vh, 40px);
+  text-align: center;
+  font-size: clamp(0.82rem, 2vw, 0.95rem);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  font-variant-numeric: tabular-nums;
-  /* أمبر اللافتة ليلاً (10.5:1 على الليل)، وتراكوتا جدارهم نهاراً
-     (4.8:1 على كريم الشريط، بينما أحمر اللافتة يهبط لـ3.97 هناك).
-     ينقلب مع --pw لا مع --p عشان لا يقعد أمبر باهتاً فوق سماء فاتحة */
+  letter-spacing: 0.06em;
   color: color-mix(in srgb, var(--terra) calc(var(--pw, 1) * 100%), var(--amber));
 }
-
-.night-pass__word {
-  position: relative;
-  z-index: 1;
-  font-family: var(--font-head);
+.shot-band__timer b {
   font-weight: 700;
-  line-height: 1.35;
-  font-size: clamp(3rem, 12vw, 5rem);
-  /* --pw انقلابة قصيرة يضبطها main.js في اللحظة اللي يصير فيها ما خلف
-     الكلمة فاتحاً: قبلها كريمية على الليل، بعدها حبر على النهار.
-     ما فيه حالة وسطى طويلة تضيع فيها. */
-  color: color-mix(in srgb, var(--ink) calc(var(--pw, 1) * 100%), var(--cream));
-  /* هالتان: عتمة تفصل الكلمة الكريمية عن سماء الفجر الفاتحة،
-     وتوهج أمبر يخلي الليل يقرأها كأنها منوّرة مثل اللافتة */
-  text-shadow:
-    0 2px 30px color-mix(in srgb, #150C06 calc(52% - var(--pw, 1) * 52%), transparent),
-    0 0 40px color-mix(in srgb, var(--amber) calc(42% - var(--p) * 42%), transparent);
+  font-size: 1.5em;
+  font-variant-numeric: tabular-nums;
+  margin-inline-end: 0.25em;
 }
 
 /* ---------- المحصول ---------- */
