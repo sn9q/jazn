@@ -17,6 +17,45 @@
     });
   }
 
+  /* انتقال حي بين واجهة جاز والـ «محصول» بدون مكتبة أو فيديو ثقيل. */
+  var journey = document.getElementById("jaznJourney");
+  if (journey && !reduced) {
+    var journeyTicking = false;
+    var clamp01 = function (value) { return Math.max(0, Math.min(1, value)); };
+    var paintJourney = function () {
+      var rect = journey.getBoundingClientRect();
+      var range = Math.max(journey.offsetHeight - window.innerHeight, 1);
+      var progress = clamp01(-rect.top / range);
+      var entry = clamp01(progress / 0.28);
+      var turn = clamp01((progress - 0.12) / 0.42);
+      var land = clamp01((progress - 0.52) / 0.30);
+      var storyA = 1 - clamp01((progress - 0.16) / 0.18);
+      var storyB = clamp01((progress - 0.18) / 0.16) * (1 - clamp01((progress - 0.55) / 0.16));
+      var storyC = clamp01((progress - 0.62) / 0.16);
+      journey.style.setProperty("--entry", entry.toFixed(3));
+      journey.style.setProperty("--turn", turn.toFixed(3));
+      journey.style.setProperty("--land", land.toFixed(3));
+      journey.style.setProperty("--story-a", storyA.toFixed(3));
+      journey.style.setProperty("--story-b", storyB.toFixed(3));
+      journey.style.setProperty("--story-c", storyC.toFixed(3));
+      journeyTicking = false;
+    };
+    paintJourney();
+    window.addEventListener("scroll", function () {
+      if (journeyTicking) return;
+      journeyTicking = true;
+      window.requestAnimationFrame(paintJourney);
+    }, { passive: true });
+    window.addEventListener("resize", paintJourney, { passive: true });
+  } else if (journey) {
+    journey.style.setProperty("--entry", "1");
+    journey.style.setProperty("--turn", "1");
+    journey.style.setProperty("--land", "1");
+    journey.style.setProperty("--story-a", "0");
+    journey.style.setProperty("--story-b", "0");
+    journey.style.setProperty("--story-c", "1");
+  }
+
   /* ظهور الأقسام */
   var targets = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
 
