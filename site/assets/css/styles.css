@@ -22,6 +22,14 @@
   --amber-core: #FEF05F;   /* قلب التوهج، من مركز اللافتة */
   --amber-deep: #D98E2B;   /* حافة التوهج */
   --sign-red: #BF4F0F;     /* حروف JAZN على اللافتة */
+  /* لوحة اللافتة: شمبانيا لا ذهب. أفتح فتقترب من كريم شارة اللوقو
+     (#F8F0F0) وتُبرز الأحمر أكثر، وتبقى فيها دفء ضوء يكفي أن تقرأ
+     العين لوحةً مضيئة لا ورقةً بيضاء. توهجها من لونها هو، فلو بقي
+     أمبر لبان حوله هالة غريبة عن اللوحة */
+  --sign-core: #FFF8DE;    /* قلب الإضاءة */
+  --sign-face: #F6E4BE;    /* وجه اللوحة */
+  --sign-edge: #DFC79A;    /* حافتها */
+  --sign-halo: #F2DFB4;    /* لون الهالة حولها */
   --cream: #FBF6F2;        /* خلفية شارة اللوقو */
   --cream-2: #F1E7DD;      /* كريم أعمق للأسطح */
   --wood: #B8935E;         /* خشب البار، من صورة g11 */
@@ -257,8 +265,11 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 /* ── اللافتة: إعادة بناء لافتتنا الحقيقية، وتشتعل عند الدخول ── */
 .sign {
-  --glow: 0 0 44px 6px color-mix(in srgb, var(--amber) 42%, transparent),
-          0 0 120px 20px color-mix(in srgb, var(--amber) 20%, transparent);
+  /* الشدّة أخفض مما كانت (42/20): كل ما فتحت اللوحة قلّ الفرق
+     بينها وبين هالتها، فالهالة القوية تصير ضباباً حولها لا ضوءاً
+     منها */
+  --glow: 0 0 44px 6px color-mix(in srgb, var(--sign-halo) 34%, transparent),
+          0 0 120px 20px color-mix(in srgb, var(--sign-halo) 16%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,7 +277,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   padding: clamp(20px, 3.4vw, 32px) clamp(58px, 15vw, 142px);
   border-radius: 10px;
   background:
-    radial-gradient(85% 130% at 50% 45%, var(--amber-core) 0%, var(--amber) 55%, var(--amber-deep) 100%);
+    radial-gradient(85% 130% at 50% 45%, var(--sign-core) 0%, var(--sign-face) 55%, var(--sign-edge) 100%);
   box-shadow: var(--glow), inset 0 0 0 1px color-mix(in srgb, var(--sign-red) 18%, transparent);
   color: var(--sign-red);
   user-select: none;
