@@ -581,6 +581,27 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .rating-line .stars { display: inline-flex; gap: 3px; color: var(--amber); }
 .rating-line .stars svg { width: 19px; height: 19px; }
 
+/* دعوة التقييم: تسكن تحت تقييم الغير مباشرةً، وهي اللحظة التي
+   يخطر فيها للزائر أن يضيف تقييمه. حبة كاملة مثل بقية الأزرار،
+   وحدّها خافت لأنها دعوة لا مطلب — والنجمة وحدها أمبر، فتلتقطها
+   العين وتربطها بنجوم التقييم فوقها بلا صراخ. عند اللمس يشتعل
+   الحدّ أمبر بهالة، مثل ما تشتعل اللافتة. */
+.rating-cta { margin-top: 26px; }
+.btn-rate {
+  border-color: color-mix(in srgb, var(--cream) 28%, transparent);
+  color: var(--cream);
+  background: color-mix(in srgb, var(--cream) 5%, transparent);
+  padding-block: 11px;
+  font-size: 0.97rem;
+}
+.btn-rate svg { color: var(--amber); }
+.btn-rate:hover,
+.btn-rate:focus-visible {
+  border-color: color-mix(in srgb, var(--amber) 70%, transparent);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+  box-shadow: 0 6px 30px -10px color-mix(in srgb, var(--amber) 55%, transparent);
+}
+
 /* ---------- متجر جَازن ---------- */
 
 .store { background: var(--cream); }
