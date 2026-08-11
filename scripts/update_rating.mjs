@@ -14,6 +14,15 @@ import { readFile, writeFile } from "node:fs/promises";
 const PLACE_ID = "ChIJvSp0YmrjBxYR1_CFyBOXpoY"; // جَازن، حي السويس، جيزان
 const PAGE = "site/index.html";
 
+// مدخلان للرقم نفسه: إما يُمرَّر جاهزاً (المهمة اليومية تجلبه من
+// كومبوزيو حيث سيربآبي مربوط أصلاً)، أو يُجلب هنا بمفتاح في البيئة
+// (لو أراد المالك يوماً أن يستقل الموقع عن كومبوزيو). المنطق الذي
+// يهم — التحقق والكتابة — مشترك بينهما فلا يتفرّع.
+function argOf(name) {
+  const i = process.argv.indexOf("--" + name);
+  return i > -1 ? process.argv[i + 1] : undefined;
+}
+
 async function fetchPlace(key) {
   const url = new URL("https://serpapi.com/search.json");
   url.search = new URLSearchParams({
@@ -51,23 +60,28 @@ function swap(html, key, value) {
   return [html.replace(re, `$1${value}$3`), m[2]];
 }
 
-const key = (process.env.SERPAPI_KEY ?? "").trim();
-if (!key) {
-  console.warn("SERPAPI_KEY غير مضبوط — الصفحة تُنشر برقمها المحفوظ");
-  process.exit(0);
-}
-
 let place;
-try {
-  place = await fetchPlace(key);
-} catch (e) {
-  console.warn(`تعذّر الجلب، الصفحة تُنشر برقمها المحفوظ — ${e.message}`);
-  process.exit(0);
+const passedRating = argOf("rating"), passedReviews = argOf("reviews");
+
+if (passedRating !== undefined || passedReviews !== undefined) {
+  place = { rating: Number(passedRating), reviews: Number(passedReviews) };
+} else {
+  const key = (process.env.SERPAPI_KEY ?? "").trim();
+  if (!key) {
+    console.warn("لا رقم مُمرَّر ولا SERPAPI_KEY — الصفحة تبقى برقمها المحفوظ");
+    process.exit(0);
+  }
+  try {
+    place = await fetchPlace(key);
+  } catch (e) {
+    console.warn(`تعذّر الجلب، الصفحة تبقى برقمها المحفوظ — ${e.message}`);
+    process.exit(0);
+  }
 }
 
 const bad = unreasonable(place);
 if (bad) {
-  console.warn(`${bad} — الصفحة تُنشر برقمها المحفوظ`);
+  console.warn(`${bad} — الصفحة تبقى برقمها المحفوظ`);
   process.exit(0);
 }
 
