@@ -19,6 +19,11 @@
    السرعة اللحظية، مقياس منظور يكبر مع الاقتراب، ولمعة تكنس
    الخزف مرة وهو يعبر ضوء اللافتة — وومضة حلقية عند اللمس.
 
+   والتوقيت مربوط بهندسة الصفحة لا بنسبة واحدة: السقوط والاستقرار
+   موقّتان على ارتفاع الشريط فينتهيان قبل ظهور رأس قسم المحصول،
+   والتفكك والبحر موقّتان على ارتفاع الشاشة فيبدآن من تلك اللحظة
+   بالضبط — فالتحلل هو نفسه فعل تسليم الصفحة للصفحة اللي بعدها.
+
    النعومة من التمهيد المخمَّد: الرسم لا يقفز مع نطّات السكرول بل
    يلحقها انسياباً كل إطار. canvas 2D وحده، بلا مكتبات، والرسم
    يشتغل فقط والشريط على الشاشة.
@@ -105,7 +110,7 @@
   };
 
   /* ─── القياس وخامة الطباعة ─── */
-  var W = 0, H = 0, S = 1, OX = 0, OY = 0;
+  var W = 0, H = 0, S = 1, OX = 0, OY = 0, VP = 1;
   var grain = null;
 
   function layout() {
@@ -113,6 +118,7 @@
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = Math.max(1, Math.round(r.width));
     H = Math.max(1, Math.round(r.height));
+    VP = Math.max(1, window.innerHeight || 1);
     cv.width = Math.round(W * dpr);
     cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -255,17 +261,34 @@
     lastP = p;
     var t = (tms || 0) / 1000;
 
-    /* ── فصول الحكاية ── */
-    var sRaw = clamp01((p - 0.06) / 0.20);
+    /* ── مرجعان هندسيان بدل نسبة واحدة ──
+       نسبة واحدة تعني توقيتاً يزيح مع كل ارتفاع شاشة: على الجوال كان
+       رأس قسم المحصول يطلع والطقم ما استقر، وعلى الديسكتوب يستقر
+       ويقعد ينتظر. فنقيس بمرجعين مربوطين بهندسة الصفحة نفسها:
+
+         apr = المسافة الممرورة ÷ ارتفاع الشريط
+               → 1 بالضبط اللحظة اللي يظهر فيها رأس القسم التالي
+                 عند أسفل الشاشة (أي r.bottom = ارتفاع الشاشة)
+         hnd = المتبقّي ÷ ارتفاع الشاشة
+               → 0 عند تلك اللحظة، و1 لما يغادر الشريط الشاشة
+
+       فالسقوط والاستقرار والبخار كلها على apr وتنتهي قبل 1، والتفكك
+       والصبّ والبحر كلها على hnd وتبدأ من صفره — فيصير التفكك حرفياً
+       هو لحظة تسليم الصفحة للصفحة اللي بعدها، لا حدثاً يصادفها. */
+    var run = p * (VP + H);
+    var apr = clamp01(run / H);
+    var hnd = clamp01((run - H) / VP);
+
+    var sRaw = clamp01((apr - 0.06) / 0.46);
     var sFall = sRaw * sRaw;
-    var sDip = Math.sin(clamp01((p - 0.26) / 0.09) * Math.PI);
-    var cRaw = clamp01((p - 0.06) / 0.28);
+    var sDip = Math.sin(clamp01((apr - 0.52) / 0.16) * Math.PI);
+    var cRaw = clamp01((apr - 0.06) / 0.62);
     var cFall = cRaw * cRaw;
-    var land = clamp01((p - 0.34) / 0.08);
+    var land = clamp01((apr - 0.68) / 0.14);
     var bounce = Math.sin(Math.min(1, land) * Math.PI);
-    var steamA = smooth((p - 0.40) / 0.05) * (1 - smooth((p - 0.49) / 0.06));
-    var dis = smooth(clamp01((p - 0.50) / 0.30));
-    var flood = smooth(clamp01((p - 0.647) / 0.17));
+    var steamA = smooth((apr - 0.76) / 0.11) * (1 - smooth((hnd - 0.02) / 0.10));
+    var dis = smooth(clamp01(hnd / 0.46));
+    var flood = smooth(clamp01((hnd - 0.225) / 0.26));
     var toCream = smooth((flood - 0.3) / 0.55);
     var settleF = smooth(flood * 1.15);
     var ampF = 15 * (1 - settleF);
@@ -372,10 +395,9 @@
       bodyDy = -46 * bodyP;
       bodyRot = -0.55 * bodyP;
       var bodyA = 1 - stag(bodyP, 0.88, 0.12);
-      /* الصبّة تبدأ عند p≈0.610، قبل ارتفاع البحر (0.647) بـ0.037 من
-         نافذة التمرير (~جزء من الثانية عند تمرير عادي) — البحر يطلع
-         من الصبّة فلا يصح يسبقها، والفجوة ضيقة عمداً وإلا صبّت
-         الخيوط في الفراغ. كان مقلوباً: البحر يوصل الكوب وهو ما صبّ. */
+      /* الصبّة تبدأ عند hnd≈0.17، قبل ارتفاع البحر (0.225) بجزء من
+         الثانية عند تمرير عادي — البحر يطلع من الصبّة فلا يصح
+         يسبقها، والفجوة ضيقة عمداً وإلا صبّت الخيوط في الفراغ. */
       pour = stag(bodyP, 0.16, 0.5);
 
 
@@ -624,14 +646,18 @@
   }
 
   /* ─── التشغيل ─── */
+  /* نقيس بـVP وH المخزّنين لا بالقيم الحيّة: draw يفكّ النسبة إلى
+     المرجعين بنفسهما، ولو اختلف المقياسان (شريط عنوان الجوال يختفي
+     وسط التمرير مثلاً) انزاح التوقيت عن هندسة الصفحة */
   function progress() {
     var r = band.getBoundingClientRect();
-    var vh = window.innerHeight || 1;
-    return clamp01((vh - r.top) / (vh + r.height));
+    return clamp01((VP - r.top) / (VP + H));
   }
 
-  /* مع prefers-reduced-motion نثبت على الطقم مستقراً وبخاره طالع */
-  var STILL = 0.45;
+  /* مع prefers-reduced-motion نثبت على الطقم مستقراً وبخاره طالع.
+     نحسب النسبة اللي تعطي apr≈0.93 (بعد الاستقرار وقبل التفكك)
+     بدل رقم ثابت، لأن المعنى صار مربوطاً بارتفاعي الشريط والشاشة */
+  function still() { return (0.93 * H) / (VP + H); }
 
   /* التمهيد المخمَّد: سر النعومة. التمرير يجي نطّات، والرسم يلحقه
      انسياباً كل إطار بدل ما يقفز معه، فتطلع الحركة سينمائية */
@@ -646,13 +672,13 @@
     window.requestAnimationFrame(frame);
   }
   function renderOnce() {
-    if (!running) draw(reduced ? STILL : lastP, 0);
+    if (!running) draw(reduced ? still() : lastP, 0);
   }
-  function onResize() { layout(); draw(reduced ? STILL : progress(), 0); }
+  function onResize() { layout(); draw(reduced ? still() : progress(), 0); }
 
   band.classList.add("on");
   layout();
-  draw(reduced ? STILL : progress(), 0);
+  draw(reduced ? still() : progress(), 0);
   window.addEventListener("resize", onResize);
 
   if (!reduced && "IntersectionObserver" in window) {
