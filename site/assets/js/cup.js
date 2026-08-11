@@ -268,7 +268,7 @@
     var bounce = Math.sin(Math.min(1, land) * Math.PI);
     var steamA = smooth((p - 0.46) / 0.07) * (1 - smooth((p - 0.55) / 0.08));
     var dis = smooth(clamp01((p - 0.55) / 0.24));
-    var flood = smooth(clamp01((p - 0.59) / 0.23));
+    var flood = smooth(clamp01((p - 0.648) / 0.20));
     var toCream = smooth((flood - 0.3) / 0.55);
     var settleF = smooth(flood * 1.15);
     var ampF = 15 * (1 - settleF);
@@ -392,7 +392,11 @@
       bodyDy = -46 * bodyP;
       bodyRot = -0.55 * bodyP;
       var bodyA = 1 - stag(bodyP, 0.78, 0.22);
-      pour = stag(bodyP, 0.28, 0.55);
+      /* الصبّة تبدأ عند p≈0.625، قبل ارتفاع البحر (0.648) بـ0.023 من
+         نافذة التمرير (~جزء من الثانية عند تمرير عادي) — البحر يطلع
+         من الصبّة فلا يصح يسبقها، والفجوة ضيقة عمداً وإلا صبّت
+         الخيوط في الفراغ. كان مقلوباً: البحر يوصل الكوب وهو ما صبّ. */
+      pour = stag(bodyP, 0.16, 0.5);
 
       var handleP = stag(dis, 0.0, 0.5);
       var handleA = 1 - stag(handleP, 0.6, 0.3);
