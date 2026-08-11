@@ -8,10 +8,11 @@
    الحكاية بالتمرير، بإيقاع فلم: الصحن والكوب مرميان من فوق معاً
    كقطعتين تسقطان بجاذبية — الصحن يلقف الطاولة أولاً، والكوب
    يلحقه ويستقر فوقه، ويتصاعد البخار. ثم مع مواصلة النزول تتحلل
-   الرسمة قطعة قطعة، يميل الكوب وتنسكب منه القهوة الغامقة، ومن
+   الرسمة، يميل الكوب وتنسكب منه القهوة الغامقة، ومن
    الصبّة يرتفع البحر الكريمي ويبتلع القطع — اللي يصير هو كريم قسم
    «القائمة تبدأ من المحصول». الوردمارك يبقى ثابتاً على الكوب
-   ويختفي معه، والقطع لا تذوب إلا في آخر لحظة قبل ما يبتلعها.
+   ويختفي معه، واليد جزء من الكوب والخصرة جزء من الصحن — قطعتان
+   فقط لا خمس، والقطع لا تذوب إلا في آخر لحظة قبل ما يبتلعها.
 
    النزول نفسه مشغول بأربعة تأثيرات مشتقة من فيزيائه لا مضافة
    زخرفةً: ظل ترقّب يضيق ويغمق كل ما قربت القطعة، أثر حركة تقوده
@@ -223,7 +224,7 @@
     ctx.globalAlpha = baseA;
   }
 
-  function drawSaucerBase() {
+  function drawSaucer() {
     ctx.fillStyle = CREAM;
     ell(0, 0, 116, 27);
     ctx.fill();
@@ -240,11 +241,7 @@
     ctx.fillStyle = mix(CREAM_2, "#C9AE93", 0.4);
     ell(2, -1, 44, 10);
     ctx.fill();
-  }
-
-  /* خصرة الأمبر قطعة لحالها: وقت التفكك تنشال عن الصحن وتطفو
-     حلقة ذهبية معلقة قبل ما تذوب */
-  function drawSaucerRing() {
+    /* خصرة الأمبر جزء من الصحن، ما تنفصل عنه */
     ctx.strokeStyle = mix(AMBER_DEEP, AMBER, 0.35, 0.8);
     ctx.lineWidth = 2.6;
     ell(0, -1, 96, 21.5);
@@ -259,16 +256,16 @@
     var t = (tms || 0) / 1000;
 
     /* ── فصول الحكاية ── */
-    var sRaw = clamp01((p - 0.09) / 0.22);
+    var sRaw = clamp01((p - 0.06) / 0.20);
     var sFall = sRaw * sRaw;
-    var sDip = Math.sin(clamp01((p - 0.31) / 0.10) * Math.PI);
-    var cRaw = clamp01((p - 0.09) / 0.32);
+    var sDip = Math.sin(clamp01((p - 0.26) / 0.09) * Math.PI);
+    var cRaw = clamp01((p - 0.06) / 0.28);
     var cFall = cRaw * cRaw;
-    var land = clamp01((p - 0.41) / 0.12);
+    var land = clamp01((p - 0.34) / 0.08);
     var bounce = Math.sin(Math.min(1, land) * Math.PI);
-    var steamA = smooth((p - 0.46) / 0.07) * (1 - smooth((p - 0.55) / 0.08));
-    var dis = smooth(clamp01((p - 0.55) / 0.30));
-    var flood = smooth(clamp01((p - 0.69) / 0.17));
+    var steamA = smooth((p - 0.40) / 0.05) * (1 - smooth((p - 0.49) / 0.06));
+    var dis = smooth(clamp01((p - 0.50) / 0.30));
+    var flood = smooth(clamp01((p - 0.647) / 0.17));
     var toCream = smooth((flood - 0.3) / 0.55);
     var settleF = smooth(flood * 1.15);
     var ampF = 15 * (1 - settleF);
@@ -326,7 +323,7 @@
       ctx.globalAlpha = 1;
     }
 
-    /* ── الصحن: يسقط لوحاله، ووقت التفكك ينسحب وتنشال عنه خصرته ── */
+    /* ── الصحن بخصرته: قطعة واحدة، يسقط لوحاله ووقت التفكك ينسحب ── */
     var sP = stag(dis, 0.05, 0.85);
     var sX = -16 * (1 - sRaw) - 88 * sP + Math.sin(t * 0.6) * 3 * sP;
     var sYv = -(VH * 0.72 + 80) * (1 - sFall) + sDip * 3 + 58 * sP;
@@ -350,7 +347,7 @@
           ctx.translate(CX + sX, SY + gy);
           ctx.rotate(sRot);
           ctx.scale(lerp(0.88, 1, smooth(gq)), lerp(0.88, 1, smooth(gq)));
-          drawSaucerBase();
+          drawSaucer();
           ctx.restore();
         }
       }
@@ -359,26 +356,7 @@
       ctx.translate(CX + sX, SY + sYv);
       ctx.rotate(sRot);
       ctx.scale(sScale, sScale);
-      drawSaucerBase();
-      ctx.restore();
-    }
-    /* الخصرة تطفو حلقة ذهبية لحالها */
-    var rP = stag(dis, 0.16, 0.78);
-    var rA = 1 - stag(rP, 0.84, 0.16);
-    if (rA > 0.004 && dis > 0.001) {
-      ctx.save();
-      ctx.globalAlpha = Math.min(1, rA);
-      ctx.translate(CX + sX * (1 - rP) + 30 * rP, SY + sYv * (1 - rP * 0.2) - 105 * rP);
-      ctx.rotate(sRot + 0.5 * rP + Math.sin(t * 0.9) * 0.05 * rP);
-      ctx.scale(1 + 0.2 * rP, 1 + 0.2 * rP);
-      drawSaucerRing();
-      ctx.restore();
-    } else if (dis <= 0.001 && sA > 0.004) {
-      ctx.save();
-      ctx.globalAlpha = sA;
-      ctx.translate(CX + sX, SY + sYv);
-      ctx.rotate(sRot);
-      drawSaucerRing();
+      drawSaucer();
       ctx.restore();
     }
 
@@ -394,14 +372,11 @@
       bodyDy = -46 * bodyP;
       bodyRot = -0.55 * bodyP;
       var bodyA = 1 - stag(bodyP, 0.88, 0.12);
-      /* الصبّة تبدأ عند p≈0.660، قبل ارتفاع البحر (0.690) بـ0.03 من
+      /* الصبّة تبدأ عند p≈0.610، قبل ارتفاع البحر (0.647) بـ0.037 من
          نافذة التمرير (~جزء من الثانية عند تمرير عادي) — البحر يطلع
          من الصبّة فلا يصح يسبقها، والفجوة ضيقة عمداً وإلا صبّت
          الخيوط في الفراغ. كان مقلوباً: البحر يوصل الكوب وهو ما صبّ. */
       pour = stag(bodyP, 0.16, 0.5);
-
-      var handleP = stag(dis, 0.0, 0.75);
-      var handleA = 1 - stag(handleP, 0.82, 0.18);
 
 
       /* خيوط الصب: أعرض عند الشفة وأرفع وهي تتسارع (عيّنات متدرجة
@@ -502,6 +477,9 @@
         ctx.translate(CX + cX + bodyDx, FOOT_Y + cY + bodyDy);
         ctx.rotate(cTilt + bodyRot);
         if (dis < 0.02) ctx.scale(cScale, cScale);
+        /* اليد جزء من الكوب: تُرسم قبل جسمه فيغطي الجسمُ وصلتَها،
+           وتتحرك معه بنفس التحويل فلا تنفصل وقت التفكك */
+        drawHandle();
         drawCupBody();
         ctx.save();
         ctx.translate(-9 * bodyP, 2 * bodyP);
@@ -524,16 +502,6 @@
           ctx.fillRect(-70, syw - 26, 140, 52);
           ctx.restore();
         }
-        ctx.restore();
-      }
-
-      /* اليد */
-      if (handleA > 0.004) {
-        ctx.save();
-        ctx.globalAlpha = handleA;
-        ctx.translate(CX + cX + 98 * handleP, FOOT_Y + cY - 74 * handleP + Math.sin(t * 1.1) * 4 * handleP);
-        ctx.rotate(cTilt + 0.75 * handleP);
-        drawHandle();
         ctx.restore();
       }
 
@@ -663,7 +631,7 @@
   }
 
   /* مع prefers-reduced-motion نثبت على الطقم مستقراً وبخاره طالع */
-  var STILL = 0.49;
+  var STILL = 0.45;
 
   /* التمهيد المخمَّد: سر النعومة. التمرير يجي نطّات، والرسم يلحقه
      انسياباً كل إطار بدل ما يقفز معه، فتطلع الحركة سينمائية */
