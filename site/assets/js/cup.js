@@ -101,14 +101,17 @@
   (function () {
     var seed = 8140777;
     var rnd = function () { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
-    for (var i = 0; i < 42; i++) {
+    for (var i = 0; i < 68; i++) {
       PARTS.push({
         src: i % 3,                       // 0 جسم، 1 كريما، 2 صحن
-        lx: (rnd() - 0.5) * 96,
-        ly: -20 - rnd() * 70,
-        s: 1.1 + rnd() * 2.1,
-        d: rnd() * 0.34,
+        ang: rnd() * Math.PI * 2,         // موضعها على حافة قطعتها
+        edge: 0.75 + rnd() * 0.45,
+        /* توزيع حجمين: غبار كثير ورقائق قليلة، فيطلع عمق */
+        s: rnd() < 0.7 ? 0.8 + rnd() * 1.2 : 1.9 + rnd() * 1.7,
+        d: rnd() * 0.4,
         ph: rnd() * 6.28,
+        fq: 0.55 + rnd() * 0.9,
+        tw: rnd() * 6.28,
       });
     }
   })();
@@ -510,33 +513,76 @@
         if (wmP > 0.8) wmRipple = { x: OX + wx * S, p: stag(wmP, 0.8, 0.2) };
       }
 
-      /* جزيئات الذوبان: تتقشر من القطع وتهبط لسطح البحر */
-      if (dis > 0.18) {
+      /* جزيئات الذوبان: تتقشر من حواف القطع نفسها لا من سحابة
+         عشوائية، لكل ذرة أثر باهت خلف مسارها، ولونها يتحول كريمياً
+         وهي نازلة — الذرة تندمج بالبحر قبل ما تلمسه، ووين تحط
+         تنقر السطح نقرة صغيرة. */
+      if (dis > 0.14) {
+        var seaY = Math.min(seaTopS, VH + 40);
         for (var i = 0; i < PARTS.length; i++) {
           var pr = PARTS[i];
-          var pp = stag(dis, 0.2 + pr.d, 0.5);
+          var pp = stag(dis, 0.16 + pr.d, 0.52);
           if (pp <= 0.004 || pp >= 0.996) continue;
-          var bx, by, col;
-          if (pr.src === 0) { bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 40; col = CREAM; }
-          else if (pr.src === 1) { bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 84; col = mix(AMBER_DEEP, AMBER, 0.4); }
-          else { bx = CX + sX; by = SY + sYv; col = CREAM_2; }
-          var px = bx + pr.lx * (0.35 + 0.95 * pp) + Math.sin(t * 0.8 + pr.ph) * 6 * pp;
-          var py = by + pr.ly * (1 - pp * 0.5) - 12 * Math.sin(Math.min(1, pp) * Math.PI)
-                 + (Math.min(seaTopS, VH + 40) - by) * pp * pp;
-          ctx.globalAlpha = Math.sin(pp * Math.PI) * 0.85;
-          ctx.fillStyle = col;
+
+          var bx, by, prx, pry, colBase;
+          if (pr.src === 0) {
+            bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 45;
+            prx = 54; pry = 38; colBase = CREAM;
+          } else if (pr.src === 1) {
+            bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 84;
+            prx = 48; pry = 12; colBase = "#E0A23E";
+          } else {
+            bx = CX + sX; by = SY + sYv;
+            prx = 108; pry = 25; colBase = CREAM_2;
+          }
+
+          var exd = Math.cos(pr.ang), eyd = Math.sin(pr.ang);
+          var pos = function (q) {
+            return [
+              bx + exd * prx * pr.edge + exd * 20 * q + Math.sin(t * pr.fq + pr.ph) * (4 + 7 * q),
+              by + eyd * pry * pr.edge - 13 * Math.sin(Math.min(1, q) * Math.PI) + (seaY - by) * q * q,
+            ];
+          };
+          var m = pos(pp);
+          var colNow = mix(colBase, CREAM, 0.55 * pp);
+          var twk = 0.75 + 0.25 * Math.sin(t * 2.6 + pr.tw);
+          var aMain = Math.sin(pp * Math.PI) * 0.9 * twk;
           var ps = pr.s * (1 - 0.3 * pp);
+
+          /* الأثر: شبحان باهتان على المسار خلفها */
+          ctx.fillStyle = colNow;
+          for (var g = 2; g >= 1; g--) {
+            var gq = pp - g * 0.05;
+            if (gq <= 0.004) continue;
+            var gm = pos(gq);
+            ctx.globalAlpha = aMain * (g === 1 ? 0.28 : 0.12);
+            ell(gm[0], gm[1], ps * 0.68, ps * 0.52);
+            ctx.fill();
+          }
+
+          ctx.globalAlpha = aMain;
           if (i % 2) {
             /* شظية رقيقة تدور وهي هابطة */
             ctx.save();
-            ctx.translate(px, py);
+            ctx.translate(m[0], m[1]);
             ctx.rotate(pr.ph + t * 0.6 + pp * 2.2);
             ell(0, 0, ps * 1.7, ps * 0.5);
             ctx.fill();
             ctx.restore();
           } else {
-            ell(px, py, ps, ps * 0.85);
+            ell(m[0], m[1], ps, ps * 0.85);
             ctx.fill();
+          }
+
+          /* نقرة الوصول على سطح الموجة */
+          if (i % 4 === 0 && pp > 0.84 && flood > 0.05) {
+            var plip = (pp - 0.84) / 0.16;
+            var surfP = (seaTopW + Math.sin((OX + m[0] * S) / (W / 6.5) + t * 0.7) * ampF - OY) / S;
+            ctx.globalAlpha = 0.4 * (1 - plip);
+            ctx.strokeStyle = mix(AMBER_DEEP, CREAM, 0.5);
+            ctx.lineWidth = 1.2;
+            ell(m[0], surfP, 3 + plip * 12, 1 + plip * 3.4);
+            ctx.stroke();
           }
         }
         ctx.globalAlpha = 1;
