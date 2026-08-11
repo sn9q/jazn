@@ -108,6 +108,41 @@
     }
   })();
 
+  /* ─── البخار ───
+     الخيط المرسوم بخطٍّ واحد يقرأ سلكاً لا بخاراً: البخار له حجم،
+     يتوسّع وهو يصعد ويتبدد قبل أن يصل بعيداً، وحافّته ليست حافّة.
+     فبدل السكتش نبني نفخةً واحدة ناعمة (تدرّج شعاعي) ونختمها
+     عشرات المرات على مسار كل خصلة — تكبر مع الارتفاع وتخفت،
+     فيصير للبخار عمقٌ وتشتّت بلا أي مرشّح blur (وهو بطيء ومتفاوت
+     الدعم). */
+  var puff = null;
+  function makePuff() {
+    var d = 72;
+    puff = document.createElement("canvas");
+    puff.width = puff.height = d;
+    var p = puff.getContext("2d");
+    var g = p.createRadialGradient(d / 2, d / 2, 0, d / 2, d / 2, d / 2);
+    /* الدفء في القلب والحياد في الحافة — وهذا وحده يوزّع الإضاءة:
+       قرب الكريما النفخات صغيرة متلاصقة فيغلب قلبها الدافئ (البخار
+       يلتقط ضوء اللافتة الأمبر)، وفي الأعلى تكبر فتغلب حافتها
+       الباردة — فيبرد الدخان وهو يعلو، بسبريت واحد لا اثنين */
+    g.addColorStop(0.00, "rgba(255,238,209,0.60)");
+    g.addColorStop(0.35, "rgba(255,246,232,0.24)");
+    g.addColorStop(0.70, "rgba(248,245,241,0.06)");
+    g.addColorStop(1.00, "rgba(248,245,241,0)");
+    p.fillStyle = g;
+    p.fillRect(0, 0, d, d);
+  }
+
+  /* ثلاث خصلات لا خيطان: العدد الفردي يكسر التناظر، ولكلٍّ طورها
+     وسرعتها وميلها فما تتنفّس الثلاث معاً. القيم بإحداثيات المشهد
+     نسبةً إلى مركز الكوب. */
+  var WISPS = [
+    { x: -21, ph: 0.0, sp: 0.55, amp: 6.0, wav: 1.9, drift: -9, h: 112, sz: 17, o: 0.95 },
+    { x: 0, ph: 2.4, sp: 0.44, amp: 8.0, wav: 2.4, drift: 5, h: 136, sz: 20, o: 1.00 },
+    { x: 19, ph: 4.3, sp: 0.63, amp: 5.0, wav: 2.1, drift: 11, h: 98, sz: 16, o: 0.80 }
+  ];
+
   /* تقدم متدرج: كل قطعة لها نافذتها داخل التفكك، فيقرأ تحللاً
      متسلسلاً لا انزلاقة واحدة متزامنة */
   var stag = function (x, s, d) { return smooth(clamp01((x - s) / d)); };
@@ -140,6 +175,8 @@
     S = Math.min(W / VW, H / VH) * 0.98;
     OX = (W - VW * S) / 2;
     OY = (H - VH * S) / 2;
+
+    if (!puff) makePuff();
 
     /* حبيبات ورق فوق المشهد كله، تكسر نظافة الفيكتور وتعطي ملمس مطبوعة */
     grain = document.createElement("canvas");
@@ -609,22 +646,40 @@
 
     }
 
-    /* خيطا بخار يتنفسان فوق الكوب المستقر */
-    if (steamA > 0.01) {
-      ctx.strokeStyle = mix(SAND, CREAM, 0.5);
-      ctx.lineCap = "round";
-      [{ x: CX - 12, ph: 0 }, { x: CX + 14, ph: 2.1 }].forEach(function (sm) {
-        var baseY = SY - 118 + bob;
-        var sway = function (k) { return Math.sin(t * 0.9 + sm.ph + k * 2.2) * (5 + k * 7); };
-        [[5, 0.10], [2.4, 0.22]].forEach(function (pass) {
-          ctx.globalAlpha = steamA * pass[1];
-          ctx.lineWidth = pass[0];
-          ctx.beginPath();
-          ctx.moveTo(sm.x, baseY);
-          ctx.bezierCurveTo(sm.x + sway(0.3), baseY - 26, sm.x + sway(0.7), baseY - 48, sm.x + sway(1) * 0.7, baseY - 74);
-          ctx.stroke();
-        });
-      });
+    /* البخار: ثلاث خصلات مختومة بالنفخات، تصعد من سطح الكريما */
+    if (steamA > 0.01 && puff) {
+      /* الكثافة هي الفرق بين بخارٍ وخرَز: لو تباعدت النفخات بانت
+         حبّاتٍ منفصلة، فالخطوة أصغر من نصف قطر النفخة دائماً،
+         وشفافية الواحدة منخفضة لأنها تتراكم */
+      var STEPS = 34;
+      var baseY = SY - 99 + bob;      // عند سطح الكريما لا فوقه بكثير
+      for (var wi = 0; wi < WISPS.length; wi++) {
+        var s = WISPS[wi];
+        for (var si = 0; si < STEPS; si++) {
+          var u = si / (STEPS - 1);
+
+          /* الغلاف: يولد عند السطح بسرعة ثم يتبدّد طويلاً — البخار
+             يختفي بالتشتّت لا بالقطع، فذيله أطول من رأسه */
+          var env = smooth(u / 0.16) * (1 - smooth((u - 0.34) / 0.66));
+          if (env < 0.004) continue;
+
+          /* التموّج يتّسع كلما ارتفع: قرب السطح الهواء ساكن،
+             وفوق يتلاعب به. والميل تربيعي فيبدأ عمودياً ثم ينحرف */
+          /* موجتان بترددين: الواحدة وحدها تعطي أفعى منتظمة،
+             واثنتان غير متناسبتين تعطيان اضطراباً */
+          var wob = (Math.sin(t * s.sp + s.ph + u * s.wav * Math.PI) +
+                     Math.sin(t * s.sp * 1.7 + s.ph * 2 + u * s.wav * 2.6) * 0.4)
+                    * s.amp * (0.18 + u * 1.15);
+          var x = CX + s.x + wob + s.drift * u * u;
+          var y = baseY - u * s.h;
+          /* يتوسّع بقوة مع الصعود: البخار يتمدّد ببرودة الهواء،
+             فالقاعدة خيط والقمة غيمة */
+          var sz = s.sz * (0.72 + u * u * 2.4 + u * 0.5);
+
+          ctx.globalAlpha = steamA * env * s.o * 0.26;
+          ctx.drawImage(puff, x - sz / 2, y - sz / 2, sz, sz);
+        }
+      }
       ctx.globalAlpha = 1;
     }
 
