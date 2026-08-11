@@ -254,20 +254,20 @@
        معاً. الصحن أثقل فيسبق ويلقف الطاولة أولاً، والكوب وراه مباشرة
        يستقر فوقه. المسافات قصيرة عمداً عشان السقوط كله داخل الكادر
        والاثنان يبانان في الهوا سوا. */
-    var sRaw = clamp01((p - 0.20) / 0.22);
+    var sRaw = clamp01((p - 0.14) / 0.22);
     var sFall = sRaw * sRaw;
-    var sDip = Math.sin(clamp01((p - 0.42) / 0.10) * Math.PI);
-    var cRaw = clamp01((p - 0.20) / 0.32);
+    var sDip = Math.sin(clamp01((p - 0.36) / 0.10) * Math.PI);
+    var cRaw = clamp01((p - 0.14) / 0.32);
     var cFall = cRaw * cRaw;
-    var land = clamp01((p - 0.52) / 0.12);
+    var land = clamp01((p - 0.46) / 0.12);
     var bounce = Math.sin(Math.min(1, land) * Math.PI);
 
-    var steamA = smooth((p - 0.57) / 0.07) * (1 - smooth((p - 0.68) / 0.08));
+    var steamA = smooth((p - 0.51) / 0.07) * (1 - smooth((p - 0.62) / 0.08));
 
     /* التفكك: الرسمة تتحلل لقطعها وينسكب منها الانتقال الكريمي */
-    var dis = smooth(clamp01((p - 0.66) / 0.20));
+    var dis = smooth(clamp01((p - 0.60) / 0.20));
     var pour = smooth(clamp01((dis - 0.22) / 0.5));   // الصب بعد ما يميل الكوب
-    var flood = smooth(clamp01((p - 0.70) / 0.22));   // البحر يرتفع من الانسكاب
+    var flood = smooth(clamp01((p - 0.64) / 0.22));   // البحر يرتفع من الانسكاب
     var fade = 1 - smooth((dis - 0.5) / 0.45);        // ذوبان القطع
 
     var streamLandX = CX;
@@ -317,10 +317,10 @@
     if (cRaw > 0.001) {
       var cX = 26 * (1 - cRaw);
       var cY = -(VH * 0.66 + 60) * (1 - cFall) - bounce * 6 + bob;
+      /* بلا سكواش/سترتش: الهبوط نطّة موضع فقط، الشكل ما يتشوه —
+         التمدد المطاطي كان يبين غريباً على خزف صلب */
       var cTilt = -0.14 * (1 - cRaw) + 0.04 * bounce;
-      var squashX = 1 + 0.04 * bounce;
-      var squashY = 1 - 0.05 * bounce;
-      var cw = 0.05 * bounce;
+      var cw = 0;
 
       /* قطعة: تحويل إضافي فوق موضع الكوب المستقر */
       var piece = function (dx, dy, rot, fn, arg) {
@@ -328,7 +328,6 @@
         ctx.globalAlpha = Math.max(0, fade);
         ctx.translate(CX + cX + dx, FOOT_Y + cY + dy);
         ctx.rotate(cTilt + rot);
-        if (dis < 0.01) ctx.scale(squashX, squashY);
         fn(arg);
         ctx.restore();
       };
@@ -455,7 +454,7 @@
   }
 
   /* مع prefers-reduced-motion نثبت على الطقم مستقراً وبخاره طالع */
-  var STILL = 0.60;
+  var STILL = 0.54;
 
   /* التمهيد المخمَّد: سر النعومة. التمرير يجي نطّات، والرسم يلحقه
      انسياباً كل إطار بدل ما يقفز معه، فتطلع الحركة سينمائية */
