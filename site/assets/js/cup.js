@@ -5,16 +5,18 @@
    ديمي-تاس أبيض بجسم مدوّر ويد صغيرة وعليه وردماركهم، على صحن
    بخصرة أمبر (تحية لصحونهم الفنية)، والكريما ذهبية مثل شوتهم.
 
-   الحكاية بالتمرير، بإيقاع فلم: الكوب وصحنه ينزلان معاً كطقم
-   واحد انزلاقاً متباطئاً، يستقران بتموّجة صغيرة ويتصاعد البخار،
-   ثم مع مواصلة النزول يغوص الطقم في بحر كريمي يطلع من الأسفل،
-   تتسع حوله دوائر على السطح ويذوب فيه ذوباناً — فيصير البحر هو
-   كريم قسم «القائمة تبدأ من المحصول» والزائر يهبط وراءه.
+   الحكاية بالتمرير، بإيقاع فلم: الصحن والكوب مرميان من فوق معاً
+   كقطعتين منفصلتين تسقطان بجاذبية — الصحن يلقف الطاولة أولاً،
+   والكوب يلحقه ويستقر فوقه بتموّجة، ويتصاعد البخار. ثم مع مواصلة
+   النزول تتفكك الرسمة نفسها إلى قطعها: اليد تسحب لجهة، الجسم
+   لجهة، الصحن لجهة، وقرص الكريما ينفصل وينسكب خيوطاً ذهبية
+   لتحت — ومن الانسكاب يرتفع البحر الكريمي اللي يبتلع القطع
+   الذايبة ويصير هو كريم قسم «القائمة تبدأ من المحصول».
 
    النعومة من التمهيد المخمَّد: الرسم لا يقفز مع نطّات السكرول بل
-   يلحقها انسياباً (progress مخمَّد كل إطار)، فتطلع الحركة سينمائية
-   مهما كان جهاز الزائر. canvas 2D وحده، بلا مكتبات، والرسم يشتغل
-   فقط والشريط على الشاشة.
+   يلحقها انسياباً كل إطار، فتطلع الحركة سينمائية مهما كان جهاز
+   الزائر. canvas 2D وحده، بلا مكتبات، والرسم يشتغل فقط والشريط
+   على الشاشة.
    ============================================================ */
 
 (function () {
@@ -136,8 +138,10 @@
     ctx.closePath();
   }
 
-  function drawCup(squashX, squashY, cremaWobble) {
-    /* اليد أولاً فتغطي الوصلةَ جسمُ الكوب */
+  /* اليد والجسم والكريما قطع مستقلة: ترسم معاً وهي طقم واحد،
+     وكل وحدة بتحويلها الخاص وقت التفكك */
+
+  function drawHandle() {
     ctx.lineCap = "round";
     ctx.strokeStyle = CREAM;
     ctx.lineWidth = 12;
@@ -151,10 +155,9 @@
     ctx.moveTo(56, -58);
     ctx.quadraticCurveTo(80, -46, 46, -28);
     ctx.stroke();
+  }
 
-    ctx.save();
-    ctx.scale(squashX, squashY);
-
+  function drawCupBody() {
     /* الجسم بملء مسطّح، وظل جانبي بحدّ صريح (بوسترايز، لا تدرج ناعم) */
     cupBodyPath();
     ctx.fillStyle = CREAM;
@@ -166,7 +169,6 @@
     ctx.fillRect(16, -100, 60, 110);
     ctx.fillStyle = mix(CREAM_2, "#C9AE93", 0.5);
     ctx.fillRect(40, -100, 36, 110);
-    /* ظل ارتكاز خفيف قرب القاعدة */
     ctx.fillStyle = mix(CREAM_2, "#B39A80", 0.55);
     ell(0, 0, 30, 7);
     ctx.fill();
@@ -175,17 +177,18 @@
     /* اللوقو على الجسم، مثل أكوابهم */
     if (wmReady) {
       var w = 40, h = (w * wm.height) / wm.width;
-      ctx.globalAlpha = 0.92;
+      ctx.globalAlpha *= 0.92;
       ctx.drawImage(wm, -w / 2, -66, w, h);
-      ctx.globalAlpha = 1;
+      ctx.globalAlpha /= 0.92;
     }
 
-    /* جوف الفوهة ثم الكريما الذهبية، مثل شوتهم في الصورة */
+    /* جوف الفوهة: يبقى مع الجسم، فإذا انفصل قرص الكريما بان الكوب فاضياً */
     ctx.fillStyle = mix(NIGHT, "#000", 0.35);
     ell(0, -84, 56, 14.6);
     ctx.fill();
+  }
 
-    var cw = 1 + cremaWobble;
+  function drawCrema(cw) {
     ctx.fillStyle = mix(AMBER_DEEP, "#B4691E", 0.35);
     ell(0, -83, 51 * cw, 12.6 / cw);
     ctx.fill();
@@ -201,17 +204,15 @@
     ctx.beginPath();
     ctx.ellipse(-7, -84.6, 16, 3.4, -0.35, 0, Math.PI * 2);
     ctx.fill();
-    /* حبيبات عند الحافة */
+    var baseA = ctx.globalAlpha;
     for (var i = 0; i < SPECKS.length; i++) {
       var sp = SPECKS[i];
-      ctx.globalAlpha = sp.o;
+      ctx.globalAlpha = baseA * sp.o;
       ctx.fillStyle = "#F2D8A0";
       ell(Math.cos(sp.a) * sp.r * 48 * cw, -83 + Math.sin(sp.a) * sp.r * 11.6, sp.s, sp.s * 0.7);
       ctx.fill();
     }
-    ctx.globalAlpha = 1;
-
-    ctx.restore();
+    ctx.globalAlpha = baseA;
   }
 
   function drawSaucer() {
@@ -245,18 +246,29 @@
     lastP = p;
     var t = (tms || 0) / 1000;
 
-    /* فصول الحكاية، كلها بمنحنيات ناعمة الطرفين */
-    /* الفصول مؤخَّرة عمداً: موضع الهبوط أسفل الشريط، وما يدخل الشاشة
-       إلا عند p≈0.33 — لو نزل الطقم قبلها ما شاف الزائر السقوط أصلاً،
-       يلقاه جالساً جاهزاً. فالنزول يصير والمسرح قدام العين. */
-    var entryRaw = clamp01((p - 0.26) / 0.30);
-    var entry = 1 - Math.pow(1 - entryRaw, 3);          // انزلاق يتباطأ قبل الاستقرار
-    var wob = Math.sin(clamp01((p - 0.54) / 0.14) * Math.PI); // تموّجة الاستقرار
-    var steamA = smooth((p - 0.56) / 0.08) * (1 - smooth((p - 0.74) / 0.12));
-    var sinkRaw = clamp01((p - 0.70) / 0.26);
-    var sink = smooth(sinkRaw);                          // غوص يبدأ وينتهي بهدوء
-    var flood = smooth(clamp01((p - 0.66) / 0.30));      // البحر الكريمي
-    var groupA = 1 - smooth((sinkRaw - 0.45) / 0.5);     // الذوبان في الصفحة اللي تحت
+    /* ── فصول الحكاية ──
+       مؤخَّرة عمداً: موضع الهبوط أسفل الشريط وما يدخل الشاشة إلا
+       عند p≈0.33، فكل شيء يصير والمسرح قدام العين. */
+
+    /* الرمية: القطعتان تنطلقان بنفس اللحظة من فوق — كأن أحداً رماهما
+       معاً. الصحن أثقل فيسبق ويلقف الطاولة أولاً، والكوب وراه مباشرة
+       يستقر فوقه. المسافات قصيرة عمداً عشان السقوط كله داخل الكادر
+       والاثنان يبانان في الهوا سوا. */
+    var sRaw = clamp01((p - 0.20) / 0.22);
+    var sFall = sRaw * sRaw;
+    var sDip = Math.sin(clamp01((p - 0.42) / 0.10) * Math.PI);
+    var cRaw = clamp01((p - 0.20) / 0.32);
+    var cFall = cRaw * cRaw;
+    var land = clamp01((p - 0.52) / 0.12);
+    var bounce = Math.sin(Math.min(1, land) * Math.PI);
+
+    var steamA = smooth((p - 0.57) / 0.07) * (1 - smooth((p - 0.68) / 0.08));
+
+    /* التفكك: الرسمة تتحلل لقطعها وينسكب منها الانتقال الكريمي */
+    var dis = smooth(clamp01((p - 0.66) / 0.20));
+    var pour = smooth(clamp01((dis - 0.12) / 0.5));   // خيوط الانسكاب
+    var flood = smooth(clamp01((p - 0.70) / 0.22));   // البحر يرتفع من الانسكاب
+    var fade = 1 - smooth((dis - 0.5) / 0.45);        // ذوبان القطع
 
     var dpr = cv.width / W;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -272,15 +284,10 @@
     ctx.translate(OX, OY);
     ctx.scale(S, S);
 
-    /* حركة الطقم: نزول معاً، تنفّس خفيف وهو مستقر، ثم غوص بذوبان */
-    var yEnter = -(VH + 260) * (1 - entry);
-    var bob = Math.sin(t * 0.8) * 2.4 * entry * (1 - sink);
-    var gy = yEnter + bob + wob * 4 + sink * VH * 0.92;
-    var tilt = -0.07 * (1 - entry) - 0.025 * sink;
-    var gscale = 1 - 0.05 * sink;                        // يبتعد وهو يغوص
+    var bob = Math.sin(t * 0.8) * 2.2 * land * (1 - dis);
 
-    /* بركة ضوء أمبر عند موضع الهبوط، تنبض نبضة عند الاستقرار */
-    var poolA = (0.13 * entry + 0.05 * wob) * (1 - sink);
+    /* بركة ضوء أمبر تنتظر تحت موضع الهبوط، وتنطفي مع التفكك */
+    var poolA = (0.11 * smooth(sRaw) + 0.05 * bounce) * (1 - dis);
     if (poolA > 0.004) {
       var pool = ctx.createRadialGradient(CX, SY + 14, 8, CX, SY + 14, 170);
       pool.addColorStop(0, mix(AMBER, NIGHT, 0.25, poolA));
@@ -288,26 +295,69 @@
       ctx.fillStyle = pool;
       ell(CX, SY + 14, 170, 44);
       ctx.fill();
-      ctx.fillStyle = "rgba(12,7,3," + 0.35 * entry * (1 - sink) + ")";
+      ctx.fillStyle = "rgba(12,7,3," + 0.35 * sFall * (1 - dis) + ")";
       ell(CX, SY + 12, 104, 20);
       ctx.fill();
     }
 
-    /* الطقم كله كتلة واحدة: الصحن والكوب فوقه */
+    /* ── الصحن: يسقط لوحاله، بميلان خفيف يعتدل قبل الأرض ── */
+    var sX = -16 * (1 - sRaw) - 74 * dis;
+    var sYv = -(VH * 0.72 + 80) * (1 - sFall) + sDip * 3 + 46 * dis;
     ctx.save();
-    ctx.globalAlpha = Math.max(0, groupA);
-    ctx.translate(CX, SY + gy);
-    ctx.rotate(tilt);
-    ctx.scale(gscale, gscale);
+    ctx.globalAlpha = Math.max(0, fade);
+    ctx.translate(CX + sX, SY + sYv);
+    ctx.rotate(-0.06 * (1 - sRaw) - 0.14 * dis);
     drawSaucer();
-    ctx.save();
-    ctx.translate(0, FOOT_Y - SY);
-    drawCup(1 + 0.018 * wob, 1 - 0.02 * wob, 0.04 * wob);
     ctx.restore();
-    ctx.restore();
-    ctx.globalAlpha = 1;
 
-    /* خيطا بخار يتنفسان فوق الكوب المستقر */
+    /* ── الكوب: مرمي وراه، يستقر فوقه بتموّجة ──
+       وقت التفكك ينحل لثلاث قطع، كل وحدة تسحب لجهتها */
+    if (cRaw > 0.001) {
+      var cX = 26 * (1 - cRaw);
+      var cY = -(VH * 0.66 + 60) * (1 - cFall) - bounce * 6 + bob;
+      var cTilt = -0.14 * (1 - cRaw) + 0.04 * bounce;
+      var squashX = 1 + 0.04 * bounce;
+      var squashY = 1 - 0.05 * bounce;
+      var cw = 0.05 * bounce;
+
+      /* قطعة: تحويل إضافي فوق موضع الكوب المستقر */
+      var piece = function (dx, dy, rot, fn, arg) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, fade);
+        ctx.translate(CX + cX + dx, FOOT_Y + cY + dy);
+        ctx.rotate(cTilt + rot);
+        if (dis < 0.01) ctx.scale(squashX, squashY);
+        fn(arg);
+        ctx.restore();
+      };
+
+      /* خيوط الانسكاب خلف القطع: من موضع القرص المنفصل إلى قاع
+         الشريط، بلون الكريما، تتمايل مع الوقت */
+      if (pour > 0.01) {
+        var pcx = CX + cX + 34 * dis;
+        var pcy = FOOT_Y + cY - 84 - 78 * dis;
+        var reach = (VH - pcy + OY / S + 60) * Math.min(1, pour * 1.5);
+        ctx.lineCap = "round";
+        [[-14, 9, 0], [4, 12, 2.2], [18, 7, 4.1]].forEach(function (st) {
+          var sway = Math.sin(t * 0.8 + st[2]) * 6;
+          ctx.globalAlpha = 0.9 * pour * Math.max(0, fade * 1.4 > 1 ? 1 : fade * 1.4);
+          ctx.strokeStyle = mix(AMBER_DEEP, AMBER, 0.3);
+          ctx.lineWidth = st[1];
+          ctx.beginPath();
+          ctx.moveTo(pcx + st[0], pcy + 6);
+          ctx.quadraticCurveTo(pcx + st[0] + sway, pcy + reach * 0.55, pcx + st[0] + sway * 0.4, pcy + reach);
+          ctx.stroke();
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      piece(-64 * dis, -26 * dis, -0.24 * dis, drawCupBody);
+      piece(92 * dis, -62 * dis, 0.6 * dis, drawHandle);
+      /* القرص ينفصل ويرتفع مائلاً وهو يصب */
+      piece(34 * dis, -78 * dis, 0.34 * dis, drawCrema, 1 + cw);
+    }
+
+    /* خيطا بخار يتنفسان فوق الكوب المستقر، وينقطعان مع التفكك */
     if (steamA > 0.01) {
       ctx.strokeStyle = mix(SAND, CREAM, 0.5);
       ctx.lineCap = "round";
@@ -331,11 +381,11 @@
     /* خامة الطباعة فوق المشهد الليلي، وتحت البحر الكريمي */
     if (grain) ctx.drawImage(grain, 0, 0);
 
-    /* البحر الكريمي: يطلع من تحت بموجة تهدأ. قاعه كريم من أول لحظة
-       لأنه يلامس حد قسم المحصول طول الوقت، وقمته وحدها عسلية تصفى. */
-    var topY = 0;
+    /* البحر الكريمي: يرتفع من وين وصلت خيوط الانسكاب، بموجة تهدأ.
+       قاعه كريم من أول لحظة لأنه يلامس حد قسم المحصول طول الوقت،
+       وقمته وحدها عسلية بلون الانسكاب تصفى مع الاستقرار. */
     if (flood > 0.001) {
-      topY = H * (1 - flood) - 60 * flood + 40 * (1 - flood);
+      var topY = H * (1 - flood) - 60 * flood + 40 * (1 - flood);
       var amp = 15 * (1 - smooth(flood * 1.15));
       var toCream = smooth((flood - 0.3) / 0.55);
       var fillCol = ctx.createLinearGradient(0, topY, 0, H);
@@ -357,17 +407,16 @@
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      /* دوائر تتسع على السطح وين غاص الطقم: أثر الاندماج بالصفحة */
-      if (sinkRaw > 0.06 && groupA > 0.01) {
-        var rcx = OX + CX * S;
-        var surfY = topY + Math.sin(rcx / (W / 6.5) + t * 0.7) * amp;
+      /* دوائر وين تضرب خيوط الانسكاب السطح */
+      if (pour > 0.1 && flood < 0.96) {
+        var rx0 = OX + (CX + 34 * dis + 4) * S;
+        var surfY = topY + Math.sin(rx0 / (W / 6.5) + t * 0.7) * amp;
         ctx.strokeStyle = mix(AMBER_DEEP, CREAM, 0.45);
-        for (var i = 0; i < 3; i++) {
-          var rp = clamp01(sinkRaw * 1.5 - i * 0.22);
-          if (rp <= 0.01 || rp >= 1) continue;
-          ctx.globalAlpha = 0.32 * (1 - rp) * flood;
-          ctx.lineWidth = 2.4 - i * 0.5;
-          ell(rcx, surfY, (36 + rp * 150) * S, (9 + rp * 36) * S);
+        for (var i = 0; i < 2; i++) {
+          var rp = (t * 0.5 + i * 0.5) % 1;
+          ctx.globalAlpha = 0.3 * (1 - rp) * pour * (1 - smooth(flood * 1.1));
+          ctx.lineWidth = 2.2 - i * 0.5;
+          ell(rx0, surfY, (26 + rp * 110) * S, (7 + rp * 26) * S);
           ctx.stroke();
         }
         ctx.globalAlpha = 1;
@@ -383,7 +432,7 @@
   }
 
   /* مع prefers-reduced-motion نثبت على الطقم مستقراً وبخاره طالع */
-  var STILL = 0.62;
+  var STILL = 0.60;
 
   /* التمهيد المخمَّد: سر النعومة. التمرير يجي نطّات، والرسم يلحقه
      انسياباً كل إطار بدل ما يقفز معه، فتطلع الحركة سينمائية */
