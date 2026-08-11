@@ -8,9 +8,10 @@
    الحكاية بالتمرير، بإيقاع فلم: الصحن والكوب مرميان من فوق معاً
    كقطعتين تسقطان بجاذبية — الصحن يلقف الطاولة أولاً، والكوب
    يلحقه ويستقر فوقه، ويتصاعد البخار. ثم مع مواصلة النزول تتحلل
-   الرسمة قطعة قطعة، يميل الكوب وتنسكب منه القهوة الغامقة، ولوقو
-   جَازن آخر ما يطفو ويلمس البحر الكريمي — اللي يصير هو كريم قسم
-   «القائمة تبدأ من المحصول».
+   الرسمة قطعة قطعة، يميل الكوب وتنسكب منه القهوة الغامقة، ومن
+   الصبّة يرتفع البحر الكريمي ويبتلع القطع — اللي يصير هو كريم قسم
+   «القائمة تبدأ من المحصول». الوردمارك يبقى ثابتاً على الكوب
+   ويختفي معه، والقطع لا تذوب إلا في آخر لحظة قبل ما يبتلعها.
 
    النزول نفسه مشغول بأربعة تأثيرات مشتقة من فيزيائه لا مضافة
    زخرفةً: ظل ترقّب يضيق ويغمق كل ما قربت القطعة، أثر حركة تقوده
@@ -77,7 +78,6 @@
   var FOOT_Y = SY - 9;          // نقطة جلوس الكوب على الصحن
 
   /* لوقو جَازن على جسم الكوب، مثل أكوابهم الحقيقية */
-  var wmSkip = false;
   var wm = new Image();
   var wmReady = false;
   wm.onload = function () { wmReady = true; renderOnce(); };
@@ -182,8 +182,8 @@
     ctx.fill();
     ctx.restore();
 
-    /* اللوقو على الجسم، مثل أكوابهم — يُتخطى بعد ما ينفصل ويطفو */
-    if (wmReady && !wmSkip) {
+    /* اللوقو على الجسم، مثل أكوابهم — ثابت عليه ويختفي معه */
+    if (wmReady) {
       var w = 40, h = (w * wm.height) / wm.width;
       ctx.globalAlpha *= 0.92;
       ctx.drawImage(wm, -w / 2, -66, w, h);
@@ -267,14 +267,13 @@
     var land = clamp01((p - 0.41) / 0.12);
     var bounce = Math.sin(Math.min(1, land) * Math.PI);
     var steamA = smooth((p - 0.46) / 0.07) * (1 - smooth((p - 0.55) / 0.08));
-    var dis = smooth(clamp01((p - 0.55) / 0.24));
-    var flood = smooth(clamp01((p - 0.648) / 0.20));
+    var dis = smooth(clamp01((p - 0.55) / 0.30));
+    var flood = smooth(clamp01((p - 0.69) / 0.17));
     var toCream = smooth((flood - 0.3) / 0.55);
     var settleF = smooth(flood * 1.15);
     var ampF = 15 * (1 - settleF);
     var pour = 0;
     var streamLandX = CX;
-    var wmRipple = null;
 
     var dpr = cv.width / W;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -328,11 +327,14 @@
     }
 
     /* ── الصحن: يسقط لوحاله، ووقت التفكك ينسحب وتنشال عنه خصرته ── */
-    var sP = stag(dis, 0.05, 0.6);
+    var sP = stag(dis, 0.05, 0.85);
     var sX = -16 * (1 - sRaw) - 88 * sP + Math.sin(t * 0.6) * 3 * sP;
     var sYv = -(VH * 0.72 + 80) * (1 - sFall) + sDip * 3 + 58 * sP;
     var sRot = -0.06 * (1 - sRaw) - 0.18 * sP;
-    var sA = 1 - stag(sP, 0.72, 0.28);
+    /* دورة حياة القطع موسَّعة لتتقاطع مع ارتفاع البحر: كانت تختفي
+       والبحر لسه في ~13% من طريقه، فتبخّرت في الهوا. الحين تعيش
+       لين يوصل 60–77% فتُبتلع فعلاً بدل ما تتلاشى قبله. */
+    var sA = 1 - stag(sP, 0.86, 0.14);
     /* سرعة السقوط اللحظية (مشتقة التسارع التربيعي) تقود أثر الحركة:
        أشباح باهتة فوق القطعة على مسارها، تختفي لحظة الاستقرار.
        ومقياس المنظور: تبدأ أصغر وهي بعيدة وتكبر وهي قادمة. */
@@ -361,8 +363,8 @@
       ctx.restore();
     }
     /* الخصرة تطفو حلقة ذهبية لحالها */
-    var rP = stag(dis, 0.16, 0.55);
-    var rA = (sA > 0 ? 1 : 1) * (1 - stag(rP, 0.68, 0.32));
+    var rP = stag(dis, 0.16, 0.78);
+    var rA = 1 - stag(rP, 0.84, 0.16);
     if (rA > 0.004 && dis > 0.001) {
       ctx.save();
       ctx.globalAlpha = Math.min(1, rA);
@@ -387,24 +389,20 @@
       cY = -(VH * 0.66 + 60) * (1 - cFall) - bounce * 6 + bob;
       cTilt = -0.14 * (1 - cRaw) + 0.04 * bounce;
 
-      var bodyP = stag(dis, 0.08, 0.6);
+      var bodyP = stag(dis, 0.08, 0.88);
       bodyDx = -52 * bodyP + Math.sin(t * 0.7) * 3 * bodyP;
       bodyDy = -46 * bodyP;
       bodyRot = -0.55 * bodyP;
-      var bodyA = 1 - stag(bodyP, 0.78, 0.22);
-      /* الصبّة تبدأ عند p≈0.625، قبل ارتفاع البحر (0.648) بـ0.023 من
+      var bodyA = 1 - stag(bodyP, 0.88, 0.12);
+      /* الصبّة تبدأ عند p≈0.660، قبل ارتفاع البحر (0.690) بـ0.03 من
          نافذة التمرير (~جزء من الثانية عند تمرير عادي) — البحر يطلع
          من الصبّة فلا يصح يسبقها، والفجوة ضيقة عمداً وإلا صبّت
          الخيوط في الفراغ. كان مقلوباً: البحر يوصل الكوب وهو ما صبّ. */
       pour = stag(bodyP, 0.16, 0.5);
 
-      var handleP = stag(dis, 0.0, 0.5);
-      var handleA = 1 - stag(handleP, 0.6, 0.3);
+      var handleP = stag(dis, 0.0, 0.75);
+      var handleA = 1 - stag(handleP, 0.82, 0.18);
 
-      /* اللوقو ينفصل عن الجسم آخر القطع: يطفو نازلاً كورقة، آخر
-         ما يلمس البحر — توقيع الختام */
-      var wmP = stag(dis, 0.42, 0.58);
-      var wmDetached = wmP > 0.001;
 
       /* خيوط الصب: أعرض عند الشفة وأرفع وهي تتسارع (عيّنات متدرجة
          العرض على المسار)، وتنتهي عند سطح الموجة الفعلي لحظتها لا
@@ -504,9 +502,7 @@
         ctx.translate(CX + cX + bodyDx, FOOT_Y + cY + bodyDy);
         ctx.rotate(cTilt + bodyRot);
         if (dis < 0.02) ctx.scale(cScale, cScale);
-        wmSkip = wmDetached;
         drawCupBody();
-        wmSkip = false;
         ctx.save();
         ctx.translate(-9 * bodyP, 2 * bodyP);
         drawCrema(1);
@@ -539,34 +535,6 @@
         ctx.rotate(cTilt + 0.75 * handleP);
         drawHandle();
         ctx.restore();
-      }
-
-      /* اللوقو الطافي: ينفصل من موضعه على الجسم بميلان الجسم نفسه
-         بالضبط (استمرارية كاملة، لا قفزة اتجاه)، ثم يتحرر تدريجياً
-         إلى أرجحة ورقة حقيقية — بندول يميل مع اتجاه حركته */
-      if (wmDetached && wmReady) {
-        var br2 = cTilt + bodyRot;
-        var wx0 = CX + cX + bodyDx - (-50) * Math.sin(br2);
-        var wy0 = FOOT_Y + cY + bodyDy + (-50) * Math.cos(br2);
-        var free = smooth(Math.min(1, wmP * 1.7));
-        var leafPh = wmP * 8.5;
-        var swing = Math.sin(leafPh) * 30 * Math.sin(Math.min(1, wmP) * Math.PI);
-        var wx = lerp(wx0, CX + 12, free * 0.8) + swing * free;
-        var wy = lerp(wy0, seaTopS - 4, wmP * wmP);
-        var wRot = lerp(br2, Math.cos(leafPh) * 0.24 * (1 - wmP * 0.45), free);
-        var wA = 1 - stag(wmP, 0.86, 0.14);
-        var wS = 1 - 0.12 * wmP;
-        if (wA > 0.004) {
-          ctx.save();
-          ctx.globalAlpha = wA * 0.95;
-          ctx.translate(wx, wy);
-          ctx.rotate(wRot);
-          ctx.scale(wS, wS);
-          var ww = 40, wh = (ww * wm.height) / wm.width;
-          ctx.drawImage(wm, -ww / 2, -wh / 2, ww, wh);
-          ctx.restore();
-        }
-        if (wmP > 0.8) wmRipple = { x: OX + wx * S, p: stag(wmP, 0.8, 0.2) };
       }
 
     }
@@ -684,16 +652,6 @@
         ctx.globalAlpha = 1;
       }
 
-      /* دائرة هبوط اللوقو: الوداعية */
-      if (wmRipple) {
-        var surfY2 = seaTopW + Math.sin(wmRipple.x / (W / 6.5) + t * 0.7) * amp;
-        ctx.strokeStyle = mix(AMBER_DEEP, CREAM, 0.35);
-        ctx.globalAlpha = 0.45 * (1 - wmRipple.p);
-        ctx.lineWidth = 2;
-        ell(wmRipple.x, surfY2, (18 + wmRipple.p * 90) * S, (5 + wmRipple.p * 22) * S);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
     }
   }
 
