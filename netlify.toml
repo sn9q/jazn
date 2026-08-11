@@ -3,6 +3,39 @@
   publish = "site"
   command = ""
 
+# ترويسات الأمان على كل مسار
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # يمنع وضع الموقع في إطار على موقع آخر (نقر مخطوف)
+    X-Frame-Options = "DENY"
+    # يمنع المتصفح من تخمين نوع الملف خلافاً للمُعلَن
+    X-Content-Type-Options = "nosniff"
+    # لا يسرّب المسار الكامل للمواقع الخارجية عند الخروج
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # الموقع لا يحتاج كاميرا ولا ميكروفون ولا موقعاً جغرافياً
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+# سياسة المحتوى: قائمة بيضاء بما يحتاجه الموقع فعلاً لا أكثر.
+# supabase.co للقاعدة (المنيو والتقييم واللوحة)، وgoogle للخريطة
+# المضمَّنة، وdata: للخطوط والصور المضمَّنة في المعاينات.
+# frame-ancestors هنا لا في X-Frame-Options وحدها لأن الأولى أدق.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = """
+      default-src 'self'; \
+      script-src 'self'; \
+      style-src 'self' 'unsafe-inline'; \
+      img-src 'self' data: https://*.supabase.co; \
+      font-src 'self'; \
+      connect-src 'self' https://*.supabase.co; \
+      frame-src https://maps.google.com https://www.google.com; \
+      form-action 'self'; \
+      base-uri 'self'; \
+      object-src 'none'; \
+      frame-ancestors 'none'"""
+
 # صفحات HTML تُقدَّم دائماً طازجة (لا كاش قديم على الجوال)
 [[headers]]
   for = "/*.html"

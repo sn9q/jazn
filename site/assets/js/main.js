@@ -106,6 +106,47 @@
       spied.forEach(function (pair) { spy.observe(pair.section); });
     }
   }
+  var scfg = window.JAZN_CONFIG || {};
+
+  /* الأسعار: مطبوعة في الصفحة، وهذه تنعشها من القاعدة نفسها التي
+     تغذّي المنيو واللوحة. قبلها كان سعر الرئيسية نسخةً يدويةً من
+     سعر المنيو — يعدّله المدير من اللوحة فيتغيّر في المنيو ويبقى
+     القديم هنا، ولا شيء ينبّه أحداً.
+
+     الربط بالترتيب (category + sort_order) لا بالاسم: أسماء
+     القاعدة غير متسقة أصلاً — «كولومبيا - كاتورا» في الاسبريسو
+     و«كولومبيا- كاتورا» في الفريدو، وستة صفوف اسمها V60 نفسه —
+     والترتيب هو ما يضبطه المدير من اللوحة فهو المعنى المستقر.
+
+     الرئيسية تعرض ستة محاصيل عمداً؛ من أراد الباقي فالمنيو. */
+  var crops = document.querySelectorAll("[data-crop]");
+  if (crops.length && window.fetch && scfg.SUPABASE_URL && scfg.SUPABASE_ANON_KEY) {
+    fetch(scfg.SUPABASE_URL +
+          "/rest/v1/menu_items?is_available=eq.true&select=category,sort_order,price", {
+      headers: {
+        apikey: scfg.SUPABASE_ANON_KEY,
+        Authorization: "Bearer " + scfg.SUPABASE_ANON_KEY,
+        "Accept-Profile": "jazn"
+      }
+    })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (rows) {
+        if (!rows || !rows.length) return;
+        var byKey = {};
+        rows.forEach(function (r) { byKey[r.category + ":" + r.sort_order] = r.price; });
+        Array.prototype.forEach.call(crops, function (card) {
+          var i = card.getAttribute("data-crop");
+          Array.prototype.forEach.call(card.querySelectorAll("[data-price]"), function (el) {
+            var v = Number(byKey[el.getAttribute("data-price") + ":" + i]);
+            /* سعر غير معقول يعني خللاً لا تغيّراً — يبقى المطبوع */
+            if (!(v > 0 && v < 10000)) return;
+            el.textContent = String(Math.round(v * 100) / 100);
+          });
+        });
+      })
+      .catch(function () {});
+  }
+
   /* التقييم: الرقم مطبوع في الصفحة ليقرأه محرك البحث ومن عطّل
      الجافاسكربت، وهذه تنعشه من قاعدة البيانات. القاعدة نفسها هي
      التي تسأل قوقل يومياً (pg_cron + SerpApi، انظر
@@ -118,7 +159,6 @@
     r: document.querySelector('[data-gmaps="rating"]'),
     c: document.querySelector('[data-gmaps="reviews"]')
   };
-  var scfg = window.JAZN_CONFIG || {};
   if (rate.r && rate.c && window.fetch && scfg.SUPABASE_URL && scfg.SUPABASE_ANON_KEY) {
     fetch(scfg.SUPABASE_URL + "/rest/v1/site_settings?key=eq.google_rating&select=value", {
       headers: {

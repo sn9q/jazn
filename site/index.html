@@ -7,17 +7,18 @@
   <meta name="description" content="جَازن اسبريسو بار في حي السويس بجيزان. محاصيل مختارة تشربها اسبريسو أو فريدو أو V60، نستقبلكم 24 ساعة.">
 
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jazn.netlify.app/">
   <meta property="og:site_name" content="جَازن اسبريسو بار">
   <meta property="og:title" content="جَازن اسبريسو بار">
   <meta property="og:description" content="كل كوب يبدأ من محصول تختاره أنت">
-  <meta property="og:image" content="/assets/img/og-jazn.jpg">
+  <meta property="og:image" content="https://jazn.netlify.app/assets/img/og-jazn.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="ar_SA">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="جَازن اسبريسو بار">
   <meta name="twitter:description" content="كل كوب يبدأ من محصول تختاره أنت">
-  <meta name="twitter:image" content="/assets/img/og-jazn.jpg">
+  <meta name="twitter:image" content="https://jazn.netlify.app/assets/img/og-jazn.jpg">
 
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
@@ -29,7 +30,15 @@
   <link rel="preload" href="/assets/fonts/amiri-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/amiri-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=4">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=21">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=22">
+
+  <!-- الأقسام تبدأ شفافة ويكشفها main.js مع التمرير. لو تعذّر
+       الجافاسكربت — تقطّع شبكة، حاجب، متصفح قديم — تبقى مخفيةً
+       للأبد ويرى الزائر هيرو وفراغاً. هذه تُظهرها، ولا تمسّ
+       الزائر العادي بشيء. -->
+  <noscript><style>
+    .reveal { opacity: 1 !important; transform: none !important; }
+  </style></noscript>
 
   <script type="application/ld+json">
   {
@@ -37,7 +46,7 @@
     "@type": "CafeOrCoffeeShop",
     "name": "جَازن اسبريسو بار",
     "alternateName": "JAZN Espresso Bar",
-    "image": "/assets/img/og-jazn.jpg",
+    "image": "https://jazn.netlify.app/assets/img/og-jazn.jpg",
     "servesCuisine": "قهوة مختصة وحلا",
     "telephone": "+966545755683",
     "address": {
@@ -141,7 +150,7 @@
         </div>
 
         <div class="crop-grid">
-          <article class="crop reveal">
+          <article class="crop reveal" data-crop="1">
             <div class="crop-top">
               <img src="/assets/img/menu/p00.webp" alt="محصول اثيوبيا يرغاتشيف" loading="lazy" decoding="async" width="64" height="64">
               <div>
@@ -151,13 +160,13 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>ازهار</span><span>خوخ</span><span>حلاوة</span><span>توت ازرق</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>12 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>فريدو</i><b>13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>V60</i><b>18 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>اسبريسو</i><b><span data-price="espresso">12</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b><span data-price="freddo">13</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b><span data-price="v60">18</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
-          <article class="crop reveal" style="--d:60ms">
+          <article class="crop reveal" data-crop="2" style="--d:60ms">
             <div class="crop-top">
               <img src="/assets/img/menu/p01.webp" alt="محصول كولومبيا كاتورا" loading="lazy" decoding="async" width="64" height="64">
               <div>
@@ -167,13 +176,13 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>توفي</span><span>فواكة حمراء</span><span>عنب</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>12 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>فريدو</i><b>13 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>V60</i><b>19 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>اسبريسو</i><b><span data-price="espresso">12</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b><span data-price="freddo">13</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b><span data-price="v60">19</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
-          <article class="crop reveal" style="--d:120ms">
+          <article class="crop reveal" data-crop="3" style="--d:120ms">
             <div class="crop-top">
               <img src="/assets/img/menu/p02.webp" alt="محصول اليمن بلقيس" loading="lazy" decoding="async" width="64" height="64">
               <div>
@@ -183,13 +192,13 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>توت</span><span>برتقال</span><span>حلاوه</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>فريدو</i><b>18 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>V60</i><b>25 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>اسبريسو</i><b><span data-price="espresso">17</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b><span data-price="freddo">18</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b><span data-price="v60">25</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
-          <article class="crop reveal">
+          <article class="crop reveal" data-crop="4">
             <div class="crop-top">
               <img src="/assets/img/menu/p03.webp" alt="محصول عنب وشمام" loading="lazy" decoding="async" width="64" height="64">
               <div>
@@ -199,13 +208,13 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>شمام</span><span>عنب</span><span>عسل</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>فريدو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>V60</i><b>24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>اسبريسو</i><b><span data-price="espresso">16</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b><span data-price="freddo">17</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b><span data-price="v60">24</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
-          <article class="crop reveal" style="--d:60ms">
+          <article class="crop reveal" data-crop="5" style="--d:60ms">
             <div class="crop-top">
               <img src="/assets/img/menu/p04.webp" alt="محصول مانجو" loading="lazy" decoding="async" width="64" height="64">
               <div>
@@ -215,13 +224,13 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>مانجو</span><span>توت ازرق</span><span>كراميل</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>فريدو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>V60</i><b>24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>اسبريسو</i><b><span data-price="espresso">16</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b><span data-price="freddo">17</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b><span data-price="v60">24</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
 
-          <article class="crop reveal" style="--d:120ms">
+          <article class="crop reveal" data-crop="6" style="--d:120ms">
             <div class="crop-top">
               <img src="/assets/img/menu/p05.webp" alt="محصول كرز" loading="lazy" decoding="async" width="64" height="64">
               <div>
@@ -231,9 +240,9 @@
             </div>
             <div class="crop-notes" aria-label="الإيحاءات"><span>كرز</span><span>عسل</span><span>مستكة</span></div>
             <div class="crop-prices">
-              <div><i>اسبريسو</i><b>16 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>فريدو</i><b>17 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
-              <div><i>V60</i><b>24 <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>اسبريسو</i><b><span data-price="espresso">16</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>فريدو</i><b><span data-price="freddo">17</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
+              <div><i>V60</i><b><span data-price="v60">24</span> <small class="sar" role="img" aria-label="ريال سعودي"><svg aria-hidden="true"><use href="#sar"></use></svg></small></b></div>
             </div>
           </article>
         </div>
@@ -447,7 +456,7 @@
 
   <!-- عنوان القاعدة ومفتاح anon: يحتاجهما main.js ليقرأ التقييم -->
   <script src="/assets/js/config.js?v=2"></script>
-  <script src="/assets/js/main.js?v=6" defer></script>
+  <script src="/assets/js/main.js?v=7" defer></script>
   <script src="/assets/js/cup.js?v=11" defer></script>
 </body>
 </html>

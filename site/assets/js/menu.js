@@ -8,16 +8,19 @@
   const cfg = window.JAZN_CONFIG || {};
   if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) return; // غير مربوط بعد، الثابت يكفي
 
-  let clientPromise = null;
-  const getClient = () => {
-    if (!clientPromise) {
-      clientPromise = import("https://esm.sh/@supabase/supabase-js@2")
-        .then(({ createClient }) => createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
-          db: { schema: "jazn" },
-        }));
-    }
-    return clientPromise;
-  };
+  /* قراءة REST مباشرة بلا SDK: الصفحة تحتاج نداءً واحداً (اقرأ
+     الأصناف المتاحة مرتبةً)، فاستيراد مكتبة 212KB من CDN خارجي
+     كلفةٌ وخطرُ عطلٍ بلا مقابل — وهذه صفحة باركود تُقرأ على
+     الطاولة بشبكة الجوال. */
+  const fetchItems = () =>
+    fetch(cfg.SUPABASE_URL +
+          "/rest/v1/menu_items?is_available=eq.true&order=sort_order&select=*", {
+      headers: {
+        apikey: cfg.SUPABASE_ANON_KEY,
+        Authorization: "Bearer " + cfg.SUPABASE_ANON_KEY,
+        "Accept-Profile": "jazn",
+      },
+    }).then((r) => (r.ok ? r.json() : null));
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -38,20 +41,21 @@
   let lastLoad = 0;
   async function loadMenu() {
     try {
-      const supabase = await getClient();
-      const { data, error } = await supabase
-        .from("menu_items")
-        .select("*")
-        .eq("is_available", true)
-        .order("sort_order");
-      if (error || !data || !data.length) return; // نبقي النسخة الثابتة
+      const data = await fetchItems();
+      if (!data || !data.length) return; // نبقي النسخة الثابتة
       lastLoad = Date.now();
 
       /* الحلويات صارت صفوفاً مثل بقية الأقسام، فما عاد لها مسار خاص */
+      /* التصنيف الذي فرغ من القاعدة يُفرَّغ في الصفحة كذلك. كان
+         الشرط rows.length يترك النسخة الثابتة القديمة ظاهرة، فلو
+         ألغى المدير كل أصناف تصنيف بقيت معروضةً للزائر. */
       ["espresso", "freddo", "v60", "milk", "sweets", "store"].forEach((cat) => {
-        const list = document.querySelector(`#${cat} .mp-list`);
+        const section = document.querySelector(`#${cat}`);
+        const list = section && section.querySelector(".mp-list");
+        if (!list) return;
         const rows = data.filter((i) => i.category === cat);
-        if (list && rows.length) list.innerHTML = rows.map(renderRow).join("");
+        list.innerHTML = rows.map(renderRow).join("");
+        section.hidden = rows.length === 0;
       });
     } catch (e) {
       /* فشل الشبكة/CDN، المنيو الثابت يبقى ظاهراً */

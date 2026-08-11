@@ -1,4 +1,19 @@
 /* جَازن اسبريسو بار، لوحة تحكم المنيو (Supabase، مخطط jazn) */
+/* تحميل مكتبة Supabase المستضافة ذاتياً مرة واحدة */
+function loadSupabase() {
+  if (window.supabase) return Promise.resolve(window.supabase);
+  return new Promise(function (resolve, reject) {
+    var s = document.createElement("script");
+    s.src = "/assets/js/vendor/supabase.umd.js?v=2.112.3";
+    s.onload = function () {
+      window.supabase ? resolve(window.supabase)
+                      : reject(new Error("تحمّلت المكتبة ولم تُعرِّف نفسها"));
+    };
+    s.onerror = function () { reject(new Error("تعذّر تحميل مكتبة Supabase")); };
+    document.head.appendChild(s);
+  });
+}
+
 (async function () {
   "use strict";
 
@@ -38,7 +53,11 @@
 
   /* ─── طبقة البيانات: كل الجداول في مخطط jazn ─── */
   let currentEmail = "";
-  const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+  /* المكتبة مستضافة ذاتياً لا من CDN: حجب esm.sh — أو تعطّله —
+     كان يقتل اللوحة كلها ويترك «تعذّر تحميل الوحدة» بلا أي وسيلة
+     للإدارة. اللوحة تحتاج auth وstorage وrpc فما تكفيها نداءات
+     REST مجرّدة كما تكفي صفحتَي المنيو والتقييم. */
+  const { createClient } = await loadSupabase();
   const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, { db: { schema: "jazn" } });
   let db, staffDb;
   {
