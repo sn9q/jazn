@@ -61,7 +61,11 @@ body {
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* clip يقصّ بلا ما يصنع حاوية تمرير، وhidden يصنعها فيكسر
+     position:sticky للأبناء — ومشهد الفنجان قائم عليه. القديمة
+     تبقى للمتصفحات اللي ما تعرف clip، والأحدث تفوز */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* height:auto إلزامي: بدونه تفوز سمة height في الـHTML على aspect-ratio فتمتد الصور */
@@ -309,22 +313,41 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
    المشهد زخرفة بحتة، فلو تعذّر الرسم الأنظف أن يوصل الهيرو قسم
    المحصول مباشرة بدل فراغ بطول شاشة. */
 
+/* الشريط مسارُ تمرير والمشهد مثبَّت داخله: بغير التثبيت يتسابق
+   المشهد وقسم المحصول على نفس محور التمرير، فإما نسرّع المشهد
+   ليسبق ظهور القسم فتضيع النعومة، أو نمهّله فيطلع القسم والمشهد
+   ما خلص. بالتثبيت يأخذ المشهد مسافته وحده والقسم ما يتحرك حتى
+   ينتهي — فينتهي التسابق ويبقى كل بكسل تمرير حركةً لا انتظاراً.
+
+   الطول = زمن المشهد: 100 للشاشة المثبَّتة + الباقي زمناً. وهو
+   على الجوال أقصر منه على الديسكتوب: التمرير بالإبهام أغلى من
+   عجلة الفأرة. وبـlvh لا svh حتى تغطي الشاشةَ المثبتةُ كامل
+   المنفذ ولو اختفى شريط عنوان الجوال، وإلا بان شريط ليل تحت
+   البحر الكريمي. */
+
 .cup-band {
   display: none;
   position: relative;
-  overflow: hidden;
-  /* المشهد شبه مربع، فعلى الجوال يحدّه العرض لا الطول: لو ربطنا
-     الارتفاع بـsvh وحده يقعد الفنجان صغيراً وسط فراغ ليلي طويل.
-     والارتفاع هنا صار هو زمن السقوط نفسه (cup.js يقيس عليه)، فأي
-     زيادة عليه فجوة ساكنة بعد الاستقرار — لذا قُصّ لأقصر ما يكفي. */
-  height: clamp(430px, 112vw, 700px);
+  height: 190vh;
+  height: 190lvh;
   background: var(--night);
 }
 @media (min-width: 700px) {
-  .cup-band { height: clamp(540px, 84svh, 700px); }
+  .cup-band { height: 215vh; height: 215lvh; }
 }
 .cup-band.on { display: block; }
-.cup-band canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.cup-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+}
+.cup-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* مع تفضيل تقليل الحركة ما في مشهد يُمرَّر عليه، فلا داعي لمسار */
+.cup-band.still { height: 100vh; height: 100lvh; }
 
 /* ---------- المحصول ---------- */
 
