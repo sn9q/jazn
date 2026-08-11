@@ -301,49 +301,28 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 
-/* ---------- ٢٥ ثانية: شوت الاسبريسو ----------
-   المحل اسبريسو بار، والعملية اللي مسمّى عليها هي هذي. الشريط كله
-   يرسمه shot.js على canvas، وCSS ما تعطيه غير الصندوق واللون تحته.
+/* ---------- الفنجان يهبط ----------
+   رسمة الديمي-تاس بين الهيرو والمحصول، يرسمها cup.js كاملة على
+   canvas. CSS ما تعطيه غير الصندوق واللون تحته.
 
-   مخفي افتراضياً ولا يكشفه إلا shot.js بعد ما يتأكد أن canvas شغال:
+   مخفي افتراضياً ولا يكشفه إلا cup.js بعد ما يتأكد أن canvas شغال:
    المشهد زخرفة بحتة، فلو تعذّر الرسم الأنظف أن يوصل الهيرو قسم
    المحصول مباشرة بدل فراغ بطول شاشة. */
 
-.shot-band {
+.cup-band {
   display: none;
   position: relative;
   overflow: hidden;
   /* المشهد شبه مربع، فعلى الجوال يحدّه العرض لا الطول: لو ربطنا
-     الارتفاع بـsvh وحده يقعد الفنجان صغيراً وسط فراغ ليلي طويل.
-     فالارتفاع يتبع العرض على الضيق، والشاشة على الواسع. */
+     الارتفاع بـsvh وحده يقعد الفنجان صغيراً وسط فراغ ليلي طويل. */
   height: clamp(430px, 118vw, 720px);
   background: var(--night);
 }
 @media (min-width: 700px) {
-  .shot-band { height: clamp(560px, 90svh, 720px); }
+  .cup-band { height: clamp(560px, 90svh, 720px); }
 }
-.shot-band.on { display: block; }
-.shot-band canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-/* العدّاد: قراءة الميزان تحت الفنجان. أمبر اللافتة فوق الليل
-   (10.5:1)، وتراكوتا جدارهم بعد ما تبتلع الكريما الكادر (4.8:1
-   على الكريم، بينما أحمر اللافتة يهبط لـ3.97 هناك) */
-.shot-band__timer {
-  position: absolute;
-  inset-inline: 0;
-  bottom: clamp(18px, 4vh, 40px);
-  text-align: center;
-  font-size: clamp(0.82rem, 2vw, 0.95rem);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: color-mix(in srgb, var(--terra) calc(var(--pw, 1) * 100%), var(--amber));
-}
-.shot-band__timer b {
-  font-weight: 700;
-  font-size: 1.5em;
-  font-variant-numeric: tabular-nums;
-  margin-inline-end: 0.25em;
-}
+.cup-band.on { display: block; }
+.cup-band canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
 /* ---------- المحصول ---------- */
 

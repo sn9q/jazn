@@ -29,7 +29,7 @@
   <link rel="preload" href="/assets/fonts/noto-naskh-arabic-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=1">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=12">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=13">
 
   <script type="application/ld+json">
   {
@@ -122,12 +122,12 @@
       </div>
     </section>
 
-    <!-- ٢٥ ثانية: شوت اسبريسو ينسحب مع التمرير، والكريما في آخره تبتلع
-         الكادر وتصير كريم قسم المحصول. زخرفة بحتة، فيبقى الشريط مخفياً
-         إذا تعذّر الرسم، ويوصل الهيرو قسم المحصول مباشرة. -->
-    <section class="shot-band" id="shotBand" aria-label="سحب شوت اسبريسو في جَازن، خمس وعشرون ثانية">
-      <canvas id="shotCanvas" aria-hidden="true"></canvas>
-      <p class="shot-band__timer" id="shotTimer" aria-hidden="true"><b dir="ltr">0.0</b> ثانية</p>
+    <!-- الفنجان يهبط: رسمة ديمي-تاس جَازن تنزل على صحنها مع التمرير،
+         ثم يغوص الاثنان في بحر كريمي يصير كريم قسم المحصول. زخرفة
+         بحتة، فيبقى الشريط مخفياً إذا تعذّر الرسم ويوصل الهيرو قسم
+         المحصول مباشرة. -->
+    <section class="cup-band" id="cupBand" aria-label="فنجان اسبريسو جَازن يهبط على صحنه">
+      <canvas id="cupCanvas" aria-hidden="true"></canvas>
     </section>
 
     <!-- المحصول: قائمتهم تبدأ من الحبة لا من المشروب -->
@@ -451,6 +451,6 @@
   </div>
 
   <script src="/assets/js/main.js?v=3" defer></script>
-  <script src="/assets/js/shot.js?v=1" defer></script>
+  <script src="/assets/js/cup.js?v=1" defer></script>
 </body>
 </html>
