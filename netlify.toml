@@ -7,7 +7,7 @@
   publish = "site"
   command = "node scripts/update_rating.mjs"
 
-# الدالة المجدولة تنبّه خطّاف البناء يومياً فيُعاد الجلب
+# دالة /api/rating تنعش الرقم يومياً على الحافة
 [functions]
   directory = "netlify/functions"
 

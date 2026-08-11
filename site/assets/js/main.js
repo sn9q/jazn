@@ -106,4 +106,21 @@
       spied.forEach(function (pair) { spy.observe(pair.section); });
     }
   }
+  /* التقييم: الرقم مطبوع في الصفحة، وهذه تنعشه من قوقل ماب.
+     الدالة مخبّأة يوماً على حافة نتلفاي فسيربآبي يُسأل مرة باليوم
+     لا مرة لكل زائر. وأي فشل يُتجاهل بصمت — المطبوع يبقى ظاهراً. */
+  var rateEls = {
+    rating: document.querySelector('[data-gmaps="rating"]'),
+    reviews: document.querySelector('[data-gmaps="reviews"]')
+  };
+  if (rateEls.rating && rateEls.reviews && window.fetch) {
+    fetch("/api/rating", { headers: { accept: "application/json" } })
+      .then(function (r) { return r.ok && r.status !== 204 ? r.json() : null; })
+      .then(function (d) {
+        if (!d || typeof d.rating !== "number" || typeof d.reviews !== "number") return;
+        rateEls.rating.textContent = String(Math.round(d.rating * 10) / 10);
+        rateEls.reviews.textContent = String(d.reviews);
+      })
+      .catch(function () {});
+  }
 })();
