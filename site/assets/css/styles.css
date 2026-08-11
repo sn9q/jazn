@@ -329,11 +329,11 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   display: none;
   position: relative;
   z-index: 1;             /* يرسم فوق القسم المسحوب خلفه */
-  height: 190vh;
-  height: 190lvh;
+  height: 270vh;
+  height: 270lvh;
 }
 @media (min-width: 700px) {
-  .cup-band { height: 215vh; height: 215lvh; }
+  .cup-band { height: 300vh; height: 300lvh; }
 }
 .cup-band.on { display: block; }
 
