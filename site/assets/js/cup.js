@@ -274,17 +274,19 @@
     var t = (tms || 0) / 1000;
 
     /* ── فصول الحكاية ── */
-    var sRaw = clamp01((p - 0.14) / 0.22);
+    var sRaw = clamp01((p - 0.09) / 0.22);
     var sFall = sRaw * sRaw;
-    var sDip = Math.sin(clamp01((p - 0.36) / 0.10) * Math.PI);
-    var cRaw = clamp01((p - 0.14) / 0.32);
+    var sDip = Math.sin(clamp01((p - 0.31) / 0.10) * Math.PI);
+    var cRaw = clamp01((p - 0.09) / 0.32);
     var cFall = cRaw * cRaw;
-    var land = clamp01((p - 0.46) / 0.12);
+    var land = clamp01((p - 0.41) / 0.12);
     var bounce = Math.sin(Math.min(1, land) * Math.PI);
-    var steamA = smooth((p - 0.51) / 0.07) * (1 - smooth((p - 0.60) / 0.08));
-    var dis = smooth(clamp01((p - 0.60) / 0.22));
-    var flood = smooth(clamp01((p - 0.64) / 0.22));
+    var steamA = smooth((p - 0.46) / 0.07) * (1 - smooth((p - 0.55) / 0.08));
+    var dis = smooth(clamp01((p - 0.55) / 0.24));
+    var flood = smooth(clamp01((p - 0.59) / 0.23));
     var toCream = smooth((flood - 0.3) / 0.55);
+    var settleF = smooth(flood * 1.15);
+    var ampF = 15 * (1 - settleF);
     var pour = 0;
     var streamLandX = CX;
     var wmRipple = null;
@@ -377,46 +379,76 @@
 
       /* اللوقو ينفصل عن الجسم آخر القطع: يطفو نازلاً كورقة، آخر
          ما يلمس البحر — توقيع الختام */
-      var wmP = stag(dis, 0.5, 0.5);
+      var wmP = stag(dis, 0.42, 0.58);
       var wmDetached = wmP > 0.001;
 
-      /* خيوط الصب: من شفة الفوهة المنخفضة إلى سطح البحر */
+      /* خيوط الصب: أعرض عند الشفة وأرفع وهي تتسارع (عيّنات متدرجة
+         العرض على المسار)، وتنتهي عند سطح الموجة الفعلي لحظتها لا
+         عند عمق ثابت — فالصبّة تلمس الموج فعلاً */
       if (pour > 0.01) {
         var br = cTilt + bodyRot;
         var ox = CX + cX + bodyDx, oy = FOOT_Y + cY + bodyDy;
         var pcx = ox + (-54) * Math.cos(br) - (-88) * Math.sin(br);
         var pcy = oy + (-54) * Math.sin(br) + (-88) * Math.cos(br);
         streamLandX = pcx + 4;
-        var reach = Math.max(0, (Math.min(seaTopS + 14, VH + 80) - pcy)) * Math.min(1, pour * 1.3);
-        ctx.lineCap = "round";
+        var ixw = OX + streamLandX * S;
+        var surfW = seaTopW + Math.sin(ixw / (W / 6.5) + t * 0.7) * ampF;
+        var endY = Math.min((surfW - OY) / S + 4, VH + 80);
+        var reachF = Math.min(1, pour * 1.3);
         var pourA = 0.92 * pour * Math.min(1, bodyA * 1.5);
-        [[-3, 9, 0], [7, 6, 2.2], [14, 3.4, 4.1]].forEach(function (st) {
-          var sway = Math.sin(t * 0.8 + st[2]) * 5;
-          ctx.globalAlpha = pourA;
-          ctx.strokeStyle = "#3B2110";
-          ctx.lineWidth = st[1];
-          ctx.beginPath();
-          ctx.moveTo(pcx + st[0], pcy + 4);
-          ctx.quadraticCurveTo(pcx + st[0] + sway, pcy + reach * 0.55, pcx + st[0] + sway * 0.4, pcy + reach);
-          ctx.stroke();
-        });
-        ctx.globalAlpha = pourA * 0.55;
+        ctx.lineCap = "round";
+
+        /* انتفاخة تعلّق السائل بالشفة */
+        ctx.globalAlpha = pourA;
+        ctx.fillStyle = "#3B2110";
+        ell(pcx + 2, pcy + 3, 7, 4);
+        ctx.fill();
+
+        var stream = function (offX, w0, ph) {
+          var x1 = pcx + offX, y1 = pcy + 4;
+          var y2 = lerp(y1, endY, reachF);
+          var sway = Math.sin(t * 0.8 + ph) * 5;
+          var cxq = x1 + sway, cyq = lerp(y1, y2, 0.55);
+          var x2 = x1 + sway * 0.4;
+          var px0 = x1, py0 = y1;
+          for (var si = 1; si <= 8; si++) {
+            var tt = si / 8, it = 1 - tt;
+            var qx = it * it * x1 + 2 * it * tt * cxq + tt * tt * x2;
+            var qy = it * it * y1 + 2 * it * tt * cyq + tt * tt * y2;
+            ctx.lineWidth = lerp(w0, w0 * 0.55, tt);
+            ctx.beginPath();
+            ctx.moveTo(px0, py0);
+            ctx.lineTo(qx, qy);
+            ctx.stroke();
+            px0 = qx; py0 = qy;
+          }
+        };
+        ctx.strokeStyle = "#3B2110";
+        stream(-3, 9.5, 0);
+        stream(7, 6.5, 2.2);
+        stream(14, 4, 4.1);
+
+        /* شرطات ضوء تنزل مع التيار، فتحس السائل يجري لا واقفاً */
+        ctx.globalAlpha = pourA * 0.5;
         ctx.strokeStyle = mix(AMBER, "#F7DE9B", 0.3);
         ctx.lineWidth = 1.8;
+        ctx.setLineDash([11, 24]);
+        ctx.lineDashOffset = -((t * 170) % 35);
         var hsway = Math.sin(t * 0.8) * 5;
         ctx.beginPath();
-        ctx.moveTo(pcx - 7, pcy + 6);
-        ctx.quadraticCurveTo(pcx - 7 + hsway, pcy + reach * 0.55, pcx - 7 + hsway * 0.4, pcy + reach);
+        ctx.moveTo(pcx - 6, pcy + 6);
+        ctx.quadraticCurveTo(pcx - 6 + hsway, lerp(pcy, endY, 0.55), pcx - 6 + hsway * 0.4, lerp(pcy + 4, endY, reachF));
         ctx.stroke();
+        ctx.setLineDash([]);
 
-        /* رذاذ الاصطدام: قطرات غامقة تنط من موضع سقوط الصبة */
-        if (flood > 0.02 && flood < 0.93) {
+        /* رذاذ الاصطدام، من سطح الموجة نفسه */
+        if (flood > 0.02 && flood < 0.93 && reachF > 0.9) {
           ctx.fillStyle = "#3B2110";
           for (var dr = 0; dr < 3; dr++) {
             var dp = (t * 0.9 + dr * 0.33) % 1;
             ctx.globalAlpha = pourA * 0.7 * (1 - dp);
-            var dxx = streamLandX + (dr - 1) * 14 * dp;
-            var dyy = seaTopS - Math.sin(dp * Math.PI) * (16 + dr * 5);
+            var dxx = streamLandX + (dr - 1) * 15 * dp;
+            var dyy = endY - 4 - Math.sin(dp * Math.PI) * (16 + dr * 5);
             ell(dxx, dyy, 2.4 - dr * 0.4, 2.8 - dr * 0.4);
             ctx.fill();
           }
@@ -450,20 +482,26 @@
         ctx.restore();
       }
 
-      /* اللوقو الطافي */
+      /* اللوقو الطافي: ينفصل من موضعه على الجسم بميلان الجسم نفسه
+         بالضبط (استمرارية كاملة، لا قفزة اتجاه)، ثم يتحرر تدريجياً
+         إلى أرجحة ورقة حقيقية — بندول يميل مع اتجاه حركته */
       if (wmDetached && wmReady) {
         var br2 = cTilt + bodyRot;
-        var wx0 = CX + cX + bodyDx + (0) * Math.cos(br2) - (-52) * Math.sin(br2);
-        var wy0 = FOOT_Y + cY + bodyDy + (0) * Math.sin(br2) + (-52) * Math.cos(br2);
-        var wx = lerp(wx0, CX + 10, wmP) + Math.sin(t * 1.2 + wmP * 5) * 9 * (1 - wmP);
+        var wx0 = CX + cX + bodyDx - (-50) * Math.sin(br2);
+        var wy0 = FOOT_Y + cY + bodyDy + (-50) * Math.cos(br2);
+        var free = smooth(Math.min(1, wmP * 1.7));
+        var leafPh = wmP * 8.5;
+        var swing = Math.sin(leafPh) * 30 * Math.sin(Math.min(1, wmP) * Math.PI);
+        var wx = lerp(wx0, CX + 12, free * 0.8) + swing * free;
         var wy = lerp(wy0, seaTopS - 4, wmP * wmP);
+        var wRot = lerp(br2, Math.cos(leafPh) * 0.24 * (1 - wmP * 0.45), free);
         var wA = 1 - stag(wmP, 0.86, 0.14);
-        var wS = 1 - 0.15 * wmP;
+        var wS = 1 - 0.12 * wmP;
         if (wA > 0.004) {
           ctx.save();
           ctx.globalAlpha = wA * 0.95;
           ctx.translate(wx, wy);
-          ctx.rotate(Math.sin(t * 0.9 + 1) * 0.09 + 0.08 * (1 - wmP));
+          ctx.rotate(wRot);
           ctx.scale(wS, wS);
           var ww = 40, wh = (ww * wm.height) / wm.width;
           ctx.drawImage(wm, -ww / 2, -wh / 2, ww, wh);
@@ -482,13 +520,24 @@
           if (pr.src === 0) { bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 40; col = CREAM; }
           else if (pr.src === 1) { bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 84; col = mix(AMBER_DEEP, AMBER, 0.4); }
           else { bx = CX + sX; by = SY + sYv; col = CREAM_2; }
-          var px = bx + pr.lx + Math.sin(t * 0.8 + pr.ph) * 7 * pp;
-          var py = by + pr.ly * (1 - pp * 0.3) + (Math.min(seaTopS, VH + 40) - (by + pr.ly)) * pp * pp;
-          ctx.globalAlpha = Math.sin(pp * Math.PI) * 0.8;
+          var px = bx + pr.lx * (0.35 + 0.95 * pp) + Math.sin(t * 0.8 + pr.ph) * 6 * pp;
+          var py = by + pr.ly * (1 - pp * 0.5) - 12 * Math.sin(Math.min(1, pp) * Math.PI)
+                 + (Math.min(seaTopS, VH + 40) - by) * pp * pp;
+          ctx.globalAlpha = Math.sin(pp * Math.PI) * 0.85;
           ctx.fillStyle = col;
-          var ps = pr.s * (1 - 0.35 * pp);
-          ell(px, py, ps, ps * 0.8);
-          ctx.fill();
+          var ps = pr.s * (1 - 0.3 * pp);
+          if (i % 2) {
+            /* شظية رقيقة تدور وهي هابطة */
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(pr.ph + t * 0.6 + pp * 2.2);
+            ell(0, 0, ps * 1.7, ps * 0.5);
+            ctx.fill();
+            ctx.restore();
+          } else {
+            ell(px, py, ps, ps * 0.85);
+            ctx.fill();
+          }
         }
         ctx.globalAlpha = 1;
       }
@@ -523,7 +572,7 @@
        قاعها كريم من أول لحظة (تلامس حد قسم المحصول طول الوقت)
        وقمتها عسلية تصفى. الموجة تنتفخ وين تضرب الصبّة السطح. */
     if (flood > 0.001) {
-      var settle = smooth(flood * 1.15);
+      var settle = settleF;
       var ix = OX + streamLandX * S;
 
       /* الطبقة الخلفية */
@@ -541,14 +590,14 @@
       ctx.fill();
 
       /* الطبقة الأمامية مع انتفاخة الاصطدام */
-      var amp = 15 * (1 - settle);
-      var bumpH = 13 * pour * (1 - settle);
+      var amp = ampF;
+      var bumpH = 15 * pour * (1 - settle);
       ctx.beginPath();
       ctx.moveTo(-4, H + 4);
       ctx.lineTo(-4, seaTopW);
       for (var x = 0; x <= W + 20; x += W / 26) {
         var dxi = x - ix;
-        var bump = bumpH * Math.exp(-(dxi * dxi) / (2 * 46 * 46));
+        var bump = bumpH * Math.exp(-(dxi * dxi) / (2 * 54 * 54));
         ctx.lineTo(x, seaTopW + Math.sin(x / (W / 6.5) + t * 0.7) * amp - bump);
       }
       ctx.lineTo(W + 4, H + 4);
@@ -562,6 +611,22 @@
       ctx.strokeStyle = mix(AMBER_DEEP, CREAM, toCream, 0.5 * (1 - settle));
       ctx.lineWidth = 3;
       ctx.stroke();
+
+      /* زبد التقاء الصبّة بالقمة: عرام أبيض صغير يرقص عند الاصطدام */
+      if (pour > 0.15) {
+        for (var fo = 0; fo < 6; fo++) {
+          var fx = ix + (fo - 2.5) * 9 + Math.sin(t * 1.3 + fo * 2.1) * 3;
+          var dxf = fx - ix;
+          var fBump = bumpH * Math.exp(-(dxf * dxf) / (2 * 54 * 54));
+          var fy = seaTopW + Math.sin(fx / (W / 6.5) + t * 0.7) * amp - fBump - 2 - (fo % 2) * 3;
+          ctx.globalAlpha = 0.55 * pour * (1 - settle);
+          ctx.fillStyle = fo % 3 ? CREAM : mix(AMBER, CREAM, 0.5);
+          ctx.beginPath();
+          ctx.arc(fx, fy, 2 + (fo % 3), 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
 
       /* فقاعات كريما على السطح حول الاصطدام، تهدأ مع البحر */
       if (pour > 0.1) {
@@ -612,7 +677,7 @@
   }
 
   /* مع prefers-reduced-motion نثبت على الطقم مستقراً وبخاره طالع */
-  var STILL = 0.54;
+  var STILL = 0.49;
 
   /* التمهيد المخمَّد: سر النعومة. التمرير يجي نطّات، والرسم يلحقه
      انسياباً كل إطار بدل ما يقفز معه، فتطلع الحركة سينمائية */
