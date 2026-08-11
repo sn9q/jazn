@@ -179,4 +179,10 @@
       })
       .catch(function () {});
   }
+
+  /* سنة الحقوق: مكتوبة في HTML فتظهر صحيحة بلا جافاسكربت، وتُحدَّث
+     هنا للسنة الجارية فلا يشيخ الشريط بعد رأس السنة */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-year]"), function (el) {
+    el.textContent = String(new Date().getFullYear());
+  });
 })();

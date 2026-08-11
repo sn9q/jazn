@@ -30,7 +30,7 @@
   <link rel="preload" href="/assets/fonts/amiri-arabic-700-normal.woff2?v=2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/amiri-arabic-400-normal.woff2?v=2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/fonts.css?v=5">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=23">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=24">
 
   <!-- الأقسام تبدأ شفافة ويكشفها main.js مع التمرير. لو تعذّر
        الجافاسكربت — تقطّع شبكة، حاجب، متصفح قديم — تبقى مخفيةً
@@ -311,7 +311,7 @@
           <div class="place-gallery">
             <figure class="reveal"><img src="/assets/img/g11.webp?v=2" alt="باريستا جَازن خلف البار، وخلفهم جدار الأكواب في مكعّباته الخشبية" loading="lazy" decoding="async" width="1600" height="900"></figure>
             <figure class="reveal" style="--d:60ms"><img src="/assets/img/g19.webp?v=2" alt="باريستا بجاكيت جَازن يحضّر V60" loading="lazy" decoding="async" width="900" height="1125"></figure>
-            <figure class="reveal" style="--d:120ms"><img src="/assets/img/g32.webp?v=2" alt="أربعة أكواب جَازن في حاملها، جاهزة للخروج" loading="lazy" decoding="async" width="900" height="1125"></figure>
+            <figure class="reveal" style="--d:120ms"><img src="/assets/img/g32.webp?v=3" alt="كوب جَازن المحفور على صينية التقديم، وبطاقة المحصول بجانبه" loading="lazy" decoding="async" width="720" height="900"></figure>
           </div>
         </div>
 
@@ -430,6 +430,13 @@
         <p>Designed &amp; Developed by <a href="https://linktr.ee/sn9q" target="_blank" rel="noopener">Yousef</a></p>
       </div>
     </div>
+
+    <!-- شريط الحقوق: خارج الحاوية ليمتد بعرض الشاشة كاملاً.
+         السنة مكتوبة هنا فتظهر صحيحة بلا جافاسكربت، وmain.js
+         يحدّثها للسنة الجارية فلا تشيخ -->
+    <div class="footer-legal">
+      <p>© <span data-year>2026</span> جَازن اسبريسو بار، جيزان</p>
+    </div>
   </footer>
 
   <!-- زر التواصل العائم: قرص مضيء بنفس توهج اللافتة -->
@@ -456,7 +463,7 @@
 
   <!-- عنوان القاعدة ومفتاح anon: يحتاجهما main.js ليقرأ التقييم -->
   <script src="/assets/js/config.js?v=2"></script>
-  <script src="/assets/js/main.js?v=7" defer></script>
+  <script src="/assets/js/main.js?v=8" defer></script>
   <script src="/assets/js/cup.js?v=12" defer></script>
 </body>
 </html>
