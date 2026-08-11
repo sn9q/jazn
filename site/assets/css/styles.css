@@ -5,7 +5,7 @@
    المتوهجة بحروف حمراء فوق واجهة ألواح خشب. الموقع مبني حولها:
    هيرو ليلي تشتعل فيه اللافتة، وأقسام نهارية بكريم شارتهم.
 
-   الألوان كلها معيَّنة من بكسلات صورهم:
+   الألوان كلها معيَّنة من بكسلات صورنا:
    توهج اللافتة، حروفها، خشب الواجهة، بلاط الأرض، وعتمة الداخل.
 
    نظام الاستدارة الموثق:
@@ -17,7 +17,7 @@
 
 :root {
   --night: #241811;        /* عتمة داخلهم الدافئة، معمَّقة درجة */
-  --night-2: #301E13;      /* العتمة كما عُيّنت من صورهم */
+  --night-2: #301E13;      /* العتمة كما عُيّنت من صورنا */
   --amber: #F3C44A;        /* توهج اللافتة الصالح للواجهة */
   --amber-core: #FEF05F;   /* قلب التوهج، من مركز اللافتة */
   --amber-deep: #D98E2B;   /* حافة التوهج */
@@ -39,6 +39,8 @@
   --radius: 14px;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* تجاوزٌ ثم استقرار: الشيء الحيّ لا يقف عند هدفه من أول مرة */
+  --ease-back: cubic-bezier(0.34, 1.5, 0.5, 1);
   --t-ui: 220ms;
   --t-reveal: 700ms;
 
@@ -174,7 +176,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   opacity: 0.85;
   transition: opacity var(--t-ui) var(--ease-out), color var(--t-ui) var(--ease-out);
 }
-/* الرابط النشط يضيء بلون اللافتة، مثل ما تضيء لافتتهم */
+/* الرابط النشط يضيء بلون اللافتة، مثل ما تضيء لافتتنا */
 .site-nav a:hover,
 .site-nav a:focus-visible { opacity: 1; }
 .site-nav a[aria-current="true"] { color: var(--amber); opacity: 1; text-shadow: 0 0 18px color-mix(in srgb, var(--amber) 55%, transparent); }
@@ -253,7 +255,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   gap: clamp(14px, 2.6vh, 26px);
 }
 
-/* ── اللافتة: إعادة بناء لافتتهم الحقيقية، وتشتعل عند الدخول ── */
+/* ── اللافتة: إعادة بناء لافتتنا الحقيقية، وتشتعل عند الدخول ── */
 .sign {
   --glow: 0 0 44px 6px color-mix(in srgb, var(--amber) 42%, transparent),
           0 0 120px 20px color-mix(in srgb, var(--amber) 20%, transparent);
@@ -269,7 +271,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   color: var(--sign-red);
   user-select: none;
 }
-/* اللوقو نفسه مقصوصاً من وردماركهم وملوّناً بأحمر اللافتة، لا خط نصي */
+/* اللوقو نفسه مقصوصاً من وردماركنا وملوّناً بأحمر اللافتة، لا خط نصي */
 .sign-mark {
   width: auto;
   height: clamp(4.6rem, 13vw, 7rem);
@@ -285,22 +287,26 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   60%, 100% { opacity: 1; box-shadow: var(--glow); }
 }
 
-/* ورفّة عابرة كل سبع ثوانٍ: لافتة النيون ما تشتعل مرة وتستقر إلى
+/* ورفّة عابرة كل أربع ثوانٍ: لافتة النيون ما تشتعل مرة وتستقر إلى
    الأبد، تظل ترفّ. نبضتان قصيرتان في آخر الدورة والباقي ثبات —
-   فتلمحها العين ولا تُتعبها. */
+   فتلمحها العين ولا تُتعبها.
+
+   النسب أُعيد حسابها مع الدورة: الرفّة نفسها تبقى ٠٫٣٩ ثانية كما
+   كانت (وهي ما تراه العين)، والذي تغيّر هو كم تتكرر. لو تُركت
+   النسب على حالها لانضغطت الرفّة نفسها فصارت تشنّجاً. */
 @keyframes sign-flicker {
-  0%, 88%   { opacity: 1;    box-shadow: var(--glow); }
-  89%       { opacity: 0.45; box-shadow: none; }
-  90.5%     { opacity: 1;    box-shadow: var(--glow); }
-  92%       { opacity: 0.3;  box-shadow: none; }
-  93.5%, 100% { opacity: 1;  box-shadow: var(--glow); }
+  0%, 86.5%   { opacity: 1;    box-shadow: var(--glow); }
+  88.25%      { opacity: 0.45; box-shadow: none; }
+  90.9%       { opacity: 1;    box-shadow: var(--glow); }
+  93.5%       { opacity: 0.3;  box-shadow: none; }
+  96.1%, 100% { opacity: 1;    box-shadow: var(--glow); }
 }
 
 /* الاشتعال أولاً، ثم الرفّة تتسلّم بعده (الأخيرة تفوز على الخاصية
    نفسها) — فلا تنقطع اللافتة بين الاثنتين */
 .sign.is-on {
   animation: sign-on 1.1s steps(1, end) both,
-             sign-flicker 7s steps(1, end) 1.3s infinite;
+             sign-flicker 4s steps(1, end) 1.3s infinite;
 }
 
 .hero-badge {
@@ -698,6 +704,16 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 
 .social-fab__btn {
+  /* التوهج في متغيّر لا في box-shadow مباشرة: الرفّة (fab-flicker)
+     والتحويم كلاهما يحتاجه، ولو كتبناه في الخاصية نفسها لأكلت
+     الحركةُ حالةَ التحويم. هكذا تبدّل الحالةُ المتغيّرَ وتقرؤه
+     الحركة كما هو */
+  --fab-glow:
+    0 0 26px 3px color-mix(in srgb, var(--amber) 40%, transparent),
+    0 10px 24px -8px rgba(20, 12, 6, 0.55);
+  --fab-dark: 0 10px 24px -8px rgba(20, 12, 6, 0.55);
+
+  position: relative;
   width: 56px;
   height: 56px;
   border: 0;
@@ -707,18 +723,55 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   place-items: center;
   color: var(--sign-red);
   background: radial-gradient(80% 110% at 50% 40%, var(--amber-core) 0%, var(--amber) 58%, var(--amber-deep) 100%);
-  box-shadow:
-    0 0 26px 3px color-mix(in srgb, var(--amber) 40%, transparent),
-    0 10px 24px -8px rgba(20, 12, 6, 0.55);
-  transition: transform var(--t-ui) var(--ease-out), box-shadow var(--t-ui) var(--ease-out);
+  box-shadow: var(--fab-glow);
+  transition: transform 260ms var(--ease-back), box-shadow var(--t-ui) var(--ease-out);
 }
-.social-fab__btn svg { width: 25px; height: 25px; grid-area: 1 / 1; transition: opacity 180ms var(--ease-out), transform 240ms var(--ease-out); }
-.social-fab__btn .i-close { opacity: 0; transform: rotate(-45deg); }
-.social-fab__btn:hover { transform: translateY(-2px); box-shadow: 0 0 34px 5px color-mix(in srgb, var(--amber) 52%, transparent), 0 14px 28px -8px rgba(20, 12, 6, 0.6); }
-.social-fab__btn:active { transform: scale(0.94); }
 
-.social-fab.is-open .social-fab__btn .i-open { opacity: 0; transform: rotate(45deg); }
-.social-fab.is-open .social-fab__btn .i-close { opacity: 1; transform: rotate(0deg); }
+/* حلقة تنبثق من الزر لحظة الفتح — الأثر الذي تتركه ضغطة على شيء
+   مضيء. تُرسم في طبقة خلفه فلا تزيح شيئاً ولا تلتقط النقر */
+.social-fab__btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--amber) 60%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.social-fab.is-open .social-fab__btn::after { animation: fab-ring 620ms var(--ease-out) 1; }
+@keyframes fab-ring {
+  0%   { opacity: 0.85; transform: scale(1); }
+  100% { opacity: 0;    transform: scale(1.85); }
+}
+
+.social-fab__btn svg {
+  width: 25px; height: 25px; grid-area: 1 / 1;
+  transition: opacity 200ms var(--ease-out), transform 320ms var(--ease-back);
+}
+.social-fab__btn .i-close { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+.social-fab__btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  --fab-glow:
+    0 0 36px 6px color-mix(in srgb, var(--amber) 55%, transparent),
+    0 14px 28px -8px rgba(20, 12, 6, 0.6);
+}
+.social-fab__btn:active { transform: scale(0.92); }
+
+/* الرفّة نفسها على الزر: نفس الدورة ونفس التأخير الابتدائي، فتغمز
+   اللافتة والزر معاً — يقرأان دائرة كهربائية واحدة لا زينتين.
+   والخفوت هنا بـbrightness لا بـopacity: الزر يطفو فوق أقسام
+   كريمية، فشفافيته تجعله يبهت لا يرفّ. */
+@keyframes fab-flicker {
+  0%, 86.5%   { box-shadow: var(--fab-glow); filter: brightness(1); }
+  88.25%      { box-shadow: var(--fab-dark); filter: brightness(0.66); }
+  90.9%       { box-shadow: var(--fab-glow); filter: brightness(1); }
+  93.5%       { box-shadow: var(--fab-dark); filter: brightness(0.55); }
+  96.1%, 100% { box-shadow: var(--fab-glow); filter: brightness(1); }
+}
+.social-fab__btn { animation: fab-flicker 4s steps(1, end) 1.3s infinite; }
+
+.social-fab.is-open .social-fab__btn .i-open { opacity: 0; transform: rotate(90deg) scale(0.6); }
+.social-fab.is-open .social-fab__btn .i-close { opacity: 1; transform: rotate(0deg) scale(1); }
 
 .social-fab__list {
   list-style: none;
@@ -743,12 +796,17 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
     0 10px 22px -8px rgba(20, 12, 6, 0.7);
   backdrop-filter: blur(6px);
   opacity: 0;
-  transform: translateY(10px) scale(0.94);
+  /* تخرج من داخل الزر لا من تحتها: صغيرة ومزاحة نحوه، فتقرأ
+     العينُ أنها انبثقت منه */
+  transform: translateY(16px) translateX(6px) scale(0.55);
+  /* الإغلاق أسرع من الفتح وبلا تجاوز: الفتح دعوة والإغلاق تنفيذ.
+     والتأخير معكوس هنا فتنسحب الأبعد أولاً */
   transition:
-    opacity 200ms var(--ease-out),
-    transform 240ms var(--ease-out),
+    opacity 130ms var(--ease-out),
+    transform 170ms cubic-bezier(0.4, 0, 0.9, 0.5),
     background 180ms var(--ease-out),
     color 180ms var(--ease-out);
+  transition-delay: calc((1 - var(--i)) * 40ms);
 }
 .social-fab__list svg { width: 21px; height: 21px; }
 .social-fab__list a:hover {
@@ -762,13 +820,19 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .social-fab.is-open .social-fab__list a {
   opacity: 1;
   transform: none;
-  transition-delay: calc(var(--i) * 45ms);
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 420ms var(--ease-back),
+    background 180ms var(--ease-out),
+    color 180ms var(--ease-out);
+  transition-delay: calc(var(--i) * 65ms);
 }
 
 @media (max-width: 640px) {
   .social-fab { inset-block-end: 16px; inset-inline-start: 16px; }
   .social-fab__btn { width: 52px; height: 52px; }
 }
+
 
 /* ---------- التذييل ---------- */
 
@@ -966,9 +1030,13 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .reveal { opacity: 1; transform: none; transition: none; }
   .sign.is-on { animation: none; }
   .btn, .crop, .brand, .site-nav a { transition: none; }
-  /* الزر العائم يفتح فوراً بلا انزلاق ولا تتابع */
+  /* الزر العائم يفتح فوراً بلا انزلاق ولا تتابع، ولا يرفّ:
+     من طلب تقليل الحركة لا يريد وميضاً متكرراً في زاوية عينه.
+     وقاعدة الفتح مكرّرة هنا لأن أسبقيتها أعلى من قاعدة العنصر */
   .social-fab__btn, .social-fab__btn svg, .social-fab__list a { transition: none; }
-  .social-fab.is-open .social-fab__list a { transition-delay: 0s; }
+  .social-fab.is-open .social-fab__list a { transition: none; transition-delay: 0s; }
+  .social-fab__btn { animation: none; }
+  .social-fab.is-open .social-fab__btn::after { animation: none; }
 }
 
 /* ---------- استجابة ---------- */
