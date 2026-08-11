@@ -6,17 +6,20 @@
    بخصرة أمبر (تحية لصحونهم الفنية)، والكريما ذهبية مثل شوتهم.
 
    الحكاية بالتمرير، بإيقاع فلم: الصحن والكوب مرميان من فوق معاً
-   كقطعتين منفصلتين تسقطان بجاذبية — الصحن يلقف الطاولة أولاً،
-   والكوب يلحقه ويستقر فوقه بتموّجة، ويتصاعد البخار. ثم مع مواصلة
-   النزول تتفكك الرسمة نفسها إلى قطعها: اليد تسحب لجهة، الجسم
-   لجهة، الصحن لجهة، وقرص الكريما ينفصل وينسكب خيوطاً ذهبية
-   لتحت — ومن الانسكاب يرتفع البحر الكريمي اللي يبتلع القطع
-   الذايبة ويصير هو كريم قسم «القائمة تبدأ من المحصول».
+   كقطعتين تسقطان بجاذبية — الصحن يلقف الطاولة أولاً، والكوب
+   يلحقه ويستقر فوقه، ويتصاعد البخار. ثم مع مواصلة النزول تتحلل
+   الرسمة قطعة قطعة، يميل الكوب وتنسكب منه القهوة الغامقة، ولوقو
+   جَازن آخر ما يطفو ويلمس البحر الكريمي — اللي يصير هو كريم قسم
+   «القائمة تبدأ من المحصول».
+
+   النزول نفسه مشغول بأربعة تأثيرات مشتقة من فيزيائه لا مضافة
+   زخرفةً: ظل ترقّب يضيق ويغمق كل ما قربت القطعة، أثر حركة تقوده
+   السرعة اللحظية، مقياس منظور يكبر مع الاقتراب، ولمعة تكنس
+   الخزف مرة وهو يعبر ضوء اللافتة — وومضة حلقية عند اللمس.
 
    النعومة من التمهيد المخمَّد: الرسم لا يقفز مع نطّات السكرول بل
-   يلحقها انسياباً كل إطار، فتطلع الحركة سينمائية مهما كان جهاز
-   الزائر. canvas 2D وحده، بلا مكتبات، والرسم يشتغل فقط والشريط
-   على الشاشة.
+   يلحقها انسياباً كل إطار. canvas 2D وحده، بلا مكتبات، والرسم
+   يشتغل فقط والشريط على الشاشة.
    ============================================================ */
 
 (function () {
@@ -94,27 +97,6 @@
   /* تقدم متدرج: كل قطعة لها نافذتها داخل التفكك، فيقرأ تحللاً
      متسلسلاً لا انزلاقة واحدة متزامنة */
   var stag = function (x, s, d) { return smooth(clamp01((x - s) / d)); };
-
-  /* جزيئات الذوبان: تنشأ من القطع المتفككة وتهبط للبحر، فتربط
-     التفكك بالاندماج حرفياً — القطع تتحلل حبيبات تسقط في الكريم */
-  var PARTS = [];
-  (function () {
-    var seed = 8140777;
-    var rnd = function () { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
-    for (var i = 0; i < 68; i++) {
-      PARTS.push({
-        src: i % 3,                       // 0 جسم، 1 كريما، 2 صحن
-        ang: rnd() * Math.PI * 2,         // موضعها على حافة قطعتها
-        edge: 0.75 + rnd() * 0.45,
-        /* توزيع حجمين: غبار كثير ورقائق قليلة، فيطلع عمق */
-        s: rnd() < 0.7 ? 0.8 + rnd() * 1.2 : 1.9 + rnd() * 1.7,
-        d: rnd() * 0.4,
-        ph: rnd() * 6.28,
-        fq: 0.55 + rnd() * 0.9,
-        tw: rnd() * 6.28,
-      });
-    }
-  })();
 
   var ell = function (cx, cy, rx, ry) {
     ctx.beginPath();
@@ -316,17 +298,33 @@
     var bob = Math.sin(t * 0.8) * 2.2 * land * (1 - dis);
 
     /* بركة ضوء أمبر تنتظر تحت موضع الهبوط، وتنطفي مع التفكك */
-    var poolA = (0.11 * smooth(sRaw) + 0.05 * bounce) * (1 - dis);
+    /* بركة الضوء وظل الترقّب: الظل يبدأ واسعاً باهتاً والطقم بعيد،
+       ويضيق ويغمق كل ما قرب — مبدأ الترقّب في الرسوم المتحركة،
+       يخلي العين تعرف وين بينزل قبل ما ينزل. */
+    var near = Math.max(smooth(sRaw), smooth(cRaw));
+    var poolA = (0.09 + 0.10 * near + 0.10 * bounce) * (1 - dis);
     if (poolA > 0.004) {
-      var pool = ctx.createRadialGradient(CX, SY + 14, 8, CX, SY + 14, 170);
+      var pool = ctx.createRadialGradient(CX, SY + 14, 8, CX, SY + 14, 190 - 40 * near);
       pool.addColorStop(0, mix(AMBER, NIGHT, 0.25, poolA));
       pool.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = pool;
-      ell(CX, SY + 14, 170, 44);
+      ell(CX, SY + 14, 190 - 40 * near, 50 - 10 * near);
       ctx.fill();
-      ctx.fillStyle = "rgba(12,7,3," + 0.35 * sFall * (1 - dis) + ")";
-      ell(CX, SY + 12, 104, 20);
+      /* الظل نفسه: من 170×34 باهت إلى 100×19 غامق */
+      ctx.fillStyle = "rgba(12,7,3," + (0.10 + 0.30 * near) * (1 - dis) + ")";
+      ell(CX, SY + 12, lerp(170, 100, near), lerp(34, 19, near));
       ctx.fill();
+    }
+
+    /* ومضة اللمس: حلقة ضوء تتسع لحظة ملامسة الصحن الطاولة */
+    if (bounce > 0.01 && dis < 0.1) {
+      var ringP = clamp01(land * 1.6);
+      ctx.globalAlpha = 0.32 * (1 - ringP) * (1 - dis);
+      ctx.strokeStyle = mix(AMBER, CREAM, 0.35);
+      ctx.lineWidth = 2.4;
+      ell(CX, SY + 10, 90 + ringP * 120, 21 + ringP * 28);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
     }
 
     /* ── الصحن: يسقط لوحاله، ووقت التفكك ينسحب وتنشال عنه خصرته ── */
@@ -335,11 +333,30 @@
     var sYv = -(VH * 0.72 + 80) * (1 - sFall) + sDip * 3 + 58 * sP;
     var sRot = -0.06 * (1 - sRaw) - 0.18 * sP;
     var sA = 1 - stag(sP, 0.72, 0.28);
+    /* سرعة السقوط اللحظية (مشتقة التسارع التربيعي) تقود أثر الحركة:
+       أشباح باهتة فوق القطعة على مسارها، تختفي لحظة الاستقرار.
+       ومقياس المنظور: تبدأ أصغر وهي بعيدة وتكبر وهي قادمة. */
+    var sVel = sRaw < 1 ? 2 * sRaw * (1 - sRaw * 0.15) : 0;
+    var sScale = lerp(0.88, 1, smooth(sRaw));
     if (sA > 0.004) {
+      if (sVel > 0.12 && sRaw < 0.99) {
+        for (var gh = 3; gh >= 1; gh--) {
+          var gq = Math.max(0, sRaw - gh * 0.022);
+          var gy = -(VH * 0.72 + 80) * (1 - gq * gq);
+          ctx.save();
+          ctx.globalAlpha = sA * sVel * (0.09 / (gh * gh));
+          ctx.translate(CX + sX, SY + gy);
+          ctx.rotate(sRot);
+          ctx.scale(lerp(0.88, 1, smooth(gq)), lerp(0.88, 1, smooth(gq)));
+          drawSaucerBase();
+          ctx.restore();
+        }
+      }
       ctx.save();
       ctx.globalAlpha = sA;
       ctx.translate(CX + sX, SY + sYv);
       ctx.rotate(sRot);
+      ctx.scale(sScale, sScale);
       drawSaucerBase();
       ctx.restore();
     }
@@ -459,12 +476,30 @@
         ctx.globalAlpha = 1;
       }
 
-      /* الجسم والكريما داخله */
+      /* الجسم والكريما داخله، ومعهما أثر الحركة ومقياس المنظور */
+      var cVel = cRaw < 1 ? 2 * cRaw * (1 - cRaw * 0.15) : 0;
+      var cScale = lerp(0.86, 1, smooth(cRaw));
       if (bodyA > 0.004) {
+        if (cVel > 0.12 && cRaw < 0.99 && dis < 0.02) {
+          for (var gc = 3; gc >= 1; gc--) {
+            var cq = Math.max(0, cRaw - gc * 0.02);
+            var cgy = -(VH * 0.66 + 60) * (1 - cq * cq);
+            ctx.save();
+            ctx.globalAlpha = cVel * (0.085 / (gc * gc));
+            ctx.translate(CX + 26 * (1 - cq), FOOT_Y + cgy);
+            ctx.rotate(-0.14 * (1 - cq));
+            ctx.scale(lerp(0.86, 1, smooth(cq)), lerp(0.86, 1, smooth(cq)));
+            /* بلا كريما في الأشباح: قرصها البرتقالي الفاتح كان يخلي
+               كل شبح يُقرأ ككوب مستقل، فيطلع تكديس لا ضبابة حركة */
+            drawCupBody();
+            ctx.restore();
+          }
+        }
         ctx.save();
         ctx.globalAlpha = bodyA;
         ctx.translate(CX + cX + bodyDx, FOOT_Y + cY + bodyDy);
         ctx.rotate(cTilt + bodyRot);
+        if (dis < 0.02) ctx.scale(cScale, cScale);
         wmSkip = wmDetached;
         drawCupBody();
         wmSkip = false;
@@ -472,6 +507,23 @@
         ctx.translate(-9 * bodyP, 2 * bodyP);
         drawCrema(1);
         ctx.restore();
+
+        /* لمعة تكنس الخزف وهو يعبر ضوء اللافتة: شريط ضيق يمر على
+           الجسم مرة واحدة أثناء النزول، مقصوص داخل حدود الكوب */
+        var sweep = smooth((cRaw - 0.42) / 0.42);
+        if (sweep > 0.01 && sweep < 0.99 && dis < 0.02) {
+          ctx.save();
+          cupBodyPath();
+          ctx.clip();
+          var syw = lerp(-118, 26, sweep);
+          var lg = ctx.createLinearGradient(0, syw - 26, 0, syw + 26);
+          lg.addColorStop(0, "rgba(255,240,205,0)");
+          lg.addColorStop(0.5, mix(AMBER, "#FFF6DF", 0.6, 0.5 * Math.sin(sweep * Math.PI)));
+          lg.addColorStop(1, "rgba(255,240,205,0)");
+          ctx.fillStyle = lg;
+          ctx.fillRect(-70, syw - 26, 140, 52);
+          ctx.restore();
+        }
         ctx.restore();
       }
 
@@ -513,80 +565,6 @@
         if (wmP > 0.8) wmRipple = { x: OX + wx * S, p: stag(wmP, 0.8, 0.2) };
       }
 
-      /* جزيئات الذوبان: تتقشر من حواف القطع نفسها لا من سحابة
-         عشوائية، لكل ذرة أثر باهت خلف مسارها، ولونها يتحول كريمياً
-         وهي نازلة — الذرة تندمج بالبحر قبل ما تلمسه، ووين تحط
-         تنقر السطح نقرة صغيرة. */
-      if (dis > 0.14) {
-        var seaY = Math.min(seaTopS, VH + 40);
-        for (var i = 0; i < PARTS.length; i++) {
-          var pr = PARTS[i];
-          var pp = stag(dis, 0.16 + pr.d, 0.52);
-          if (pp <= 0.004 || pp >= 0.996) continue;
-
-          var bx, by, prx, pry, colBase;
-          if (pr.src === 0) {
-            bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 45;
-            prx = 54; pry = 38; colBase = CREAM;
-          } else if (pr.src === 1) {
-            bx = CX + cX + bodyDx; by = FOOT_Y + cY + bodyDy - 84;
-            prx = 48; pry = 12; colBase = "#E0A23E";
-          } else {
-            bx = CX + sX; by = SY + sYv;
-            prx = 108; pry = 25; colBase = CREAM_2;
-          }
-
-          var exd = Math.cos(pr.ang), eyd = Math.sin(pr.ang);
-          var pos = function (q) {
-            return [
-              bx + exd * prx * pr.edge + exd * 20 * q + Math.sin(t * pr.fq + pr.ph) * (4 + 7 * q),
-              by + eyd * pry * pr.edge - 13 * Math.sin(Math.min(1, q) * Math.PI) + (seaY - by) * q * q,
-            ];
-          };
-          var m = pos(pp);
-          var colNow = mix(colBase, CREAM, 0.55 * pp);
-          var twk = 0.75 + 0.25 * Math.sin(t * 2.6 + pr.tw);
-          var aMain = Math.sin(pp * Math.PI) * 0.9 * twk;
-          var ps = pr.s * (1 - 0.3 * pp);
-
-          /* الأثر: شبحان باهتان على المسار خلفها */
-          ctx.fillStyle = colNow;
-          for (var g = 2; g >= 1; g--) {
-            var gq = pp - g * 0.05;
-            if (gq <= 0.004) continue;
-            var gm = pos(gq);
-            ctx.globalAlpha = aMain * (g === 1 ? 0.28 : 0.12);
-            ell(gm[0], gm[1], ps * 0.68, ps * 0.52);
-            ctx.fill();
-          }
-
-          ctx.globalAlpha = aMain;
-          if (i % 2) {
-            /* شظية رقيقة تدور وهي هابطة */
-            ctx.save();
-            ctx.translate(m[0], m[1]);
-            ctx.rotate(pr.ph + t * 0.6 + pp * 2.2);
-            ell(0, 0, ps * 1.7, ps * 0.5);
-            ctx.fill();
-            ctx.restore();
-          } else {
-            ell(m[0], m[1], ps, ps * 0.85);
-            ctx.fill();
-          }
-
-          /* نقرة الوصول على سطح الموجة */
-          if (i % 4 === 0 && pp > 0.84 && flood > 0.05) {
-            var plip = (pp - 0.84) / 0.16;
-            var surfP = (seaTopW + Math.sin((OX + m[0] * S) / (W / 6.5) + t * 0.7) * ampF - OY) / S;
-            ctx.globalAlpha = 0.4 * (1 - plip);
-            ctx.strokeStyle = mix(AMBER_DEEP, CREAM, 0.5);
-            ctx.lineWidth = 1.2;
-            ell(m[0], surfP, 3 + plip * 12, 1 + plip * 3.4);
-            ctx.stroke();
-          }
-        }
-        ctx.globalAlpha = 1;
-      }
     }
 
     /* خيطا بخار يتنفسان فوق الكوب المستقر */
