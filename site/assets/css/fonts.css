@@ -12,7 +12,13 @@
    من الخط السابق على نفس المقاس، فالتسميات الصغيرة (المعالجة،
    الإيحاءات، تسميات الأسعار) كانت تطلع رفيعة على الجوال. التصحيح
    في الوجه نفسه لا في عشرات قواعد font-size، فتبقى نسب المقاس
-   كما هي وتكبر الحروف وحدها. */
+   كما هي وتكبر الحروف وحدها.
+
+   والوجهان العربيان مُجزّآن (subset): حُذفت منهما كتل أشكال العرض
+   القديمة (FB50–FEFF) والرموز الرياضية العربية (1EE00+) وعلامات
+   الضبط القرآنية — كلها لا يكتبها أحد اليوم، فالمتصفح يُشكّل
+   الحروف من جدول GSUB لا من تلك الكتل. النتيجة 203KB ← 148KB
+   بلا فرق بكسل واحد في تنضيد الموقع (قِيس بمقارنة صورتين). */
 
 @font-face {
   font-family: "Amiri";
@@ -20,8 +26,8 @@
   font-weight: 400;
   font-display: swap;
   size-adjust: 108%;
-  src: url("../fonts/amiri-arabic-400-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+  src: url("../fonts/amiri-arabic-400-normal.woff2?v=2") format("woff2");
+  unicode-range: U+0600-06FF, U+FD3E-FD3F, U+FDF2;
 }
 @font-face {
   font-family: "Amiri";
@@ -29,8 +35,8 @@
   font-weight: 700;
   font-display: swap;
   size-adjust: 108%;
-  src: url("../fonts/amiri-arabic-700-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+  src: url("../fonts/amiri-arabic-700-normal.woff2?v=2") format("woff2");
+  unicode-range: U+0600-06FF, U+FD3E-FD3F, U+FDF2;
 }
 @font-face {
   font-family: "Amiri";
