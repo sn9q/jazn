@@ -266,9 +266,11 @@
 
     /* التفكك: الرسمة تتحلل لقطعها وينسكب منها الانتقال الكريمي */
     var dis = smooth(clamp01((p - 0.66) / 0.20));
-    var pour = smooth(clamp01((dis - 0.12) / 0.5));   // خيوط الانسكاب
+    var pour = smooth(clamp01((dis - 0.22) / 0.5));   // الصب بعد ما يميل الكوب
     var flood = smooth(clamp01((p - 0.70) / 0.22));   // البحر يرتفع من الانسكاب
     var fade = 1 - smooth((dis - 0.5) / 0.45);        // ذوبان القطع
+
+    var streamLandX = CX;
 
     var dpr = cv.width / W;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -331,30 +333,51 @@
         ctx.restore();
       };
 
-      /* خيوط الانسكاب خلف القطع: من موضع القرص المنفصل إلى قاع
-         الشريط، بلون الكريما، تتمايل مع الوقت */
+      /* الكوب وقت التفكك ما يفقد مشروبه: يميل ويصب من شفته.
+         الكريما طبقة باقية داخل الفوهة (تنزلق قليلاً ناحية الميلان)،
+         واللي ينسكب هو القهوة الغامقة اللي تحتها — لون اسبريسو صدق. */
+      var bodyDx = -46 * dis, bodyDy = -34 * dis, bodyRot = -0.5 * dis;
+
+      /* خيوط الصب خلف القطع: تبدأ من شفة الفوهة المنخفضة بعد الميلان */
       if (pour > 0.01) {
-        var pcx = CX + cX + 34 * dis;
-        var pcy = FOOT_Y + cY - 84 - 78 * dis;
-        var reach = (VH - pcy + OY / S + 60) * Math.min(1, pour * 1.5);
+        var br = cTilt + bodyRot;
+        var ox = CX + cX + bodyDx, oy = FOOT_Y + cY + bodyDy;
+        var pcx = ox + (-54) * Math.cos(br) - (-88) * Math.sin(br);
+        var pcy = oy + (-54) * Math.sin(br) + (-88) * Math.cos(br);
+        streamLandX = pcx + 4;
+        var reach = (VH - pcy + 80) * Math.min(1, pour * 1.4);
         ctx.lineCap = "round";
-        [[-14, 9, 0], [4, 12, 2.2], [18, 7, 4.1]].forEach(function (st) {
-          var sway = Math.sin(t * 0.8 + st[2]) * 6;
-          ctx.globalAlpha = 0.9 * pour * Math.max(0, fade * 1.4 > 1 ? 1 : fade * 1.4);
-          ctx.strokeStyle = mix(AMBER_DEEP, AMBER, 0.3);
+        var pourA = 0.92 * pour * Math.min(1, fade * 1.4);
+        [[-3, 9, 0], [7, 6, 2.2], [14, 3.4, 4.1]].forEach(function (st) {
+          var sway = Math.sin(t * 0.8 + st[2]) * 5;
+          ctx.globalAlpha = pourA;
+          ctx.strokeStyle = "#3B2110";
           ctx.lineWidth = st[1];
           ctx.beginPath();
-          ctx.moveTo(pcx + st[0], pcy + 6);
+          ctx.moveTo(pcx + st[0], pcy + 4);
           ctx.quadraticCurveTo(pcx + st[0] + sway, pcy + reach * 0.55, pcx + st[0] + sway * 0.4, pcy + reach);
           ctx.stroke();
         });
+        /* خيط ضوء أمبر على حافة الصبة، وإلا ضاعت القهوة الغامقة فوق الليل */
+        ctx.globalAlpha = pourA * 0.55;
+        ctx.strokeStyle = mix(AMBER, "#F7DE9B", 0.3);
+        ctx.lineWidth = 1.8;
+        var hsway = Math.sin(t * 0.8) * 5;
+        ctx.beginPath();
+        ctx.moveTo(pcx - 7, pcy + 6);
+        ctx.quadraticCurveTo(pcx - 7 + hsway, pcy + reach * 0.55, pcx - 7 + hsway * 0.4, pcy + reach);
+        ctx.stroke();
         ctx.globalAlpha = 1;
       }
 
-      piece(-64 * dis, -26 * dis, -0.24 * dis, drawCupBody);
+      piece(bodyDx, bodyDy, bodyRot, function () {
+        drawCupBody();
+        ctx.save();
+        ctx.translate(-9 * dis, 2 * dis);
+        drawCrema(1 + cw);
+        ctx.restore();
+      });
       piece(92 * dis, -62 * dis, 0.6 * dis, drawHandle);
-      /* القرص ينفصل ويرتفع مائلاً وهو يصب */
-      piece(34 * dis, -78 * dis, 0.34 * dis, drawCrema, 1 + cw);
     }
 
     /* خيطا بخار يتنفسان فوق الكوب المستقر، وينقطعان مع التفكك */
@@ -409,7 +432,7 @@
 
       /* دوائر وين تضرب خيوط الانسكاب السطح */
       if (pour > 0.1 && flood < 0.96) {
-        var rx0 = OX + (CX + 34 * dis + 4) * S;
+        var rx0 = OX + streamLandX * S;
         var surfY = topY + Math.sin(rx0 / (W / 6.5) + t * 0.7) * amp;
         ctx.strokeStyle = mix(AMBER_DEEP, CREAM, 0.45);
         for (var i = 0; i < 2; i++) {
