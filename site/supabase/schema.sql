@@ -114,7 +114,7 @@ create policy settings_owner_insert on jazn.site_settings for insert to authenti
 create policy settings_owner_update on jazn.site_settings for update to authenticated using (jazn.is_owner()) with check (jazn.is_owner());
 
 insert into jazn.site_settings (key, value) values
-  ('google_rating', '{"rating": 4.8, "count": 440, "url": "https://maps.app.goo.gl/vQsRaDumDRTAAFv6A"}'::jsonb)
+  ('google_rating', '{"rating": 4.8, "count": 427, "url": "https://maps.app.goo.gl/vQsRaDumDRTAAFv6A"}'::jsonb)
 on conflict (key) do nothing;
 
 -- ─── تخزين صور الأصناف ───
@@ -140,7 +140,7 @@ create policy jazn_menu_delete on storage.objects for delete to authenticated
 
 -- ─── تقييم قوقل ───
 -- القيمة أعلاه ثابتة، والتحديث الآلي اليومي عبر SerpApi منفصل في
--- rating-cron.optional.sql ولا يُنفَّذ إلا بعد توفر مفتاح SerpApi.
+-- rating-cron.sql ويُنفَّذ مرة واحدة بعد هذا الملف.
 
 -- ─── الحماية (RLS) على المنيو ───
 alter table jazn.menu_items enable row level security;

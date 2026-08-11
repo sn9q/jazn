@@ -106,20 +106,36 @@
       spied.forEach(function (pair) { spy.observe(pair.section); });
     }
   }
-  /* التقييم: الرقم مطبوع في الصفحة، وهذه تنعشه من قوقل ماب.
-     الدالة مخبّأة يوماً على حافة نتلفاي فسيربآبي يُسأل مرة باليوم
-     لا مرة لكل زائر. وأي فشل يُتجاهل بصمت — المطبوع يبقى ظاهراً. */
-  var rateEls = {
-    rating: document.querySelector('[data-gmaps="rating"]'),
-    reviews: document.querySelector('[data-gmaps="reviews"]')
+  /* التقييم: الرقم مطبوع في الصفحة ليقرأه محرك البحث ومن عطّل
+     الجافاسكربت، وهذه تنعشه من قاعدة البيانات. القاعدة نفسها هي
+     التي تسأل قوقل يومياً (pg_cron + SerpApi، انظر
+     site/supabase/rating-cron.optional.sql) — فلا مفتاح في المتصفح
+     ولا خدمة وسيطة، والزائر يقرأ صفاً واحداً مخزّناً.
+
+     نداء REST مباشر بلا مكتبة: السطر واحد وقراءةٌ عامة، فاستيراد
+     SDK من CDN خارجي كلفةٌ وخطرُ عطلٍ بلا مقابل. */
+  var rate = {
+    r: document.querySelector('[data-gmaps="rating"]'),
+    c: document.querySelector('[data-gmaps="reviews"]')
   };
-  if (rateEls.rating && rateEls.reviews && window.fetch) {
-    fetch("/api/rating", { headers: { accept: "application/json" } })
-      .then(function (r) { return r.ok && r.status !== 204 ? r.json() : null; })
-      .then(function (d) {
-        if (!d || typeof d.rating !== "number" || typeof d.reviews !== "number") return;
-        rateEls.rating.textContent = String(Math.round(d.rating * 10) / 10);
-        rateEls.reviews.textContent = String(d.reviews);
+  var scfg = window.JAZN_CONFIG || {};
+  if (rate.r && rate.c && window.fetch && scfg.SUPABASE_URL && scfg.SUPABASE_ANON_KEY) {
+    fetch(scfg.SUPABASE_URL + "/rest/v1/site_settings?key=eq.google_rating&select=value", {
+      headers: {
+        apikey: scfg.SUPABASE_ANON_KEY,
+        Authorization: "Bearer " + scfg.SUPABASE_ANON_KEY,
+        "Accept-Profile": "jazn"
+      }
+    })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (rows) {
+        var v = rows && rows[0] && rows[0].value;
+        if (!v) return;
+        var n = Number(v.rating), c = Number(v.count);
+        /* لا نعرض إلا رقماً معقولاً — وإلا يبقى المطبوع */
+        if (!(n >= 1 && n <= 5) || !(c >= 1) || c % 1 !== 0) return;
+        rate.r.textContent = String(Math.round(n * 10) / 10);
+        rate.c.textContent = String(c);
       })
       .catch(function () {});
   }
