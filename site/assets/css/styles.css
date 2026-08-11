@@ -357,11 +357,14 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   display: none;
   position: relative;
   z-index: 1;             /* يرسم فوق القسم المسحوب خلفه */
-  height: 235vh;
-  height: 235lvh;
+  /* +17vh على الجوال و+12vh على الديسك توب تعويضاً عن استباق
+     التسليم (LEAD في cup.js): المشهد صار يخلص قبل انفكاك التثبيت
+     لا عنده، فلولا الزيادة لانضغطت أطواره بقدر الاستباق */
+  height: 252vh;
+  height: 252lvh;
 }
 @media (min-width: 700px) {
-  .cup-band { height: 260vh; height: 260lvh; }
+  .cup-band { height: 272vh; height: 272lvh; }
 }
 .cup-band.on { display: block; }
 
