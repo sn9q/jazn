@@ -8,37 +8,41 @@
 --    http     يخلي القاعدة تسأل الإنترنت بنفسها
 --    SerpApi  يقرأ بيانات قوقل ماب الرسمية
 --
---  التنفيذ: الصقه كاملاً في Supabase → SQL Editor → Run.
---  آمن للتكرار: تشغيله مرتين لا يضاعف شيئاً.
---  للتراجع: select cron.unschedule('jazn-refresh-google-rating');
+--  ┌───────────────────────────────────────────────────────┐
+--  │  المطلوب منك: سطر واحد فقط — ضع مفتاح جَازن في        │
+--  │  السطر المعلَّم بـ«ضع المفتاح هنا» أدناه.              │
+--  │  ثم الصق الملف كاملاً في Supabase → SQL Editor → Run. │
+--  └───────────────────────────────────────────────────────┘
 --
---  المفتاح لا تكتبه: الخطوة الأولى تنقله من دالة سونق القائمة في
---  نفس القاعدة إلى خزنة Supabase، فيصير للمشروعين مصدر واحد.
---  ولو رغبت يوماً بتغييره:
---    select vault.update_secret(id, 'المفتاح-الجديد')
---    from vault.secrets where name = 'serpapi_key';
+--  المفتاح يُحفظ في خزنة Supabase باسم jazn_serpapi_key — خاصٌّ
+--  بجَازن وحده، منفصل عن مفتاح سونق، فرصيد كلٍّ منهما مستقل.
+--  ولا يظهر في نص الدالة ولا في سجلات القاعدة.
+--
+--  آمن للتكرار: تشغيله مرتين لا يضاعف شيئاً، وإعادة تشغيله
+--  بمفتاح جديد تُحدّث القديم (وهكذا تُدوَّر المفاتيح).
+--
+--  للتراجع: select cron.unschedule('jazn-refresh-google-rating');
 -- ═══════════════════════════════════════════════════════════
 
--- ─── ١) المفتاح إلى الخزنة (مرة واحدة) ───
+-- ─── ١) المفتاح إلى الخزنة ───
 do $seed$
-declare k text;
+declare
+  k text := 'ضع المفتاح هنا';   -- ←←← السطر الوحيد الذي تعدّله
+  existing uuid;
 begin
-  if exists (select 1 from vault.secrets where name = 'serpapi_key') then
-    raise notice 'المفتاح موجود في الخزنة، تخطّي';
-    return;
+  if k is null or k = 'ضع المفتاح هنا' or length(k) < 20 then
+    raise exception 'ضع مفتاح جَازن من serpapi.com في السطر المعلَّم أولاً، ثم أعد التشغيل';
   end if;
 
-  select (regexp_match(
-            pg_get_functiondef('public.refresh_google_rating()'::regprocedure),
-            'api_key=([A-Za-z0-9_-]+)'))[1]
-    into k;
+  select id into existing from vault.secrets where name = 'jazn_serpapi_key';
 
-  if k is null or length(k) < 20 then
-    raise exception 'ما لقيت مفتاح SerpApi في دالة سونق. ضعه يدوياً ثم أعد التشغيل: select vault.create_secret(''المفتاح'', ''serpapi_key'');';
+  if existing is null then
+    perform vault.create_secret(k, 'jazn_serpapi_key', 'مفتاح SerpApi الخاص بجَازن وحده');
+    raise notice 'حُفظ مفتاح جَازن في الخزنة';
+  else
+    perform vault.update_secret(existing, k);
+    raise notice 'حُدّث مفتاح جَازن في الخزنة';
   end if;
-
-  perform vault.create_secret(k, 'serpapi_key', 'مفتاح SerpApi المشترك بين سونق وجَازن');
-  raise notice 'نُقل المفتاح إلى الخزنة';
 end
 $seed$;
 
@@ -57,9 +61,9 @@ declare
   r numeric;
   c int;
 begin
-  select decrypted_secret into k from vault.decrypted_secrets where name = 'serpapi_key';
+  select decrypted_secret into k from vault.decrypted_secrets where name = 'jazn_serpapi_key';
   if k is null or k = '' then
-    raise notice 'لا مفتاح في الخزنة';
+    raise notice 'لا مفتاح جَازن في الخزنة';
     return;
   end if;
 
