@@ -1,125 +1,52 @@
 /* خطوط جَازن، مستضافة ذاتياً — لا CDN خارجي.
 
-   Zain للعناوين: عربي معاصر بأطراف دافئة وعدّة تُذكّر بالنسخ بلا
-   رسميّته، ومضغوط قليلاً فتقعد العناوين العربية الطويلة في سطر.
-   Readex Pro للنص: مفتوح واسع العدّة، مريح في الفقرات وفي أسطر
-   الأسعار الصغيرة. والاثنان يتباينان — عنوان مضغوط ونص واسع —
-   فيبين العنوان بلا ما نكبّره.
-   Jost لحروف JAZN اللاتينية كما هي.
+   أميري وحده، عناوينَ ونصّاً ولاتينياً: نسخ كلاسيكي بأصل مطبعي،
+   يعطي الصفحة طعم مجلة لا طعم تطبيق. وخطٌ واحد في كل مكان أنظف
+   من زوج، شرط أن يحتمل الدورين — وأميري يحتمل: وزن 700 له كثافة
+   تكفي للعناوين، و400 معتدل في الفقرات.
 
-   قبلهما كان Noto Naskh (كتابي، يقرأ صحيفةً لا لافتة) وIBM Plex
-   Sans Arabic (خط واجهات برمجية) — صحيحان لكن ما لهما علاقة
-   بإسبريسو بار. */
+   ولاتينيّته من العائلة نفسها، فالأسعار و«V60» و«@jazn.sa» تقعد
+   مع العربي بلا فاصل بصري.
+
+   وsize-adjust: 108% ليست زخرفة: أميري خط مطبعي يركّب أضيق بـ31%
+   من الخط السابق على نفس المقاس، فالتسميات الصغيرة (المعالجة،
+   الإيحاءات، تسميات الأسعار) كانت تطلع رفيعة على الجوال. التصحيح
+   في الوجه نفسه لا في عشرات قواعد font-size، فتبقى نسب المقاس
+   كما هي وتكبر الحروف وحدها. */
 
 @font-face {
-  font-family: "Zain";
+  font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../fonts/zain-arabic-400-normal.woff2") format("woff2");
+  size-adjust: 108%;
+  src: url("../fonts/amiri-arabic-400-normal.woff2") format("woff2");
   unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
 }
 @font-face {
-  font-family: "Zain";
+  font-family: "Amiri";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("../fonts/zain-arabic-700-normal.woff2") format("woff2");
+  size-adjust: 108%;
+  src: url("../fonts/amiri-arabic-700-normal.woff2") format("woff2");
   unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
 }
 @font-face {
-  font-family: "Zain";
+  font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../fonts/zain-latin-400-normal.woff2") format("woff2");
+  size-adjust: 108%;
+  src: url("../fonts/amiri-latin-400-normal.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+2000-206F;
 }
 @font-face {
-  font-family: "Zain";
+  font-family: "Amiri";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("../fonts/zain-latin-700-normal.woff2") format("woff2");
+  size-adjust: 108%;
+  src: url("../fonts/amiri-latin-700-normal.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+2000-206F;
-}
-
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/readex-pro-arabic-400-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/readex-pro-arabic-500-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("../fonts/readex-pro-arabic-600-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/readex-pro-arabic-700-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/readex-pro-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+2000-206F;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/readex-pro-latin-500-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+2000-206F;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("../fonts/readex-pro-latin-600-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+2000-206F;
-}
-@font-face {
-  font-family: "Readex Pro";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/readex-pro-latin-700-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+2000-206F;
-}
-
-@font-face {
-  font-family: "Jost";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/jost-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Jost";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/jost-latin-500-normal.woff2") format("woff2");
 }

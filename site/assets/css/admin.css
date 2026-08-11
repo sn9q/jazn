@@ -176,7 +176,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   margin: 0 0 0.55rem;
 }
 .adm-group__title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to left, rgba(243,196,74,0.4), transparent); }
-.adm-group__title small { color: rgba(243,236,223,0.5); font-family: "Readex Pro", sans-serif; font-size: 0.75rem; font-weight: 400; }
+.adm-group__title small { color: rgba(243,236,223,0.5); font-family: var(--font-body, "Amiri", serif); font-size: 0.75rem; font-weight: 400; }
 
 .adm-item {
   display: grid;
