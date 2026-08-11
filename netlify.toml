@@ -7,6 +7,10 @@
   publish = "site"
   command = "node scripts/update_rating.mjs"
 
+# دالة /api/rating تنعش الرقم يومياً على حافة نتلفاي
+[functions]
+  directory = "netlify/functions"
+
 # صفحات HTML تُقدَّم دائماً طازجة (لا كاش قديم على الجوال)
 [[headers]]
   for = "/*.html"
