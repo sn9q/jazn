@@ -32,8 +32,8 @@
   --sand: #C9B8A4;         /* نص ثانوي على الليل */
   --logo: #886460;         /* بني اللوقو الوردي، من بكسلاته */
 
-  --font-head: "Noto Naskh Arabic", serif;
-  --font-body: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-head: "Zain", "Noto Naskh Arabic", serif;
+  --font-body: "Readex Pro", system-ui, sans-serif;
   --font-latin: "Jost", sans-serif;
 
   --radius: 14px;
@@ -273,7 +273,24 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   46%  { opacity: 0.55; box-shadow: none; }
   60%, 100% { opacity: 1; box-shadow: var(--glow); }
 }
-.sign.is-on { animation: sign-on 1.1s steps(1, end) both; }
+
+/* ورفّة عابرة كل سبع ثوانٍ: لافتة النيون ما تشتعل مرة وتستقر إلى
+   الأبد، تظل ترفّ. نبضتان قصيرتان في آخر الدورة والباقي ثبات —
+   فتلمحها العين ولا تُتعبها. */
+@keyframes sign-flicker {
+  0%, 88%   { opacity: 1;    box-shadow: var(--glow); }
+  89%       { opacity: 0.45; box-shadow: none; }
+  90.5%     { opacity: 1;    box-shadow: var(--glow); }
+  92%       { opacity: 0.3;  box-shadow: none; }
+  93.5%, 100% { opacity: 1;  box-shadow: var(--glow); }
+}
+
+/* الاشتعال أولاً، ثم الرفّة تتسلّم بعده (الأخيرة تفوز على الخاصية
+   نفسها) — فلا تنقطع اللافتة بين الاثنتين */
+.sign.is-on {
+  animation: sign-on 1.1s steps(1, end) both,
+             sign-flicker 7s steps(1, end) 1.3s infinite;
+}
 
 .hero-badge {
   display: inline-flex;
