@@ -25,12 +25,12 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-  /* الصورة تجي من القاعدة الآن (عمود image_url)، ويعدّلها المدير من اللوحة.
-     لو الصنف بلا صورة تظهر شارة اللوقو بدل مربع فاضي. */
-  const FALLBACK = "/assets/img/logo-badge.webp";
-
+  /* الصورة تجي من القاعدة (عمود image_url)، ويعدّلها المدير من اللوحة.
+     ولو حذفها المدير تُحذف خانتها كلها — لا شارةَ لوقو بديلة: البديل
+     يقول «هنا صورة ناقصة»، والحذف يقول «هذا الصنف بلا صورة»، والثاني
+     هو المقصود. والصف يلتئم وحده لأنه flex فيتمدّد النص مكانها. */
   const renderRow = (it) => `<li class="mp-item">
-      <img src="${esc(it.image_url || FALLBACK)}" alt="" loading="lazy" decoding="async" width="58" height="58">
+      ${it.image_url ? `<img src="${esc(it.image_url)}" alt="" loading="lazy" decoding="async" width="58" height="58">` : ""}
       <div class="mp-item__body">
         <div class="mp-item__name">${esc(it.name)}</div>
         ${it.note ? `<div class="mp-item__note">${esc(it.note)}</div>` : ""}
