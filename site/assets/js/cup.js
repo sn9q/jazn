@@ -59,8 +59,12 @@
   var tok = function (name, fallback) {
     return (css.getPropertyValue(name) || "").trim() || fallback;
   };
+  /* الليل صار حبراً لا سطحاً: يبقى للخطوط الداكنة في الرسمة
+     (اليد، حدّ الصحن) بينما أرضية المشهد حجرٌ بيج مثل الهيرو */
   var NIGHT = tok("--night", "#241811");
   var NIGHT_2 = tok("--night-2", "#301E13");
+  var STONE = tok("--stone", "#9B7E5B");
+  var STONE_2 = tok("--stone-2", "#A98C68");
   var CREAM = tok("--cream", "#FBF6F2");
   var CREAM_2 = tok("--cream-2", "#F1E7DD");
   var AMBER = tok("--amber", "#F3C44A");
@@ -411,10 +415,10 @@
     var dpr = cv.width / W;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    /* ليل بنفس تدرّج الهيرو */
+    /* حجر بنفس تدرّج الهيرو */
     var bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, NIGHT);
-    bg.addColorStop(1, NIGHT_2);
+    bg.addColorStop(0, STONE_2);
+    bg.addColorStop(1, STONE);
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
@@ -440,7 +444,7 @@
     var poolA = (0.09 + 0.10 * near + 0.10 * bounce) * (1 - dis);
     if (poolA > 0.004) {
       var pool = ctx.createRadialGradient(CX, SY + 14, 8, CX, SY + 14, 190 - 40 * near);
-      pool.addColorStop(0, mix(AMBER, NIGHT, 0.25, poolA));
+      pool.addColorStop(0, mix(AMBER, STONE, 0.25, poolA));
       pool.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = pool;
       ell(CX, SY + 14, 190 - 40 * near, 50 - 10 * near);

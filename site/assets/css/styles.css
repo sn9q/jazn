@@ -16,8 +16,21 @@
    ============================================================ */
 
 :root {
-  --night: #241811;        /* عتمة داخلهم الدافئة، معمَّقة درجة */
-  --night-2: #301E13;      /* العتمة كما عُيّنت من صورنا */
+  /* ── الحجر: أسطح الموقع الكبرى ──
+     بيج بلاطة الكوفي نفسها، مقيسٌ من صورة الجدار: الوجه (155,126,91)
+     وانحراف التموّج ±10.8. والنقشة مبنيّة لا مقصوصة — بلاطة واحدة
+     متصلة بلا فواصل ولا شبكة، وضجيجها ملتفّ فتتكرر بلا خط ظاهر
+     مهما امتدّ السطح، وتبقى حادّة على أي كثافة بكسل. */
+  --stone: #9B7E5B;        /* وجه الحجر */
+  --stone-2: #A98C68;      /* أفتح درجة، لأعلى التدرّجات */
+  --stone-deep: #7E6444;   /* أغمق، للحواف والفواصل */
+  --stone-tex: url("../img/stone.webp");
+
+  /* الليل بقي حبراً لا سطحاً: خطوط الفنجان الداكنة، ونص الزر
+     الأمبر، وزر «المنيو كامل» — كلها تحتاج غامقاً ولو صارت
+     الأسطح فاتحة */
+  --night: #241811;
+  --night-2: #301E13;
   --amber: #F3C44A;        /* توهج اللافتة الصالح للواجهة */
   --amber-core: #FEF05F;   /* قلب التوهج، من مركز اللافتة */
   --amber-deep: #D98E2B;   /* حافة التوهج */
@@ -153,7 +166,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
               border-color var(--t-ui) var(--ease-out);
 }
 .site-header.is-scrolled {
-  background: color-mix(in srgb, var(--night) 90%, transparent);
+  background: color-mix(in srgb, var(--stone) 92%, transparent);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom-color: color-mix(in srgb, var(--amber) 22%, transparent);
@@ -235,7 +248,8 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   display: grid;
   align-items: center;
   background:
-    radial-gradient(120% 85% at 50% 0%, var(--night-2) 0%, var(--night) 58%);
+    var(--stone-tex),
+    radial-gradient(120% 85% at 50% 0%, var(--stone-2) 0%, var(--stone) 58%);
   color: var(--cream);
   padding-top: calc(var(--header-h) + 20px);
   padding-bottom: 46px;
@@ -251,7 +265,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   background: repeating-linear-gradient(
     90deg,
     var(--wood-deep) 0 14px,
-    color-mix(in srgb, var(--wood-deep) 72%, var(--night)) 14px 16px
+    color-mix(in srgb, var(--wood-deep) 72%, var(--stone-deep)) 14px 16px
   );
   opacity: 0.85;
 }
@@ -395,7 +409,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   height: 100vh;
   height: 100lvh;
   overflow: hidden;
-  background: var(--night);
+  background: var(--stone);
 }
 .cup-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
@@ -550,7 +564,8 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 .place {
   background:
-    radial-gradient(110% 70% at 50% 100%, var(--night-2) 0%, var(--night) 62%);
+    var(--stone-tex),
+    radial-gradient(110% 70% at 50% 100%, var(--stone-2) 0%, var(--stone) 62%);
   color: var(--cream);
 }
 
@@ -848,7 +863,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 /* ---------- التذييل ---------- */
 
 .site-footer {
-  background: var(--night);
+  background-image: var(--stone-tex), linear-gradient(var(--stone), var(--stone));
   color: var(--sand);
   /* بلا حشوة سفلية: شريط الحقوق يلصق بأسفل الصفحة، والمسافة فوقه
      من هامشه هو */
@@ -903,7 +918,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
    لونه ليلٌ مدفوءٌ بالخشب فيبين شريطاً مستقلاً تحت التذييل بلا
    حدٍّ مرسوم — والفرق لونيّ لا خطّي، أهدأ للعين. */
 .footer-legal {
-  background: color-mix(in srgb, var(--wood-deep) 20%, var(--night));
+  background: color-mix(in srgb, var(--stone-deep) 100%, var(--stone));
   color: var(--sand);
   padding-block: 15px;
   margin-top: clamp(34px, 4vw, 48px);
@@ -920,7 +935,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .menu-page { background: var(--cream); }
 
 .mp-header {
-  background: var(--night);
+  background-image: var(--stone-tex), linear-gradient(var(--stone), var(--stone));
   color: var(--cream);
   padding-block: 26px 20px;
 }
@@ -948,7 +963,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--night) 92%, transparent);
+  background: color-mix(in srgb, var(--stone) 94%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid color-mix(in srgb, var(--amber) 20%, transparent);
@@ -1074,3 +1089,71 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .sign { padding-inline: clamp(62px, 20vw, 104px); }
   .place-gallery { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ── الحبر على الحجر ──
+   الأسطح انقلبت من الليل إلى البيج، فلا يكفي تبديل الخلفية: النص
+   الكريمي عليها تباينه 3.6 والرملي 2.0، والحد 4.5. فبدل تعديل
+   عشرين قاعدة نُعيد تعريف التوكنين داخل الأسطح الحجرية وحدها —
+   فينقلب كل ما يقرأ منهما دفعةً واحدة، وتبقى القواعد كما هي.
+
+   والأكسنت يتحوّل من الأمبر إلى أحمر اللافتة: الأمبر لونٌ فاتح،
+   يضيء على الليل ويذوب على الحجر. والأحمر لونهم أصلاً، وتباينه
+   على البيج 4.6. */
+.site-header,
+.hero.on-night,
+.place.on-night,
+.site-footer,
+.footer-legal,
+.mp-header,
+.mp-tabs {
+  --cream: #2B1D12;      /* الحبر الأساسي */
+  --sand: #4B3826;       /* الثانوي */
+}
+
+/* الأمبر بقي كما هو للأزرار: زر «شوف المنيو» أفتح من الحجر فيبرز
+   عليه كما كان يبرز على الليل.
+
+   أما الأكسنت نصّاً فقياسٌ حسم الأمر: على حجرٍ إضاءته 0.22 لا يوجد
+   لونٌ ملوَّن يبلغ 4.5 إطلاقاً — أحمر اللافتة يعطي 1.27، وأغمق
+   درجةٍ منه تعبر الحد هي #2F1404 وقد فقدت حمرتها أصلاً. فالتمييز
+   ينتقل من اللون إلى الوزن والخط تحته: النص بالحبر المقروء،
+   والأحمر يحمله الخط السفلي وحده. وهذا أصحّ على أي حال — ألّا
+   يُعتمد على اللون وحده في الدلالة. */
+.site-header .site-nav a[aria-current="true"],
+.mp-tabs a.is-active {
+  color: var(--cream);
+  font-weight: 600;
+  text-shadow: none;
+  border-bottom: 2px solid var(--sign-red);
+}
+.site-header .site-nav a[aria-current="true"] { padding-bottom: 4px; }
+
+.hero-badge {
+  color: var(--sand);
+  border-color: color-mix(in srgb, var(--stone-deep) 90%, transparent);
+}
+/* النجوم والأيقونات زخرفةٌ لا نصّ، فتؤخذ من الأمبر الغامق: هو أفتح
+   من الحجر فيُرى فوقه، بينما الأحمر أغمق منه بقليل فيغرق فيه */
+.hero-badge svg,
+.rating-line .stars { color: var(--amber-deep); }
+.footer-links a:hover,
+.footer-social a:hover,
+.mp-back:hover { color: var(--sign-red); }
+
+/* شريط الحقوق: أغمق سطحٍ في الصفحة، فنصّه فاتح لا حبر */
+.footer-legal { color: var(--cream-2); }
+
+/* النقشة: بلاطة واحدة كبيرة، لا شبكة صغيرة مكرّرة */
+.site-header,
+.hero.on-night,
+.place.on-night,
+.site-footer,
+.mp-header {
+  background-size: 1000px 1000px, auto;
+  background-repeat: repeat, no-repeat;
+}
+
+/* الوردمارك كان كريمياً ليُقرأ على الليل، وصار حبراً ليُقرأ على الحجر */
+.brand img,
+.footer-brand img,
+.mp-header .brand img { content: url("../img/wordmark-ink.webp"); }
