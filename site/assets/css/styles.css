@@ -485,15 +485,11 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   box-shadow: 0 18px 38px -18px color-mix(in srgb, var(--wood-deep) 55%, transparent);
 }
 
-.crop-top { display: flex; align-items: center; gap: 14px; }
-.crop-top img {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--cream);
-  box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--wood-deep) 60%, transparent);
-}
+/* كانت مصغّرة دائرية بجانب الاسم، وحُذفت: صورة صينية التقديم نفسها
+   تتكرر على المحاصيل الستة، فلا تفرّق بينها ولا تصف واحداً منها —
+   والاسم والمعالجة يقولان أكثر منها. فبقي الصفّ بلا صورة، ولا
+   يحتاج flex لعنصرٍ واحد. */
+.crop-top { display: block; }
 .crop h3 {
   font-family: var(--font-head);
   font-weight: 700;
