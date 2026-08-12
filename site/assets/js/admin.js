@@ -204,7 +204,9 @@ function loadSupabase() {
             <input type="checkbox" data-act="toggle" data-id="${it.id}" ${it.is_available ? "checked" : ""} />
             <i></i>
           </label>
-          <img class="adm-item__thumb" src="${esc(it.image_url || "/assets/img/logo-badge.webp")}" alt="" loading="lazy" decoding="async" width="44" height="44">
+          ${it.image_url
+            ? `<img class="adm-item__thumb" src="${esc(it.image_url)}" alt="" loading="lazy" decoding="async" width="44" height="44">`
+            : NO_IMAGE}
           <div class="adm-item__info">
             <div class="adm-item__name">
               ${esc(it.name)}
@@ -298,6 +300,20 @@ function loadSupabase() {
   const BUCKET = "jazn-menu";
   const IMG_MAX = 900;      // أطول ضلع بالبكسل
   const IMG_QUALITY = 0.85;
+
+  /* علامة «بلا صورة» في القائمة.
+     كانت شارة اللوقو تسدّ الفراغ، لكنها تُقرأ صورةَ صنفٍ لا غيابَ
+     صورة — فيظن المدير أن كل الأصناف مصوَّرة. والأيقونة مشطوبة
+     عمداً: أيقونة الصورة وحدها تُقرأ «هنا صورة» أو «ارفع صورة»،
+     والشطب وحده يقول «لا صورة». وإطارها متقطّع كإطار «بلا صورة»
+     في نافذة التعديل، فتتّحد اللغة في الموضعين. */
+  const NO_IMAGE =
+    '<span class="adm-item__noimg" title="بلا صورة" role="img" aria-label="بلا صورة">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+    'stroke-linecap="round" aria-hidden="true">' +
+    '<rect x="3" y="4.5" width="18" height="15" rx="2.5"/>' +
+    '<path d="M3.6 16.5l4.6-4.2 3.3 3"/><circle cx="15.6" cy="9.4" r="1.3"/>' +
+    '<path d="M4 20L20 4"/></svg></span>';
 
   const isUploaded = (url) => typeof url === "string" && url.includes(`/${BUCKET}/`);
 

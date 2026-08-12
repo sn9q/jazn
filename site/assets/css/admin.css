@@ -233,6 +233,20 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   background: rgba(36, 24, 17, 0.8);
   border: 1px solid rgba(246, 228, 190, 0.16);
 }
+/* علامة «بلا صورة»: بنفس مقاس المصغّرة وموضعها تماماً، فلا يتحرّك
+   الصفّ حين يكتسب الصنف صورةً أو يفقدها */
+.adm-item__noimg {
+  grid-area: thumb;
+  width: 44px; height: 44px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: rgba(243, 236, 223, 0.42);
+  background: rgba(24, 15, 10, 0.35);
+  border: 1.5px dashed rgba(246, 228, 190, 0.30);
+}
+.adm-item__noimg svg { width: 20px; height: 20px; }
+
 .adm-item__info { grid-area: info; min-width: 0; }
 .adm-item__name { font-weight: 600; color: var(--cream-050); font-size: 0.98rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .adm-item__badge { font-size: 0.66rem; font-weight: 600; color: var(--ink-900); background: linear-gradient(135deg, var(--led), var(--led)); border-radius: 999px; padding: 1px 8px; }
