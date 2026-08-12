@@ -1051,12 +1051,13 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 /* اللوح شبه شفاف: الحجر يبين خلفه فيربط الصفحة بأرضها بدل أن
    تطفو ألواحٌ صمّاء عليها.
 
-   و8% لا 12%: الشفافية تُغمّق اللوح فتأكل من تباين ما عليه، وأول
-   ما يسقط هو السعر (أحمر اللافتة) لأنه أقلّها احتياطاً — عند 12%
-   ينزل إلى 4.36 وعند 8% يبقى 4.52. الحبر والنصّ الثانوي بعيدان
-   عن الحدّ في الحالين (12.9 و5.5). */
+   والقدر 16%: أقلّ منه لا يُرى أثره أصلاً. والشفافية تُغمّق اللوح
+   فتأكل من تباين ما عليه، وسقفها كان السعر — أحمر اللافتة #BF4F0F
+   يعطي 3.82 على اللوح الشفاف، بل كان 4.14 قبل الشفافية أصلاً
+   فهو أقلّ ألوان الصفحة احتياطاً من البداية. فأُنزلت درجته
+   (أدناه) وارتفع السقف معها. */
 .mp-section {
-  background: color-mix(in srgb, var(--cream) 92%, transparent);
+  background: color-mix(in srgb, var(--cream) 84%, transparent);
   border: 1px solid color-mix(in srgb, var(--wood) 26%, transparent);
   border-radius: var(--radius);
   padding: clamp(22px, 4vw, 34px) clamp(18px, 3.4vw, 30px);
@@ -1095,17 +1096,24 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   flex: none;
   font-weight: 700;
   font-size: 1.1rem;
-  color: var(--sign-red);
+  /* أغمق درجةً من أحمر اللافتة، بنفس درجة اللون والتشبّع: على اللوح
+     الشفاف يرتفع من 3.82 إلى 4.80، وعلى الكريم الصافي من 4.50 إلى
+     5.66. والسعر أهمّ رقمٍ في المنيو فلا يُترك أضعفَ ما فيه. */
+  color: #A6440D;
   white-space: nowrap;
 }
 .mp-item__price .sar { color: var(--ink-soft); }
 
 /* الحلويات: بطاقات بصور */
 
+/* هذا السطر خارج الألواح، يقع على الحجر مباشرة — فحبرُ الأسطح
+   الكريمية لا يصلح له: كان --ink-soft فتباينه على الحجر 1.9.
+   يأخذ كريم الأسطح الحجرية ووزناً يكفي لمقاسه الصغير. */
 .mp-foot {
   padding-block: 36px 60px;
   text-align: center;
-  color: var(--ink-soft);
+  color: var(--cream);
+  font-weight: 600;
   font-size: 0.9rem;
 }
 
