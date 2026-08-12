@@ -62,6 +62,9 @@
   --font-head: "Amiri", serif;
   --font-body: "Amiri", serif;
   --font-latin: "Amiri", serif;
+  /* خطّ المتن: تجوّل. لا يحلّ محلّ أميري بل يقاسمه — أميري يحمل
+     الشخصية في العناوين والاسم، وتجوّل يحمل ما يُقرأ فعلاً */
+  --font-read: "Tajawal", "Amiri", sans-serif;
 
   --radius: 14px;
 
@@ -1127,6 +1130,11 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .sign { padding-inline: clamp(62px, 20vw, 104px); }
   .place-gallery { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* عنوان الهيرو وفقرات «بار» بخطّ المتن: هذان أطولُ ما يُقرأ في
+   الصفحة، وقد اختيرا بالعين من سبع عيّنات معروضة على القسم نفسه */
+.hero h1,
+.place-copy p { font-family: var(--font-read); }
 
 /* ── النص على الحجر: فاتح ──
    والثانوي كالأساسي لا أخفت منه. الرملي (#C9B8A4) كان يقرأ ثانوياً

@@ -56,3 +56,27 @@
   src: url("../fonts/amiri-latin-700-normal.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+2000-206F;
 }
+
+/* ─── تجوّل: خطّ المتن المختار ───
+   أميري خطٌّ مطبعي بأصلٍ نسخي، جميل في العناوين لكن فقراته الطويلة
+   تُقرأ ببطء على الشاشة الصغيرة. وتجوّل قلمٌ هندسي حديث، حروفه
+   مفتوحة وسطوره تُمسح بالعين بسرعة — فيتقاسمان الدورين: أميري
+   للشخصية، وتجوّل لِما يُقرأ فعلاً.
+
+   ومحارفه ١٨٦ فقط (٢٩KB للوزنين)، فلا يحتاج تجزئة. */
+@font-face {
+  font-family: "Tajawal";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/tajawal-arabic-400-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: "Tajawal";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/tajawal-arabic-700-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF;
+}
