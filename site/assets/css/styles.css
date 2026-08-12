@@ -46,6 +46,9 @@
   /* كل ما يقرأ «مضيئاً» في الواجهة يأخذ من هنا: اللافتة والزرّان
      والأيقونات الصغيرة. مصدر ضوءٍ واحد في المكان، فلونٌ واحد له */
   --led: var(--sign-face);
+  /* حروف اللافتة كما قِيست من صورتها (#B84808)، لا الأحمر العام:
+     أدقّ شبهاً، وتباينه على وجه اللافتة 4.22 بدل 3.86 */
+  --led-ink: #B84808;
   --cream: #FBF6F2;        /* خلفية شارة اللوقو */
   --cream-2: #F1E7DD;      /* كريم أعمق للأسطح */
   --wood: #B8935E;         /* خشب البار، من صورة g11 */
@@ -233,7 +236,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
    فلونان مضيئان مختلفان يقرآن خللاً في الإضاءة لا تنوّعاً. */
 .btn-amber {
   background: radial-gradient(120% 180% at 50% 0%, var(--sign-core) 0%, var(--sign-face) 60%, var(--sign-edge) 100%);
-  color: var(--night);
+  /* حروفه بحروف اللافتة لا بالحبر: الزر صار زجاجها، فيكمل الشبه.
+     واللون مقيسٌ من صورة اللافتة نفسها */
+  color: var(--led-ink);
   box-shadow: 0 6px 26px -8px color-mix(in srgb, var(--sign-halo) 70%, transparent);
 }
 .btn-amber:hover { background: var(--sign-core); }

@@ -29,8 +29,9 @@
   --led-core: #FFF8DE;
   --led-edge: #DFC79A;
   --sign-red: #BF4F0F;
+  --led-ink: #B84808;   /* حروف اللافتة، مقيسة من صورتها */
 
-  --green: #4E9A6A;
+  --green: #5F8F5A;
   --red: #C0533A;
   --line: rgba(246, 228, 190, 0.18);
   --ease: cubic-bezier(0.23, 1, 0.32, 1);
@@ -77,13 +78,13 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 /* الزر الأساسي من زجاج اللافتة، مثل «شوف المنيو» في الموقع */
 .adm-btn--primary {
   background: radial-gradient(120% 180% at 50% 0%, var(--led-core) 0%, var(--led) 60%, var(--led-edge) 100%);
-  color: var(--ink-900);
+  color: var(--led-ink);   /* حروف اللافتة على زجاجها */
   box-shadow: 0 8px 24px -10px rgba(246, 228, 190, 0.75);
 }
 .adm-btn--primary:hover { transform: translateY(-1px); }
 .adm-btn--ghost { background: transparent; border-color: rgba(246, 228, 190,0.35); color: var(--cream-100); }
 .adm-btn--ghost:hover { border-color: var(--led); color: var(--led); }
-.adm-btn--danger { background: var(--red); color: #fff; }
+.adm-btn--danger { background: var(--red); color: var(--cream-050); }
 .adm-btn--block { width: 100%; }
 .adm-btn[disabled] { opacity: 0.55; pointer-events: none; }
 
@@ -100,7 +101,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
 .adm-card__logo { width: auto; height: 96px; margin: 0 auto 1rem; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45)); }
-.adm-card h1 { font-size: 1.45rem; color: #fff; }
+.adm-card h1 { font-size: 1.45rem; color: var(--cream-050); }
 .adm-gate__lead { color: rgba(243,236,223,0.7); margin: 0.4rem 0 1.4rem; font-size: 0.92rem; }
 
 /* ─── حقول ─── */
@@ -125,7 +126,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   padding-inline-end: 2.6rem;
 }
 .adm-field input:focus, .adm-field select:focus { outline: none; border-color: var(--led-edge); box-shadow: 0 0 0 3px rgba(223, 199, 154,0.25); }
-.adm-error { background: rgba(207,90,90,0.14); border: 1px solid rgba(207,90,90,0.4); color: #f3b8b8; font-size: 0.85rem; border-radius: 10px; padding: 0.55rem 0.9rem; margin: 0 0 0.9rem; text-align: start; }
+.adm-error { background: rgba(207,90,90,0.14); border: 1px solid rgba(207,90,90,0.4); color: #F0C0B0; font-size: 0.85rem; border-radius: 10px; padding: 0.55rem 0.9rem; margin: 0 0 0.9rem; text-align: start; }
 
 .adm-check { display: flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; color: var(--cream-100); margin-bottom: 0.7rem; }
 .adm-check input { width: 19px; height: 19px; accent-color: var(--led-edge); cursor: pointer; }
@@ -196,7 +197,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   border: 1px solid rgba(246, 228, 190,0.22); border-radius: 999px; padding: 0.42rem 1.05rem;
   transition: 0.2s var(--ease);
 }
-.adm-filters button.is-active { background: linear-gradient(135deg, var(--led-core), var(--led-edge)); color: var(--ink-900); border-color: transparent; font-weight: 600; }
+.adm-filters button.is-active { background: linear-gradient(135deg, var(--led-core), var(--led-edge)); color: var(--led-ink); border-color: transparent; font-weight: 600; }
 
 /* ─── قائمة الأصناف ─── */
 .adm-group { margin-bottom: 1.5rem; }
@@ -234,7 +235,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 }
 .adm-item__info { grid-area: info; min-width: 0; }
 .adm-item__name { font-weight: 600; color: var(--cream-050); font-size: 0.98rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-.adm-item__badge { font-size: 0.66rem; font-weight: 600; color: #241811; background: linear-gradient(135deg, var(--led), var(--led)); border-radius: 999px; padding: 1px 8px; }
+.adm-item__badge { font-size: 0.66rem; font-weight: 600; color: var(--ink-900); background: linear-gradient(135deg, var(--led), var(--led)); border-radius: 999px; padding: 1px 8px; }
 .adm-item__badge--off { background: rgba(243,236,223,0.25); color: var(--cream-100); }
 .adm-item__meta { font-size: 0.78rem; color: rgba(243,236,223,0.55); margin-top: 1px; }
 .adm-item__price { grid-area: price; font-weight: 600; color: var(--led); font-size: 1.02rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -257,7 +258,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-icon-btn:hover { border-color: var(--led-edge); color: var(--led); }
 .adm-icon-btn:active { transform: scale(0.93); }
 .adm-icon-btn svg { width: 17px; height: 17px; }
-.adm-icon-btn--danger:hover { border-color: var(--red); color: #f3b8b8; }
+.adm-icon-btn--danger:hover { border-color: var(--red); color: #F0C0B0; }
 .adm-icon-btn[disabled] { opacity: 0.3; pointer-events: none; }
 
 /* مفتاح الإظهار/الإخفاء */
@@ -274,7 +275,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   transition: transform 0.22s var(--ease);
 }
 .adm-toggle input:checked + i { background: var(--green); border-color: transparent; }
-.adm-toggle input:checked + i::after { transform: translateX(-19px); background: #fff; }
+.adm-toggle input:checked + i::after { transform: translateX(-19px); background: var(--cream-050); }
 
 /* حالة فارغة */
 .adm-empty { text-align: center; padding: 3rem 1rem; color: rgba(243,236,223,0.55); }
@@ -286,7 +287,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-modal__backdrop { position: absolute; inset: 0; background: rgba(18, 11, 7, 0.7); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
 .adm-modal__panel {
   position: relative; width: min(100%, 520px); max-height: 92dvh; overflow-y: auto;
-  background: linear-gradient(170deg, #142c52, var(--ink-900) 70%);
+  background: linear-gradient(170deg, var(--ink-700), var(--ink-900) 72%);
   border: 1px solid rgba(246, 228, 190,0.25); border-radius: 18px;
   padding: 1.3rem 1.4rem 1.4rem;
   box-shadow: 0 40px 90px -30px rgba(0,0,0,0.8);
@@ -295,7 +296,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-modal__panel--sm { width: min(100%, 400px); }
 @keyframes admPop { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
 .adm-modal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
-.adm-modal__head h2 { font-size: 1.2rem; color: #fff; }
+.adm-modal__head h2 { font-size: 1.2rem; color: var(--cream-050); }
 .adm-modal__x { background: none; border: none; color: var(--led); font-size: 1.7rem; line-height: 1; cursor: pointer; padding: 0.1rem 0.4rem; }
 .adm-modal__x:hover { color: var(--led); }
 .adm-modal__foot { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.2rem; }
