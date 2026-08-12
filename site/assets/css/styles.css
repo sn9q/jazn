@@ -872,48 +872,68 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   background-image: var(--stone-tex), linear-gradient(var(--stone), var(--stone));
   color: var(--sand);
   /* بلا حشوة سفلية: شريط الحقوق يلصق بأسفل الصفحة، والمسافة فوقه
-     من هامشه هو */
-  padding-block: clamp(52px, 7vw, 84px) 0;
+     من هامشه هو. والعلوية نزلت من 52–84 إلى 34–46 مع ضغط التذييل */
+  padding-block: clamp(34px, 4.4vw, 46px) 0;
+  text-align: center;
 }
 
+/* ثلاثة صفوف متتابعة بدل ثلاثة أعمدة: العمودان كانا يفرشان الروابط
+   الخمس رأسياً فيطول التذييل شاشةً كاملة على الجوال. الروابط في
+   سطرٍ واحد يلتفّ عند الحاجة، والعناوين («تصفّح»، «تابعنا») حُذفت
+   لأن خمسة روابط في سطرٍ لا تحتاج عنواناً يشرحها. */
 .footer-top {
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr 1fr;
-  gap: clamp(30px, 4vw, 56px);
-  align-items: start;
+  justify-items: center;
+  gap: clamp(18px, 2.6vw, 24px);
 }
 
-.footer-brand img { height: 74px; width: auto; }
+.footer-brand img { height: 56px; width: auto; }
 .footer-tagline {
-  margin-top: 18px;
-  max-width: 30ch;
-  font-size: 0.95rem;
+  margin-top: 10px;
+  font-size: 0.88rem;
+  letter-spacing: 0.14em;
 }
 
-.footer-h {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--cream);
-  margin-bottom: 18px;
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px clamp(16px, 3.4vw, 30px);
 }
+.footer-nav a {
+  color: var(--sand);
+  text-decoration: none;
+  font-size: 0.95rem;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--t-ui) var(--ease-out);
+}
+.footer-nav a:hover { color: var(--cream); }
 
-.footer-links,
-.footer-social { list-style: none; display: grid; gap: 12px; }
-.footer-links a,
+.footer-social {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 28px);
+}
 .footer-social a {
   color: var(--sand);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  font-size: 0.9rem;
   transition: color var(--t-ui) var(--ease-out);
 }
-.footer-links a:hover,
-.footer-social a:hover { color: var(--amber); }
-.footer-social a { display: inline-flex; align-items: center; gap: 10px; }
-.footer-social svg { width: 19px; height: 19px; flex: none; }
+.footer-social a:hover { color: var(--cream); }
+.footer-social svg { width: 18px; height: 18px; flex: none; }
 .footer-social .handle { font-family: var(--font-latin); }
 
 .footer-bottom {
-  margin-top: clamp(40px, 5vw, 60px);
-  padding-top: 24px;
+  margin-top: clamp(20px, 2.6vw, 28px);
+  padding-top: 16px;
   border-top: 1px solid color-mix(in srgb, var(--amber) 14%, transparent);
   text-align: center;
   font-size: 0.85rem;
@@ -926,8 +946,8 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .footer-legal {
   background: color-mix(in srgb, var(--stone-deep) 100%, var(--stone));
   color: var(--sand);
-  padding-block: 15px;
-  margin-top: clamp(34px, 4vw, 48px);
+  padding-block: 13px;
+  margin-top: clamp(18px, 2.4vw, 26px);
   text-align: center;
   font-size: 0.83rem;
   letter-spacing: 0.01em;
@@ -1082,8 +1102,6 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   .store-card { grid-template-columns: 1fr; }
   .store-card img { aspect-ratio: 16 / 10; }
   .store-copy { padding: 22px; padding-top: 0; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .footer-brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 640px) {
