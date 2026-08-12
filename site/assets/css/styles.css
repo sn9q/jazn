@@ -1048,8 +1048,15 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 .mp-tabs a.is-active { color: var(--amber); border-bottom-color: var(--amber); }
 
+/* اللوح شبه شفاف: الحجر يبين خلفه فيربط الصفحة بأرضها بدل أن
+   تطفو ألواحٌ صمّاء عليها.
+
+   و8% لا 12%: الشفافية تُغمّق اللوح فتأكل من تباين ما عليه، وأول
+   ما يسقط هو السعر (أحمر اللافتة) لأنه أقلّها احتياطاً — عند 12%
+   ينزل إلى 4.36 وعند 8% يبقى 4.52. الحبر والنصّ الثانوي بعيدان
+   عن الحدّ في الحالين (12.9 و5.5). */
 .mp-section {
-  background: var(--cream);
+  background: color-mix(in srgb, var(--cream) 92%, transparent);
   border: 1px solid color-mix(in srgb, var(--wood) 26%, transparent);
   border-radius: var(--radius);
   padding: clamp(22px, 4vw, 34px) clamp(18px, 3.4vw, 30px);
@@ -1199,9 +1206,13 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 .site-header .site-nav a[aria-current="true"] { padding-bottom: 4px; }
 
+/* لونها كان أبيض الصفحة نفسه (#FBF6F2) تماماً كالعنوان، لكنها
+   تُقرأ أخفت منه: مقاسها أصغر ووزنها 500، فقلم أميري يرقّ فيها
+   ويقلّ ما يصل العينَ من البياض. فالعلاج في الوزن لا في اللون. */
 .hero-badge {
-  color: var(--sand);
-  border-color: color-mix(in srgb, var(--cream) 40%, transparent);
+  color: var(--cream);
+  font-weight: 700;
+  border-color: color-mix(in srgb, var(--cream) 45%, transparent);
 }
 .hero-badge svg,
 .rating-line .stars { color: var(--led); }
