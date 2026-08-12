@@ -1,21 +1,43 @@
 /* ═══════════════════════════════════════════════
    جَازن اسبريسو بار، لوحة تحكم المنيو
-   نفس هوية الموقع: ليل دافئ + أمبر اللافتة + كريم
+
+   نفس هوية الموقع بعد تحوّله: أرضية حجر البلاطة بنقشتها،
+   وألواحٌ من ليل جَازن تطفو عليها، وكل ما يضيء بلون اللافتة.
+
+   وقبل هذا كانت اللوحة تحمل بقايا مشروعٍ آخر: أسطحها
+   rgba(15,34,64) و rgba(10,24,48) — كحليّ لا بنّي — وخطوطها
+   IBM Plex وEl Messiri وNoto Naskh، وما منها خطٌّ محمَّل في
+   هذه الصفحة أصلاً (المحمَّل أميري وحده)، فكانت تُعرض بخط
+   النظام. صُحّح الاثنان.
    ═══════════════════════════════════════════════ */
 :root {
-  --navy-900: #241811;
-  --navy-800: #301E13;
-  --navy-700: #3E2A1A;
+  /* الحجر: نفس توكنات الموقع وقيمها */
+  --stone: #9B7E5B;
+  --stone-2: #A98C68;
+  --stone-deep: #7E6444;
+
+  /* الليل: ألواح اللوحة، وهو حبر الموقع نفسه */
+  --ink-900: #241811;
+  --ink-800: #301E13;
+  --ink-700: #3E2A1A;
+
   --cream-050: #FBF6F2;
   --cream-100: #F1E7DD;
-  --copper: #D98E2B;
-  --copper-lt: #F3C44A;
-  --gold: #F3C44A;
-  --green: #3ba876;
-  --red: #cf5a5a;
-  --line: rgba(243, 196, 74, 0.16);
+
+  /* اللافتة: كل ما يضيء في اللوحة يأخذ منها، كما في الموقع */
+  --led: #F6E4BE;
+  --led-core: #FFF8DE;
+  --led-edge: #DFC79A;
+  --sign-red: #BF4F0F;
+
+  --green: #4E9A6A;
+  --red: #C0533A;
+  --line: rgba(246, 228, 190, 0.18);
   --ease: cubic-bezier(0.23, 1, 0.32, 1);
   --radius: 14px;
+
+  --font-head: "Amiri", serif;
+  --font-body: "Amiri", serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -24,20 +46,23 @@ html { -webkit-text-size-adjust: 100%; }
 [hidden] { display: none !important; }
 body.adm {
   margin: 0;
-  font-family: "IBM Plex Sans Arabic", system-ui, Tahoma, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.97rem;
   line-height: 1.65;
   color: var(--cream-050);
-  background:
-    radial-gradient(1.2px 1.2px at 18% 8%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1.1px 1.1px at 78% 5%, rgba(243,196,74,0.5), transparent),
-    radial-gradient(120% 60% at 50% 0%, var(--navy-700), var(--navy-900) 60%);
+  /* نفس أرضية الموقع: بلاطة جَازن بنقشتها، والألواح ليلٌ يطفو عليها */
+  background-image:
+    url("../img/stone.webp"),
+    radial-gradient(120% 70% at 50% 0%, var(--stone-2), var(--stone) 62%);
+  background-size: 1000px 1000px, auto;
+  background-repeat: repeat, no-repeat;
+  background-attachment: fixed, fixed;
   min-height: 100dvh;
 }
 img { display: block; }
-h1, h2 { font-family: "Noto Naskh Arabic", "IBM Plex Sans Arabic", serif; margin: 0; line-height: 1.3; }
+h1, h2 { font-family: var(--font-head); margin: 0; line-height: 1.3; }
 a { color: inherit; text-decoration: none; }
-a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-color: rgba(243,196,74,0.18); }
+a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-color: rgba(246, 228, 190,0.18); }
 
 /* ─── أزرار ─── */
 .adm-btn {
@@ -49,10 +74,15 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   white-space: nowrap;
 }
 .adm-btn:active { transform: scale(0.97); }
-.adm-btn--primary { background: linear-gradient(135deg, var(--copper-lt), var(--copper)); color: #241811; box-shadow: 0 10px 24px -12px rgba(217,142,43,0.7); }
+/* الزر الأساسي من زجاج اللافتة، مثل «شوف المنيو» في الموقع */
+.adm-btn--primary {
+  background: radial-gradient(120% 180% at 50% 0%, var(--led-core) 0%, var(--led) 60%, var(--led-edge) 100%);
+  color: var(--ink-900);
+  box-shadow: 0 8px 24px -10px rgba(246, 228, 190, 0.75);
+}
 .adm-btn--primary:hover { transform: translateY(-1px); }
-.adm-btn--ghost { background: transparent; border-color: rgba(243,196,74,0.35); color: var(--cream-100); }
-.adm-btn--ghost:hover { border-color: var(--copper-lt); color: var(--gold); }
+.adm-btn--ghost { background: transparent; border-color: rgba(246, 228, 190,0.35); color: var(--cream-100); }
+.adm-btn--ghost:hover { border-color: var(--led); color: var(--led); }
 .adm-btn--danger { background: var(--red); color: #fff; }
 .adm-btn--block { width: 100%; }
 .adm-btn[disabled] { opacity: 0.55; pointer-events: none; }
@@ -61,7 +91,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-gate { min-height: 100dvh; display: grid; place-items: center; padding: 1.5rem; }
 .adm-card {
   width: min(100%, 420px);
-  background: rgba(15, 34, 64, 0.75);
+  background: rgba(36, 24, 17, 0.88);
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 2.2rem 1.9rem;
@@ -75,73 +105,73 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 
 /* ─── حقول ─── */
 .adm-field { text-align: start; margin-bottom: 0.95rem; }
-.adm-field label { display: block; font-size: 0.84rem; font-weight: 500; color: var(--copper-lt); margin-bottom: 0.35rem; }
+.adm-field label { display: block; font-size: 0.84rem; font-weight: 500; color: var(--led); margin-bottom: 0.35rem; }
 .adm-field label b { color: var(--red); }
 .adm-hint { color: rgba(243,236,223,0.45); font-weight: 400; font-size: 0.9em; }
 .adm-field input, .adm-field select {
   width: 100%; font-family: inherit; font-size: 1rem; color: var(--cream-050);
-  background: rgba(10, 24, 48, 0.6);
-  border: 1px solid rgba(243,196,74,0.25); border-radius: 10px;
+  background: rgba(28, 18, 12, 0.6);
+  border: 1px solid rgba(246, 228, 190,0.25); border-radius: 10px;
   padding: 0.65rem 0.9rem; min-height: 46px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 /* السهم في أقصى اليسار (RTL)، والمساحة محجوزة له بحشوة النهاية حتى لا يركب على النص */
 .adm-field select {
   appearance: none; -webkit-appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--copper-lt) 50%), linear-gradient(135deg, var(--copper-lt) 50%, transparent 50%);
+  background-image: linear-gradient(45deg, transparent 50%, var(--led) 50%), linear-gradient(135deg, var(--led) 50%, transparent 50%);
   background-position: calc(0% + 18px) 55%, calc(0% + 24px) 55%;
   background-size: 6px 6px; background-repeat: no-repeat;
   padding-inline-start: 0.9rem;
   padding-inline-end: 2.6rem;
 }
-.adm-field input:focus, .adm-field select:focus { outline: none; border-color: var(--copper); box-shadow: 0 0 0 3px rgba(217,142,43,0.25); }
+.adm-field input:focus, .adm-field select:focus { outline: none; border-color: var(--led-edge); box-shadow: 0 0 0 3px rgba(223, 199, 154,0.25); }
 .adm-error { background: rgba(207,90,90,0.14); border: 1px solid rgba(207,90,90,0.4); color: #f3b8b8; font-size: 0.85rem; border-radius: 10px; padding: 0.55rem 0.9rem; margin: 0 0 0.9rem; text-align: start; }
 
 .adm-check { display: flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; color: var(--cream-100); margin-bottom: 0.7rem; }
-.adm-check input { width: 19px; height: 19px; accent-color: var(--copper); cursor: pointer; }
+.adm-check input { width: 19px; height: 19px; accent-color: var(--led-edge); cursor: pointer; }
 .adm-switches { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-top: 0.4rem; }
 .adm-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-.adm-variants { border: 1px dashed rgba(243,196,74,0.3); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem; }
-.adm-vhead { display: grid; grid-template-columns: 1fr 1fr 38px; gap: 0.6rem; font-size: 0.78rem; color: var(--copper-lt); margin-bottom: 0.4rem; }
+.adm-variants { border: 1px dashed rgba(246, 228, 190,0.3); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.9rem; }
+.adm-vhead { display: grid; grid-template-columns: 1fr 1fr 38px; gap: 0.6rem; font-size: 0.78rem; color: var(--led); margin-bottom: 0.4rem; }
 .adm-vrow { display: grid; grid-template-columns: 1fr 1fr 38px; gap: 0.6rem; align-items: center; margin-bottom: 0.55rem; }
 .adm-vrow input {
   width: 100%; font-family: inherit; font-size: 0.98rem; color: var(--cream-050);
-  background: rgba(10, 24, 48, 0.6);
-  border: 1px solid rgba(243,196,74,0.25); border-radius: 10px;
+  background: rgba(28, 18, 12, 0.6);
+  border: 1px solid rgba(246, 228, 190,0.25); border-radius: 10px;
   padding: 0.55rem 0.75rem; min-height: 44px;
 }
-.adm-vrow input:focus { outline: none; border-color: var(--copper); box-shadow: 0 0 0 3px rgba(217,142,43,0.25); }
+.adm-vrow input:focus { outline: none; border-color: var(--led-edge); box-shadow: 0 0 0 3px rgba(223, 199, 154,0.25); }
 .adm-vrow .adm-icon-btn { width: 38px; height: 38px; }
 .adm-btn--sm { padding: 0.45rem 1rem; font-size: 0.84rem; }
 
 /* قائمة الموظفين */
 .adm-staff__lead { color: rgba(243,236,223,0.7); font-size: 0.88rem; margin: 0 0 0.7rem; }
-.adm-staff__sub { font-family: "El Messiri", sans-serif; font-size: 1rem; color: var(--gold); margin: 1.1rem 0 0.7rem; }
+.adm-staff__sub { font-family: var(--font-head); font-size: 1rem; color: var(--led); margin: 1.1rem 0 0.7rem; }
 .adm-staff__list { display: grid; gap: 0.45rem; margin-bottom: 0.4rem; }
 .adm-staff__row {
   display: flex; align-items: center; justify-content: space-between; gap: 0.7rem;
-  background: rgba(10, 24, 48, 0.55); border: 1px solid var(--line);
+  background: rgba(28, 18, 12, 0.55); border: 1px solid var(--line);
   border-radius: 10px; padding: 0.5rem 0.8rem;
 }
 .adm-staff__id { display: grid; gap: 2px; min-width: 0; }
 .adm-staff__id b { font-size: 0.95rem; font-weight: 600; color: var(--cream-050); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .adm-staff__email { direction: ltr; text-align: end; font-size: 0.78rem; color: rgba(243,236,223,0.55); overflow-wrap: anywhere; }
 .adm-staff__acts { display: flex; gap: 0.35rem; flex: none; }
-.adm-staff__you { font-size: 0.66rem; font-weight: 600; color: #241811; background: linear-gradient(135deg, var(--gold), var(--copper-lt)); border-radius: 999px; padding: 1px 8px; }
-.adm-staff__target { direction: ltr; text-align: center; color: var(--copper-lt); font-size: 0.85rem; margin: 0 0 0.9rem; overflow-wrap: anywhere; }
+.adm-staff__you { font-size: 0.66rem; font-weight: 600; color: var(--ink-900); background: var(--led); border-radius: 999px; padding: 1px 8px; }
+.adm-staff__target { direction: ltr; text-align: center; color: var(--led); font-size: 0.85rem; margin: 0 0 0.9rem; overflow-wrap: anywhere; }
 
 /* ─── الهيدر العلوي ─── */
 .adm-topbar {
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   padding: 0.7rem clamp(1rem, 4vw, 2rem);
-  background: rgba(10, 24, 48, 0.85);
+  background: rgba(28, 18, 12, 0.85);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 .adm-topbar__brand { display: flex; align-items: center; gap: 0.7rem; }
 .adm-topbar__brand img { width: auto; height: 46px; }
-.adm-topbar__brand strong { display: block; font-family: "El Messiri", sans-serif; color: var(--gold); font-size: 1.02rem; line-height: 1.25; }
+.adm-topbar__brand strong { display: block; font-family: var(--font-head); color: var(--led); font-size: 1.02rem; line-height: 1.25; }
 .adm-topbar__brand small { color: rgba(243,236,223,0.55); font-size: 0.74rem; }
 .adm-topbar__actions { display: flex; gap: 0.55rem; }
 
@@ -151,10 +181,10 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 /* إحصائيات */
 .adm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.3rem; }
 .adm-stat {
-  background: rgba(15, 34, 64, 0.6); border: 1px solid var(--line); border-radius: var(--radius);
+  background: rgba(36, 24, 17, 0.6); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 0.85rem 1rem; text-align: center;
 }
-.adm-stat b { display: block; font-size: 1.5rem; font-weight: 600; color: var(--gold); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.adm-stat b { display: block; font-size: 1.5rem; font-weight: 600; color: var(--led); font-variant-numeric: tabular-nums; line-height: 1.2; }
 .adm-stat span { font-size: 0.78rem; color: rgba(243,236,223,0.6); }
 
 /* شريط الأدوات */
@@ -163,34 +193,34 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-filters button {
   font-family: inherit; font-size: 0.86rem; font-weight: 500; cursor: pointer;
   color: var(--cream-100); background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(243,196,74,0.22); border-radius: 999px; padding: 0.42rem 1.05rem;
+  border: 1px solid rgba(246, 228, 190,0.22); border-radius: 999px; padding: 0.42rem 1.05rem;
   transition: 0.2s var(--ease);
 }
-.adm-filters button.is-active { background: linear-gradient(135deg, var(--copper-lt), var(--copper)); color: #241811; border-color: transparent; font-weight: 600; }
+.adm-filters button.is-active { background: linear-gradient(135deg, var(--led-core), var(--led-edge)); color: var(--ink-900); border-color: transparent; font-weight: 600; }
 
 /* ─── قائمة الأصناف ─── */
 .adm-group { margin-bottom: 1.5rem; }
 .adm-group__title {
   display: flex; align-items: center; gap: 0.8rem;
-  font-family: "El Messiri", sans-serif; font-size: 1.08rem; font-weight: 600; color: var(--gold);
+  font-family: var(--font-head); font-size: 1.08rem; font-weight: 600; color: var(--led);
   margin: 0 0 0.55rem;
 }
-.adm-group__title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to left, rgba(243,196,74,0.4), transparent); }
-.adm-group__title small { color: rgba(243,236,223,0.5); font-family: var(--font-body, "Amiri", serif); font-size: 0.75rem; font-weight: 400; }
+.adm-group__title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to left, rgba(246, 228, 190,0.4), transparent); }
+.adm-group__title small { color: rgba(243,236,223,0.5); font-family: var(--font-body); font-size: 0.75rem; font-weight: 400; }
 
 .adm-item {
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
   grid-template-areas: "toggle thumb info price actions";
   align-items: center; gap: 0.8rem;
-  background: rgba(15, 34, 64, 0.55);
+  background: rgba(36, 24, 17, 0.55);
   border: 1px solid var(--line); border-radius: var(--radius);
   padding: 0.7rem 0.9rem; margin-bottom: 0.55rem;
   transition: border-color 0.2s;
 }
-.adm-item:hover { border-color: rgba(243,196,74,0.35); }
+.adm-item:hover { border-color: rgba(246, 228, 190,0.35); }
 .adm-item--off { opacity: 0.55; }
-.adm-item--signature { border-color: rgba(215,165,119,0.45); background: linear-gradient(120deg, rgba(217,142,43,0.14), rgba(15,34,64,0.55) 60%); }
+.adm-item--signature { border-color: rgba(215,165,119,0.45); background: linear-gradient(120deg, rgba(223, 199, 154,0.14), rgba(36, 24, 17,0.55) 60%); }
 
 .adm-item > .adm-toggle { grid-area: toggle; }
 /* مصغّرة الصنف: المدير يشوف صورة كل صنف بلا ما يفتح نافذته */
@@ -199,17 +229,17 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   width: 44px; height: 44px;
   object-fit: cover;
   border-radius: 9px;
-  background: rgba(15, 34, 64, 0.8);
-  border: 1px solid rgba(230, 199, 155, 0.16);
+  background: rgba(36, 24, 17, 0.8);
+  border: 1px solid rgba(246, 228, 190, 0.16);
 }
 .adm-item__info { grid-area: info; min-width: 0; }
 .adm-item__name { font-weight: 600; color: var(--cream-050); font-size: 0.98rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-.adm-item__badge { font-size: 0.66rem; font-weight: 600; color: #241811; background: linear-gradient(135deg, var(--gold), var(--copper-lt)); border-radius: 999px; padding: 1px 8px; }
+.adm-item__badge { font-size: 0.66rem; font-weight: 600; color: #241811; background: linear-gradient(135deg, var(--led), var(--led)); border-radius: 999px; padding: 1px 8px; }
 .adm-item__badge--off { background: rgba(243,236,223,0.25); color: var(--cream-100); }
 .adm-item__meta { font-size: 0.78rem; color: rgba(243,236,223,0.55); margin-top: 1px; }
-.adm-item__price { grid-area: price; font-weight: 600; color: var(--gold); font-size: 1.02rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.adm-item__price { grid-area: price; font-weight: 600; color: var(--led); font-size: 1.02rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
-.sar { display: inline-block; font-size: 0.82em; line-height: 0; vertical-align: -0.04em; margin-inline-start: 0.12em; color: var(--copper-lt); }
+.sar { display: inline-block; font-size: 0.82em; line-height: 0; vertical-align: -0.04em; margin-inline-start: 0.12em; color: var(--led); }
 .sar svg { width: 0.9em; height: 1em; fill: currentColor; display: block; }
 /* أحجام متعددة: عمود أسعار مرصوص */
 .adm-item__price--multi { display: grid; gap: 2px; justify-items: start; }
@@ -220,11 +250,11 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-icon-btn {
   width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
   display: grid; place-items: center;
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(243,196,74,0.18);
-  color: var(--copper-lt);
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(246, 228, 190,0.18);
+  color: var(--led);
   transition: 0.18s var(--ease);
 }
-.adm-icon-btn:hover { border-color: var(--copper); color: var(--gold); }
+.adm-icon-btn:hover { border-color: var(--led-edge); color: var(--led); }
 .adm-icon-btn:active { transform: scale(0.93); }
 .adm-icon-btn svg { width: 17px; height: 17px; }
 .adm-icon-btn--danger:hover { border-color: var(--red); color: #f3b8b8; }
@@ -235,7 +265,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-toggle input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .adm-toggle i {
   position: absolute; inset: 0; border-radius: 999px;
-  background: rgba(243,236,223,0.18); border: 1px solid rgba(243,196,74,0.25);
+  background: rgba(243,236,223,0.18); border: 1px solid rgba(246, 228, 190,0.25);
   transition: background 0.2s;
 }
 .adm-toggle i::after {
@@ -253,11 +283,11 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 /* ─── النوافذ ─── */
 .adm-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 1rem; }
 .adm-modal[hidden] { display: none; }
-.adm-modal__backdrop { position: absolute; inset: 0; background: rgba(6, 14, 28, 0.7); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+.adm-modal__backdrop { position: absolute; inset: 0; background: rgba(18, 11, 7, 0.7); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
 .adm-modal__panel {
   position: relative; width: min(100%, 520px); max-height: 92dvh; overflow-y: auto;
-  background: linear-gradient(170deg, #142c52, var(--navy-900) 70%);
-  border: 1px solid rgba(243,196,74,0.25); border-radius: 18px;
+  background: linear-gradient(170deg, #142c52, var(--ink-900) 70%);
+  border: 1px solid rgba(246, 228, 190,0.25); border-radius: 18px;
   padding: 1.3rem 1.4rem 1.4rem;
   box-shadow: 0 40px 90px -30px rgba(0,0,0,0.8);
   animation: admPop 0.28s var(--ease);
@@ -266,17 +296,17 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 @keyframes admPop { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
 .adm-modal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
 .adm-modal__head h2 { font-size: 1.2rem; color: #fff; }
-.adm-modal__x { background: none; border: none; color: var(--copper-lt); font-size: 1.7rem; line-height: 1; cursor: pointer; padding: 0.1rem 0.4rem; }
-.adm-modal__x:hover { color: var(--gold); }
+.adm-modal__x { background: none; border: none; color: var(--led); font-size: 1.7rem; line-height: 1; cursor: pointer; padding: 0.1rem 0.4rem; }
+.adm-modal__x:hover { color: var(--led); }
 .adm-modal__foot { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.2rem; }
 .adm-delete__msg { color: var(--cream-100); font-size: 0.95rem; margin: 0; }
-.adm-delete__msg span { color: var(--gold); font-weight: 600; }
+.adm-delete__msg span { color: var(--led); font-weight: 600; }
 
 /* ─── التنبيهات ─── */
 .adm-toasts { position: fixed; bottom: 1.2rem; inset-inline-start: 50%; transform: translateX(50%); z-index: 200; display: grid; gap: 0.5rem; width: min(92vw, 360px); }
 .adm-toast {
   display: flex; align-items: center; gap: 0.6rem;
-  background: rgba(15, 34, 64, 0.95); border: 1px solid var(--line);
+  background: rgba(36, 24, 17, 0.95); border: 1px solid var(--line);
   border-inline-start: 3px solid var(--green);
   color: var(--cream-050); font-size: 0.88rem;
   border-radius: 12px; padding: 0.7rem 1rem;
@@ -302,7 +332,7 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   }
   .adm-item__actions {
     justify-content: flex-end;
-    border-top: 1px solid rgba(230, 199, 155, 0.1);
+    border-top: 1px solid rgba(246, 228, 190, 0.1);
     padding-top: 0.55rem;
   }
   /* حقول النموذج المزدوجة تتكدس عموديا، النصوص تظهر كاملة */
@@ -336,16 +366,16 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   overflow: hidden;
   display: grid;
   place-items: center;
-  background: rgba(15, 34, 64, 0.7);
-  border: 1px dashed rgba(230, 199, 155, 0.28);
+  background: rgba(36, 24, 17, 0.7);
+  border: 1px dashed rgba(246, 228, 190, 0.28);
 }
 .adm-imgpreview img { width: 100%; height: 100%; object-fit: cover; }
 .adm-imgpreview__empty { font-size: 0.75rem; color: rgba(243, 236, 223, 0.45); }
 .adm-imgpreview__busy {
   position: absolute; inset: 0;
   display: grid; place-items: center;
-  background: rgba(9, 20, 40, 0.82);
-  font-size: 0.76rem; color: var(--gold);
+  background: rgba(24, 15, 10, 0.82);
+  font-size: 0.76rem; color: var(--led);
 }
 .adm-imgfield__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; }
 .adm-imgfield__actions .adm-hint { font-size: 0.72rem; }
