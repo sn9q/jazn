@@ -1060,15 +1060,13 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 .mp-section-head h2,
 .mp-item__name { color: var(--cream); }
-.mp-section-head p,
-.mp-item__note { color: var(--cream); }
 .mp-item { border-bottom-color: color-mix(in srgb, var(--cream) 22%, transparent); }
 .mp-section-head h2 {
   font-family: var(--font-head);
   font-weight: 700;
   font-size: clamp(1.4rem, 3.4vw, 1.9rem);
 }
-.mp-section-head p { color: var(--ink-soft); font-size: 0.9rem; }
+.mp-section-head p { color: var(--cream); font-size: 0.9rem; }
 
 .mp-list { list-style: none; margin-top: 18px; display: grid; gap: 0; }
 .mp-item {
@@ -1088,7 +1086,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 .mp-item__body { flex: 1; min-width: 0; }
 .mp-item__name { font-weight: 600; font-size: 1.02rem; }
-.mp-item__note { color: var(--ink-soft); font-size: 0.85rem; margin-top: 2px; }
+.mp-item__note { color: var(--cream); font-size: 0.85rem; margin-top: 2px; }
 .mp-item__price {
   flex: none;
   font-weight: 700;
