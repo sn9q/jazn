@@ -43,6 +43,9 @@
   --sign-face: #F6E4BE;    /* وجه اللوحة */
   --sign-edge: #DFC79A;    /* حافتها */
   --sign-halo: #F2DFB4;    /* لون الهالة حولها */
+  /* كل ما يقرأ «مضيئاً» في الواجهة يأخذ من هنا: اللافتة والزرّان
+     والأيقونات الصغيرة. مصدر ضوءٍ واحد في المكان، فلونٌ واحد له */
+  --led: var(--sign-face);
   --cream: #FBF6F2;        /* خلفية شارة اللوقو */
   --cream-2: #F1E7DD;      /* كريم أعمق للأسطح */
   --wood: #B8935E;         /* خشب البار، من صورة g11 */
@@ -225,12 +228,15 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .btn:active { transform: scale(0.97); }
 .btn svg { width: 19px; height: 19px; flex: none; }
 
+/* «الليدات» كلها من زجاجة واحدة: الزر الأساسي والزر العائم يأخذان
+   لون لوحة اللافتة نفسه لا الأمبر. المكان فيه مصدر ضوءٍ واحد،
+   فلونان مضيئان مختلفان يقرآن خللاً في الإضاءة لا تنوّعاً. */
 .btn-amber {
-  background: var(--amber);
+  background: radial-gradient(120% 180% at 50% 0%, var(--sign-core) 0%, var(--sign-face) 60%, var(--sign-edge) 100%);
   color: var(--night);
-  box-shadow: 0 6px 26px -8px color-mix(in srgb, var(--amber) 65%, transparent);
+  box-shadow: 0 6px 26px -8px color-mix(in srgb, var(--sign-halo) 70%, transparent);
 }
-.btn-amber:hover { background: var(--amber-core); }
+.btn-amber:hover { background: var(--sign-core); }
 
 .btn-line-cream { border-color: color-mix(in srgb, var(--cream) 45%, transparent); color: var(--cream); background: transparent; }
 .btn-line-cream:hover { border-color: var(--cream); }
@@ -642,7 +648,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   padding-block: 11px;
   font-size: 0.97rem;
 }
-.btn-rate svg { color: var(--amber); }
+.btn-rate svg { color: var(--led); }
 .btn-rate:hover,
 .btn-rate:focus-visible {
   border-color: color-mix(in srgb, var(--amber) 70%, transparent);
@@ -735,7 +741,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
      الحركةُ حالةَ التحويم. هكذا تبدّل الحالةُ المتغيّرَ وتقرؤه
      الحركة كما هو */
   --fab-glow:
-    0 0 26px 3px color-mix(in srgb, var(--amber) 40%, transparent),
+    0 0 26px 3px color-mix(in srgb, var(--sign-halo) 55%, transparent),
     0 10px 24px -8px rgba(20, 12, 6, 0.55);
   --fab-dark: 0 10px 24px -8px rgba(20, 12, 6, 0.55);
 
@@ -748,7 +754,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   display: grid;
   place-items: center;
   color: var(--sign-red);
-  background: radial-gradient(80% 110% at 50% 40%, var(--amber-core) 0%, var(--amber) 58%, var(--amber-deep) 100%);
+  background: radial-gradient(80% 110% at 50% 40%, var(--sign-core) 0%, var(--sign-face) 58%, var(--sign-edge) 100%);
   box-shadow: var(--fab-glow);
   transition: transform 260ms var(--ease-back), box-shadow var(--t-ui) var(--ease-out);
 }
@@ -760,7 +766,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  border: 2px solid color-mix(in srgb, var(--amber) 60%, transparent);
+  border: 2px solid color-mix(in srgb, var(--sign-face) 75%, transparent);
   opacity: 0;
   pointer-events: none;
 }
@@ -778,7 +784,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .social-fab__btn:hover {
   transform: translateY(-3px) scale(1.05);
   --fab-glow:
-    0 0 36px 6px color-mix(in srgb, var(--amber) 55%, transparent),
+    0 0 36px 6px color-mix(in srgb, var(--sign-halo) 72%, transparent),
     0 14px 28px -8px rgba(20, 12, 6, 0.6);
 }
 .social-fab__btn:active { transform: scale(0.92); }
@@ -812,13 +818,13 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   border-radius: 999px;
   display: grid;
   place-items: center;
-  color: var(--amber);
+  color: var(--led);
   background: color-mix(in srgb, var(--night) 94%, transparent);
-  border: 1px solid color-mix(in srgb, var(--amber) 48%, transparent);
+  border: 1px solid color-mix(in srgb, var(--led) 55%, transparent);
   /* حلقة داكنة تفصلها عن الكريم، وتوهج خافت يفصلها عن الليل */
   box-shadow:
     0 0 0 1px rgba(20, 12, 6, 0.22),
-    0 0 14px 1px color-mix(in srgb, var(--amber) 16%, transparent),
+    0 0 14px 1px color-mix(in srgb, var(--led) 20%, transparent),
     0 10px 22px -8px rgba(20, 12, 6, 0.7);
   backdrop-filter: blur(6px);
   opacity: 0;
@@ -836,9 +842,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 .social-fab__list svg { width: 21px; height: 21px; }
 .social-fab__list a:hover {
-  background: var(--amber);
+  background: var(--led);
   color: var(--night);
-  border-color: var(--amber);
+  border-color: var(--led);
 }
 .social-fab__list a:active { transform: scale(0.95); }
 
@@ -1118,7 +1124,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   color: var(--cream);
   font-weight: 600;
   text-shadow: none;
-  border-bottom: 2px solid var(--amber);
+  border-bottom: 2px solid var(--led);
 }
 .site-header .site-nav a[aria-current="true"] { padding-bottom: 4px; }
 
@@ -1127,7 +1133,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   border-color: color-mix(in srgb, var(--cream) 40%, transparent);
 }
 .hero-badge svg,
-.rating-line .stars { color: var(--amber); }
+.rating-line .stars { color: var(--led); }
 
 /* شريط الحقوق: أغمق سطحٍ في الصفحة، ونصّه فاتح مثل بقية الحجر */
 .footer-legal { color: var(--cream-2); }
