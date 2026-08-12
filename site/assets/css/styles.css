@@ -1061,7 +1061,7 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .mp-section-head h2,
 .mp-item__name { color: var(--cream); }
 .mp-section-head p,
-.mp-item__note { color: #EFE6D9; }
+.mp-item__note { color: var(--cream); }
 .mp-item { border-bottom-color: color-mix(in srgb, var(--cream) 22%, transparent); }
 .mp-section-head h2 {
   font-family: var(--font-head);
