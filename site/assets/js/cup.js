@@ -324,6 +324,11 @@
     if (v === fade) return;
     fade = v;
     stage.style.opacity = v >= 1 ? "0" : String(1 - v);
+    /* واكتمالُ الذوبان هو لحظة فكّ القفل بالضبط: القسم انكشف
+       والصفحة صارت تحت اليد. ولو انتظرنا نهاية الخطّ الزمني بقي
+       القفل ثلث ثانيةٍ زائدة بعد أن يرى الزائرُ صفحةً جاهزة — وهي
+       ذيلُ التخميد، لا يُرسم فيه شيء لأن المشهد شفّاف أصلاً. */
+    if (v >= 1) unlock();
   }
 
   function draw(p, tms) {
@@ -858,6 +863,67 @@
   var t0 = 0;
   var last = 0;
 
+  /* ─── قفل التمرير في الطور التلقائي ───
+     الشريط بشاشة واحدة وقسمُ المحصول مركونٌ خلفه، فمن نزل والمشهدُ
+     يمشي انزاح عن الشريط ووقع في وسط القسم — يرى نصفَ صفحة تحت
+     نصفِ انميشن. والطور التلقائي لا يحتاج تمريراً أصلاً: هو يمشي
+     بساعته ويكشف القسم في مكانه. فنقفل التمرير طولَه ونفكّه عند
+     الانكشاف، فيهبط الزائر على رأس القسم لا في وسطه.
+
+     والقفل بثلاث طبقات لأن الطبقة الواحدة لا تكفي: touch-action
+     يمنع لمسةً جديدة قبل أن تبدأ، وpreventDefault يمنع الجارية،
+     وإعادةُ الموضع عند كل حدث scroll تلقف ما تسرّب — اندفاعَ نطّةٍ
+     بدأت قبل القفل، أو مفاتيحَ لوحة، أو تمريراً برمجياً.
+
+     وله مخارج: ينفكّ عند الانتهاء، وعند إخفاء اللسان (لا أحد ينظر
+     فتُختم الحكاية)، وبمؤقّتٍ احتياطي — فلا تبقى صفحةٌ مقفلة أبداً. */
+  var lockY = 0;
+  var locked = false;
+  var lockT = 0;
+
+  function block(e) { e.preventDefault(); }
+  function hold() { if (locked) window.scrollTo(0, lockY); }
+  function blockKeys(e) {
+    /* مسافة، صفحة أعلى/أسفل، بداية/نهاية، سهم أعلى/أسفل */
+    var k = e.keyCode;
+    if (k === 32 || (k >= 33 && k <= 36) || k === 38 || k === 40) e.preventDefault();
+  }
+
+  function lock() {
+    if (locked || reduced) return;
+    locked = true;
+    /* الموضع المقفول هو رأس الشريط لا موضع الإصبع: من وصل بنطّةٍ
+       قويّة تجاوزه بإطار أو إطارين، فنعيده إلى الإطار الصحيح */
+    lockY = (window.pageYOffset || 0) + band.getBoundingClientRect().top;
+    window.scrollTo(0, lockY);
+    document.documentElement.style.touchAction = "none";
+    window.addEventListener("wheel", block, { passive: false });
+    window.addEventListener("touchmove", block, { passive: false });
+    window.addEventListener("keydown", blockKeys);
+    window.addEventListener("scroll", hold);
+    lockT = window.setTimeout(unlock, AUTO_MS + 4000);
+  }
+
+  function unlock() {
+    if (!locked) return;
+    locked = false;
+    window.clearTimeout(lockT);
+    document.documentElement.style.touchAction = "";
+    window.removeEventListener("wheel", block, { passive: false });
+    window.removeEventListener("touchmove", block, { passive: false });
+    window.removeEventListener("keydown", blockKeys);
+    window.removeEventListener("scroll", hold);
+  }
+
+  function finish() {
+    ph = END;
+    pd = 1;
+    running = false;
+    last = 0;
+    unlock();
+    draw(1, 0);
+  }
+
   function frame(ms) {
     if (!running) return;
     /* الفارق الزمني الحقيقي، لا افتراض ستّين إطاراً: التخميد بمعامل
@@ -869,7 +935,7 @@
     var target;
     if (ph === ENTER) {
       var e = entry();
-      if (e >= 1) { ph = AUTO; t0 = ms; }
+      if (e >= 1) { ph = AUTO; t0 = ms; lock(); }
       else target = e * PIN;
     }
     if (ph === AUTO) target = PIN + (1 - PIN) * clamp01((ms - t0) / AUTO_MS);
@@ -886,12 +952,11 @@
     } else if (target >= 1 && pd > 0.999) {
       /* والوقوف بعد أن يلحق التخميدُ هدفَه لا لحظةَ بلوغ الهدف:
          الفرق هو ذيل التباطؤ في آخر الحركة، وقطعُه يُقرأ نتوءاً */
-      pd = 1;
-      ph = END;
+      finish();
+      return;
     }
 
     draw(pd, ms);
-    if (ph === END) { running = false; last = 0; return; }
     window.requestAnimationFrame(frame);
   }
 
@@ -925,9 +990,10 @@
         } else {
           running = false;
           last = 0;
-          /* غادر الشريطُ الشاشةَ والساعةُ تمشي: مرّرتَ فوقها، وهي
-             لا تُعاد. نختمها ذائبةً حتى لا يجد الراجعُ نصفَ مشهد. */
-          if (ph === AUTO) { ph = END; pd = 1; draw(1, 0); }
+          /* غادر الشريطُ الشاشةَ والساعةُ تمشي — وهذا لا يقع إلا لو
+             تسرّب تمريرٌ من القفل. نختمها ذائبةً ونفكّ القفل حتى لا
+             يجد الراجعُ نصفَ مشهد ولا صفحةً مقفلة. */
+          if (ph === AUTO) finish();
           else pd = null;
         }
       },
@@ -939,8 +1005,15 @@
      من رابطٍ يعيد التحميل فتُعاد وحدها، أما الرجوع بزرّ المتصفح من
      المنيو فيستعيده سفاري من bfcache بحالة JS كما تركتَها — فيجد
      الزائرُ مشهداً منتهياً. pageshow المستعادة هي الإشارة. */
+  /* اللسان مخفيّ والساعة تمشي: لا أحد ينظر، والـrAF يتوقّف أصلاً
+     فتتجمّد الحكاية ويبقى القفل. نختمها ونفكّه. */
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden && ph === AUTO) finish();
+  });
+
   window.addEventListener("pageshow", function (e) {
     if (!e.persisted || reduced) return;
+    unlock();
     ph = ENTER;
     t0 = 0;
     pd = null;
