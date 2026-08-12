@@ -943,7 +943,16 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   text-align: center;
   font-size: 0.85rem;
 }
-.footer-bottom a { color: var(--cream); text-underline-offset: 4px; }
+/* الاسم بلا خطٍّ تحته: يبقى رابطاً ويُعرَف بوزنه لا بخطّه.
+   والخط يعود عند التحويم وحده، فلا يفقده من يتصفح بلوحة مفاتيح */
+.footer-bottom a {
+  color: var(--cream);
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+.footer-bottom a:hover,
+.footer-bottom a:focus-visible { text-decoration: underline; }
 
 /* شريط الحقوق: آخر ما في الصفحة، بعرضها كاملاً.
    لونه ليلٌ مدفوءٌ بالخشب فيبين شريطاً مستقلاً تحت التذييل بلا
