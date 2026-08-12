@@ -875,10 +875,9 @@
      يتبع الإصبع تماماً كالنسخة اليدوية: تنزل ينزل، تقف يقف. ولأن
      موضع المشهد يُشتقّ من التمرير كذلك، فالحركتان واحدة ولا تتنازعان.
 
-     AUTO: أول ما تبلغ حافّة الشريط أعلى الشاشة — وهي نفسها لحظة
-     ملامسة الطقم للطاولة — تُسلَّم الحركة للساعة، فتمشي من PIN إلى 1
-     في AUTO_MS: البخار ثم التفكك ثم الصبّة ثم البحر ثم الذوبان الذي
-     يكشف قسم المحصول في مكانه — بلا تمرير.
+     AUTO: تُسلَّم الحركة للساعة عند TRIG — وهي نفسها لحظة ملامسة
+     الطقم للطاولة — فتمشي من PIN إلى 1 في AUTO_MS: البخار ثم التفكك
+     ثم الصبّة ثم البحر ثم الذوبان الذي يكشف قسم المحصول — بلا تمرير.
 
      END: انتهت. لا تُعاد بالطلوع والنزول داخل الزيارة نفسها؛
      التكرار كلما مرّ بها يجعلها زخرفةً مزعجة لا لحظةَ دخول. */
@@ -887,6 +886,33 @@
   var AUTO_MS = 3200;
   var t0 = 0;
   var last = 0;
+  var p0 = 0, fallMs = 0;
+  var lastE = -1, lastMove = 0, lastDown = true;
+
+  /* ─── عتبة التسليم ───
+     كانت الشرطَ «تلامس حافّةُ الشريط أعلى الشاشة بالضبط»، وهذا حدُّ
+     سكّينٍ بلا تسامح: من وقف والحافّةُ على بُعد ثمانين بكسل بقي
+     المشهد متجمّداً — والطقمُ قد استقرّ على الصحن، فلا شيء في الصورة
+     يقول «كمّل». عيبٌ في التصميم لا في التنفيذ.
+
+     فصار التسليم عند 0.85 من دخول الشريط، والسقوطُ يُقاس عليها هي:
+     d = e ÷ TRIG، فيلمس الطقمُ الطاولةَ في اللحظة التي تُسلَّم فيها
+     الحركة تماماً كما كان — لا فجوةَ سكونٍ ينتظر فيها الزائرُ شيئاً
+     لا يجيء، ولا نتوءَ سرعةٍ عند التسليم لأنه ما بقي متحرّك.
+
+     ويبقى تحت الحافّة 0.15 من الشاشة، فيسحبها القفلُ إلى مكانها
+     انزلاقاً في settleMs (أدناه) لا قفزاً.
+
+     وعتبةٌ ثانية تحتها فلا تعلق الحكاية أبداً: من وقف والشريط نصفُه
+     داخل وما كمّل، تتسلّم الساعةُ وحدها بعد نصف ثانية من السكون —
+     وتكمل ما بقي من السقوط قبل أن تدخل في التفكك، فلا تقفز. وهي
+     تتسلّم والإصبع واقف، أي والسرعةُ صفر، فلا نتوءَ في التسليم.
+     وشرطُها أن يكون آخر تحرّكٍ نزولاً: من رجع يقرأ الهيرو لا يُسحب
+     إلى الأسفل رغماً عنه. */
+  var TRIG = 0.85;
+  var HOLD_MIN = 0.45;    // أقلّ دخولٍ يستحقّ التسليم عند السكون
+  var STILL_MS = 550;     // كم يسكن التمرير قبل أن تتسلّم الساعة
+  var FALL_MS = 900;      // زمنُ إكمال سقوطٍ كامل على الساعة
 
   /* ─── قفل التمرير في الطور التلقائي ───
      الشريط بشاشة واحدة وقسمُ المحصول مركونٌ خلفه، فمن نزل والمشهدُ
@@ -901,13 +927,29 @@
      بدأت قبل القفل، أو مفاتيحَ لوحة، أو تمريراً برمجياً.
 
      وله مخارج: ينفكّ عند الانتهاء، وعند إخفاء اللسان (لا أحد ينظر
-     فتُختم الحكاية)، وبمؤقّتٍ احتياطي — فلا تبقى صفحةٌ مقفلة أبداً. */
+     فتُختم الحكاية)، وبمؤقّتٍ احتياطي — فلا تبقى صفحةٌ مقفلة أبداً.
+
+     ولأن التسليم يسبق ملامسةَ الحافّة (TRIG أعلاه)، فالقفل يستقرّ
+     على موضعه انزلاقاً لا قفزاً: يسحب الصفحةَ تلك الـ0.15 الباقية
+     في ثلث ثانية بمنحنى ناعم، فتُقرأ استقراراً في الإطار لا نطّة.
+     وهو آمن هنا بلا سواه: الطقم ساكن (d=1) وما بدأ التفكك بعد
+     (0.68ث)، فلا حركةَ أخرى تزاحمه. */
   var lockY = 0;
   var locked = false;
   var lockT = 0;
+  var lockFrom = 0, lockTo = 0, lockT0 = 0, settleMs = 320;
 
   function block(e) { e.preventDefault(); }
   function hold() { if (locked) window.scrollTo(0, lockY); }
+
+  /* الانزلاق يُقاد من حلقة الرسم نفسها، فموضعُ الصفحة وموضعُ المشهد
+     يتحدّثان في الإطار الواحد ولا يتخلّف أحدهما عن الآخر إطاراً */
+  function settle(ms) {
+    if (!lockT0) lockT0 = ms;
+    var u = clamp01((ms - lockT0) / settleMs);
+    lockY = lockFrom + (lockTo - lockFrom) * smoother(u);
+    window.scrollTo(0, lockY);
+  }
   function blockKeys(e) {
     /* مسافة، صفحة أعلى/أسفل، بداية/نهاية، سهم أعلى/أسفل */
     var k = e.keyCode;
@@ -917,16 +959,21 @@
   function lock() {
     if (locked || reduced) return;
     locked = true;
-    /* الموضع المقفول هو رأس الشريط لا موضع الإصبع: من وصل بنطّةٍ
-       قويّة تجاوزه بإطار أو إطارين، فنعيده إلى الإطار الصحيح */
-    lockY = (window.pageYOffset || 0) + band.getBoundingClientRect().top;
-    window.scrollTo(0, lockY);
+    /* الوجهة رأسُ الشريط لا موضعُ الإصبع: من وصل بنطّةٍ قويّة تجاوزه
+       بإطار أو إطارين فيُردّ إليه، ومن وصل عند العتبة فبقي تحته
+       شيء يُسحب إليه. وفي الحالين انزلاقاً لا قفزاً */
+    lockFrom = window.pageYOffset || 0;
+    lockTo = lockFrom + band.getBoundingClientRect().top;
+    lockT0 = 0;
+    lockY = lockFrom;
+    /* والمدّة على المسافة: عشرون بكسلاً لا تأخذ زمن ثلاثمئة */
+    settleMs = Math.max(200, Math.min(640, 180 + Math.abs(lockTo - lockFrom) * 0.9));
     document.documentElement.style.touchAction = "none";
     window.addEventListener("wheel", block, { passive: false });
     window.addEventListener("touchmove", block, { passive: false });
     window.addEventListener("keydown", blockKeys);
     window.addEventListener("scroll", hold);
-    lockT = window.setTimeout(unlock, AUTO_MS + 4000);
+    lockT = window.setTimeout(unlock, AUTO_MS + FALL_MS + 4000);
   }
 
   function unlock() {
@@ -959,11 +1006,31 @@
 
     var target;
     if (ph === ENTER) {
-      var e = entry();
-      if (e >= 1) { ph = AUTO; t0 = ms; lock(); }
-      else target = e * PIN;
+      var raw = entry();
+      if (lastE < 0) { lastE = raw; lastMove = ms; }
+      var dE = raw - lastE;
+      if (Math.abs(dE) > 0.0008) { lastDown = dE > 0; lastE = raw; lastMove = ms; }
+
+      var e = raw / TRIG;
+      if (e >= 1 || (lastDown && raw >= HOLD_MIN && ms - lastMove > STILL_MS)) {
+        ph = AUTO;
+        /* من أين تتسلّم الساعة، وكم يلزمها لإكمال ما بقي من السقوط.
+           في المسار المعتاد p0 = PIN وfallMs = 0، فلا فرق البتّة */
+        p0 = Math.min(pd === null ? e * PIN : pd, PIN);
+        fallMs = (FALL_MS * (PIN - p0)) / PIN;
+        t0 = ms;
+        lock();
+      } else target = e * PIN;
     }
-    if (ph === AUTO) target = PIN + (1 - PIN) * clamp01((ms - t0) / AUTO_MS);
+    if (ph === AUTO) {
+      var el = ms - t0;
+      /* بقيّةُ السقوط بخطٍّ مستقيم لا بمنحنى: التخميد يذيب بدايته
+         وحده، والجاذبيةُ لا تتباطأ في آخر هبوطها */
+      target = el < fallMs
+        ? p0 + ((PIN - p0) * el) / fallMs
+        : PIN + (1 - PIN) * clamp01((el - fallMs) / AUTO_MS);
+      if (locked) settle(ms);
+    }
 
     if (pd === null) pd = target;
     var k = 1 - Math.pow(1 - 0.14, dt / 16.6667);
@@ -997,12 +1064,12 @@
   }
   function onResize() {
     layout();
-    draw(reduced ? STILL : (pd === null ? entry() * PIN : pd), 0);
+    draw(reduced ? STILL : (pd === null ? clamp01(entry() / TRIG) * PIN : pd), 0);
   }
 
   band.classList.add("on");
   layout();
-  draw(reduced ? STILL : entry() * PIN, 0);
+  draw(reduced ? STILL : clamp01(entry() / TRIG) * PIN, 0);
   window.addEventListener("resize", onResize);
 
   if (!reduced && "IntersectionObserver" in window) {
@@ -1043,8 +1110,11 @@
     t0 = 0;
     pd = null;
     last = 0;
+    lastE = -1;
+    lastMove = 0;
+    lastDown = true;
     setFade(0);
-    draw(entry() * PIN, 0);
+    draw(clamp01(entry() / TRIG) * PIN, 0);
     /* والمراقب لا يُنبّهنا هنا: حالة التقاطع لم تتبدّل، إنما تبدّلت
        حالتُنا نحن. فنسأل الرايةَ التي يحدّثها ونشغّل بأنفسنا. */
     if (visible) start();
