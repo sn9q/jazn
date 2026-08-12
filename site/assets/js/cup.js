@@ -997,8 +997,7 @@
     draw(1, 0);
   }
 
-  function frame(ms) {
-    if (!running) return;
+  function step(ms) {
     /* الفارق الزمني الحقيقي، لا افتراض ستّين إطاراً: التخميد بمعامل
        ثابت لكل إطار يعطي سرعتين مختلفتين على شاشة 60Hz و120Hz —
        وهذا وحده يكفي ليُقرأ المشهد «سريعاً» على جوالٍ حديث. */
@@ -1007,6 +1006,13 @@
 
     var target;
     if (ph === ENTER) {
+      /* الشريط صار في معظمه فوق الشاشة والحكاية لم تبدأ: الزائر
+         تجاوزها — إمّا صاعداً من أسفل، وإمّا بقفزةٍ في الموضع (رابط
+         مرساة، أو موضعٌ مستعاد). فتُختم ذائبةً: لا يُسحب إلى الوراء
+         ليشاهد ما تجاوزه، ولا يبقى الكانفسُ معتماً على إطارٍ قديم
+         فوق القسم — وهو ما كان يُرى فنجاناً متجمّداً. */
+      if (band.getBoundingClientRect().top < -VP * 0.5) { finish(); return; }
+
       var raw = entry();
       if (lastE < 0) { lastE = raw; lastMove = ms; }
       var dE = raw - lastE;
@@ -1050,14 +1056,45 @@
     }
 
     draw(pd, ms);
+  }
+
+  /* واستثناءٌ في إطارٍ واحد كان يقتل السلسلة كلها: rAF لا يُجدوَل،
+     وrunning يبقى true فيرفض start() إعادةَ التشغيل — فيتجمّد
+     الكانفس معتماً على آخر إطار، إلى الأبد. الآن يُختم المشهد
+     ذائباً فيرى الزائرُ القسمَ لا فنجاناً واقفاً. */
+  function frame(ms) {
+    if (!running) return;
+    beat = ms;
+    try {
+      step(ms);
+    } catch (e) {
+      finish();
+      return;
+    }
+    if (ph === END) { running = false; last = 0; return; }
     window.requestAnimationFrame(frame);
   }
 
   function start() {
-    if (running) return;
+    if (reduced || ph === END || running) return;
     running = true;
     last = 0;
     window.requestAnimationFrame(frame);
+  }
+
+  /* ─── إيقاظ الحلقة الميتة ───
+     الرايةُ وحدها لا تكفي دليلاً على الحياة: السلسلة قد تنقطع
+     وrunning باقيةٌ true، فيرفض start() إعادةَ التشغيل ويبقى
+     الكانفس معتماً على إطارٍ قديم فوق القسم — إلى الأبد. فالدليل
+     نبضٌ: زمن آخر إطارٍ نُفِّذ فعلاً. وأيُّ حدثٍ رخيص يوقظها. */
+  var beat = 0;
+  function wake() {
+    if (reduced || ph === END) return;
+    var r = band.getBoundingClientRect();
+    if (r.top >= VP || r.bottom <= 0) return;      // خارج الشاشة، فلتنم
+    if (running && (window.performance ? performance.now() : 0) - beat < 250) return;
+    running = false;
+    start();
   }
 
   function renderOnce() {
@@ -1092,6 +1129,12 @@
       },
       { threshold: 0 }
     ).observe(band);
+
+    /* حارسٌ فوق المراقب: المراقب لا ينبّه إلا عند تبدّل التقاطع، فلو
+       وقفت الحلقةُ والشريطُ ظاهرٌ (تبدّلٌ لم يره، أو إطارٌ سقط، أو
+       لسانٌ عاد من الخلفية) بقيت واقفةً وما فيه ما يوقظها. */
+    window.addEventListener("scroll", wake, { passive: true });
+    window.addEventListener("touchstart", wake, { passive: true });
   }
 
   /* الرجوع إلى الصفحة الرئيسية زيارةٌ جديدة فتُعاد الحكاية: الدخول
@@ -1101,7 +1144,8 @@
   /* اللسان مخفيّ والساعة تمشي: لا أحد ينظر، والـrAF يتوقّف أصلاً
      فتتجمّد الحكاية ويبقى القفل. نختمها ونفكّه. */
   document.addEventListener("visibilitychange", function () {
-    if (document.hidden && ph === AUTO) finish();
+    if (!document.hidden) { wake(); return; }
+    if (ph === AUTO) finish();
   });
 
   window.addEventListener("pageshow", function (e) {
