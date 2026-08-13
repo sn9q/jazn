@@ -1097,17 +1097,39 @@
     start();
   }
 
+  /* ─── الموضع خارج الحلقة ───
+     كل رسمٍ لا يصدر عن الحلقة (تحجيم، وصول اللوقو، أول رسمة) يسأل
+     هذه. وأول سؤالها: هل انتهت الحكاية؟ فإن انتهت فالموضع 1 مهما
+     قال التمرير — وهذا هو الفرق بين صفحةٍ سليمة وأخرى يعود إليها
+     الفنجان.
+
+     كان المعالج يستنتج الموضع من التمرير متى كان pd فارغاً، ولا
+     يسأل عن الطور. وpd يُفرَّغ حين يغادر الشريطُ الشاشة بعد
+     الانتهاء. فيجتمع الأمران في سفاري وحده: هو يطلق resize مع كل
+     ظهورٍ واختفاءٍ لشريط عنوانه أثناء التمرير (وكروم لا يفعل، فما
+     ظهر العيب في أي اختبار). فمن أكمل الحكاية ثم نزل ثم صعد إلى
+     الهيرو، يُعاد الرسمُ عند أول resize بموضعٍ محسوبٍ من التمرير
+     فترجع الشفافية إلى 1 ويطلع المشهد من جديد — ومع كل resize
+     تالٍ يتبع إصبعَه كأن الحكاية تُعاد. وحين يقف يبقى على
+     clamp01(entry()/TRIG)*PIN، وهي تساوي PIN بالضبط عند أي دخولٍ
+     فوق العتبة: فنجانٌ مستقرٌّ بلا بخار، متجمّدٌ فوق القسم. */
+  function restP() {
+    if (reduced) return STILL;
+    if (ph === END) return 1;
+    return pd === null ? clamp01(entry() / TRIG) * PIN : pd;
+  }
+
   function renderOnce() {
-    if (!running) draw(reduced ? STILL : lastP, 0);
+    if (!running) draw(restP(), 0);
   }
   function onResize() {
     layout();
-    draw(reduced ? STILL : (pd === null ? clamp01(entry() / TRIG) * PIN : pd), 0);
+    draw(restP(), 0);
   }
 
   band.classList.add("on");
   layout();
-  draw(reduced ? STILL : clamp01(entry() / TRIG) * PIN, 0);
+  draw(restP(), 0);
   window.addEventListener("resize", onResize);
 
   if (!reduced && "IntersectionObserver" in window) {
@@ -1124,7 +1146,7 @@
              تسرّب تمريرٌ من القفل. نختمها ذائبةً ونفكّ القفل حتى لا
              يجد الراجعُ نصفَ مشهد ولا صفحةً مقفلة. */
           if (ph === AUTO) finish();
-          else pd = null;
+          else if (ph === ENTER) pd = null;   // ومع END يبقى pd=1
         }
       },
       { threshold: 0 }
