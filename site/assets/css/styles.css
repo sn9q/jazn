@@ -160,6 +160,11 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 .on-night .section-lead { color: var(--sand); }
 
+/* التحويم على اللمس: سفاري يثبّت :hover بعد اللمسة فتبقى الحالة
+   مضيئةً حتى تُضغط بقعةٌ أخرى — والزائر يقرأها اختياراً قائماً لا
+   أثرَ ضغطةٍ انقضى (وهذا ما بلّغ عنه: زرُّ الانستقرام يرجع منوّراً).
+   فالتحويم لِمن يملك مؤشّراً يحوّم به، واللمسُ له :active وحده. */
+
 /* ---------- الهيدر ---------- */
 
 .site-header {
@@ -190,7 +195,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 
 .brand { display: inline-flex; align-items: center; transition: opacity var(--t-ui) var(--ease-out); }
-.brand:hover { opacity: 0.8; }
+@media (hover: hover) {
+  .brand:hover { opacity: 0.8; }
+}
 .brand img { height: 44px; width: auto; }
 
 .site-nav { display: flex; align-items: center; gap: clamp(16px, 3vw, 30px); }
@@ -207,8 +214,8 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   transition: opacity var(--t-ui) var(--ease-out), color var(--t-ui) var(--ease-out);
 }
 /* الرابط النشط يضيء بلون اللافتة، مثل ما تضيء لافتتنا */
-.site-nav a:hover,
 .site-nav a:focus-visible { opacity: 1; }
+@media (hover: hover) { .site-nav a:hover { opacity: 1; } }
 .site-nav a[aria-current="true"] { color: var(--amber); opacity: 1; text-shadow: 0 0 18px color-mix(in srgb, var(--amber) 55%, transparent); }
 
 /* ---------- الأزرار ---------- */
@@ -244,16 +251,24 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   color: var(--led-ink);
   box-shadow: 0 6px 26px -8px color-mix(in srgb, var(--sign-halo) 70%, transparent);
 }
-.btn-amber:hover { background: var(--sign-core); }
+@media (hover: hover) {
+  .btn-amber:hover { background: var(--sign-core); }
+}
 
 .btn-line-cream { border-color: color-mix(in srgb, var(--cream) 45%, transparent); color: var(--cream); background: transparent; }
-.btn-line-cream:hover { border-color: var(--cream); }
+@media (hover: hover) {
+  .btn-line-cream:hover { border-color: var(--cream); }
+}
 
 .btn-line-ink { border-color: var(--ink); color: var(--ink); background: transparent; }
-.btn-line-ink:hover { background: var(--ink); color: var(--cream); }
+@media (hover: hover) {
+  .btn-line-ink:hover { background: var(--ink); color: var(--cream); }
+}
 
 .btn-night { background: var(--night); color: var(--cream); }
-.btn-night:hover { background: var(--night-2); }
+@media (hover: hover) {
+  .btn-night:hover { background: var(--night-2); }
+}
 
 /* ---------- الهيرو: الليل واللافتة ---------- */
 
@@ -485,9 +500,11 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   padding: 22px 20px 20px;
   transition: transform var(--t-ui) var(--ease-out), box-shadow var(--t-ui) var(--ease-out);
 }
-.crop:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 38px -18px color-mix(in srgb, var(--wood-deep) 55%, transparent);
+@media (hover: hover) {
+  .crop:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 38px -18px color-mix(in srgb, var(--wood-deep) 55%, transparent);
+  }
 }
 
 /* كانت مصغّرة دائرية بجانب الاسم، وحُذفت: صورة صينية التقديم نفسها
@@ -659,11 +676,17 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-size: 0.97rem;
 }
 .btn-rate svg { color: var(--led); }
-.btn-rate:hover,
 .btn-rate:focus-visible {
   border-color: color-mix(in srgb, var(--amber) 70%, transparent);
   background: color-mix(in srgb, var(--amber) 10%, transparent);
   box-shadow: 0 6px 30px -10px color-mix(in srgb, var(--amber) 55%, transparent);
+}
+@media (hover: hover) {
+  .btn-rate:hover {
+  border-color: color-mix(in srgb, var(--amber) 70%, transparent);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+  box-shadow: 0 6px 30px -10px color-mix(in srgb, var(--amber) 55%, transparent);
+  }
 }
 
 /* ---------- متجر جَازن ---------- */
@@ -791,11 +814,13 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   transition: opacity 200ms var(--ease-out), transform 320ms var(--ease-back);
 }
 .social-fab__btn .i-close { opacity: 0; transform: rotate(-90deg) scale(0.6); }
-.social-fab__btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  --fab-glow:
-    0 0 36px 6px color-mix(in srgb, var(--sign-halo) 72%, transparent),
-    0 14px 28px -8px rgba(20, 12, 6, 0.6);
+@media (hover: hover) {
+  .social-fab__btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    --fab-glow:
+      0 0 36px 6px color-mix(in srgb, var(--sign-halo) 72%, transparent),
+      0 14px 28px -8px rgba(20, 12, 6, 0.6);
+  }
 }
 .social-fab__btn:active { transform: scale(0.92); }
 
@@ -851,10 +876,12 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   transition-delay: calc((1 - var(--i)) * 40ms);
 }
 .social-fab__list svg { width: 21px; height: 21px; }
-.social-fab__list a:hover {
-  background: var(--led);
-  color: var(--night);
-  border-color: var(--led);
+@media (hover: hover) {
+  .social-fab__list a:hover {
+    background: var(--led);
+    color: var(--night);
+    border-color: var(--led);
+  }
 }
 .social-fab__list a:active { transform: scale(0.95); }
 
@@ -919,7 +946,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   align-items: center;
   transition: color var(--t-ui) var(--ease-out);
 }
-.footer-nav a:hover { color: var(--cream); }
+@media (hover: hover) {
+  .footer-nav a:hover { color: var(--cream); }
+}
 
 .footer-social {
   list-style: none;
@@ -937,7 +966,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-size: 0.9rem;
   transition: color var(--t-ui) var(--ease-out);
 }
-.footer-social a:hover { color: var(--cream); }
+@media (hover: hover) {
+  .footer-social a:hover { color: var(--cream); }
+}
 .footer-social svg { width: 18px; height: 18px; flex: none; }
 .footer-social .handle { font-family: var(--font-latin); }
 
@@ -956,8 +987,8 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   text-decoration: none;
   text-underline-offset: 4px;
 }
-.footer-bottom a:hover,
 .footer-bottom a:focus-visible { text-decoration: underline; }
+@media (hover: hover) { .footer-bottom a:hover { text-decoration: underline; } }
 
 /* شريط الحقوق: آخر ما في الصفحة، بعرضها كاملاً.
    لونه ليلٌ مدفوءٌ بالخشب فيبين شريطاً مستقلاً تحت التذييل بلا
@@ -1019,7 +1050,9 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
   font-size: 0.93rem;
   transition: color var(--t-ui) var(--ease-out);
 }
-.mp-back:hover { color: var(--amber); }
+@media (hover: hover) {
+  .mp-back:hover { color: var(--amber); }
+}
 .mp-back svg { width: 18px; height: 18px; }
 
 .mp-tabs {

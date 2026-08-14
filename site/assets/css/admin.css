@@ -81,9 +81,13 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   color: var(--led-ink);   /* حروف اللافتة على زجاجها */
   box-shadow: 0 8px 24px -10px rgba(246, 228, 190, 0.75);
 }
-.adm-btn--primary:hover { transform: translateY(-1px); }
+@media (hover: hover) {
+  .adm-btn--primary:hover { transform: translateY(-1px); }
+}
 .adm-btn--ghost { background: transparent; border-color: rgba(246, 228, 190,0.35); color: var(--cream-100); }
-.adm-btn--ghost:hover { border-color: var(--led); color: var(--led); }
+@media (hover: hover) {
+  .adm-btn--ghost:hover { border-color: var(--led); color: var(--led); }
+}
 .adm-btn--danger { background: var(--red); color: var(--cream-050); }
 .adm-btn--block { width: 100%; }
 .adm-btn[disabled] { opacity: 0.55; pointer-events: none; }
@@ -219,7 +223,9 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   padding: 0.7rem 0.9rem; margin-bottom: 0.55rem;
   transition: border-color 0.2s;
 }
-.adm-item:hover { border-color: rgba(246, 228, 190,0.35); }
+@media (hover: hover) {
+  .adm-item:hover { border-color: rgba(246, 228, 190,0.35); }
+}
 .adm-item--off { opacity: 0.55; }
 .adm-item--signature { border-color: rgba(215,165,119,0.45); background: linear-gradient(120deg, rgba(223, 199, 154,0.14), rgba(36, 24, 17,0.55) 60%); }
 
@@ -269,10 +275,14 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
   color: var(--led);
   transition: 0.18s var(--ease);
 }
-.adm-icon-btn:hover { border-color: var(--led-edge); color: var(--led); }
+@media (hover: hover) {
+  .adm-icon-btn:hover { border-color: var(--led-edge); color: var(--led); }
+}
 .adm-icon-btn:active { transform: scale(0.93); }
 .adm-icon-btn svg { width: 17px; height: 17px; }
-.adm-icon-btn--danger:hover { border-color: var(--red); color: #F0C0B0; }
+@media (hover: hover) {
+  .adm-icon-btn--danger:hover { border-color: var(--red); color: #F0C0B0; }
+}
 .adm-icon-btn[disabled] { opacity: 0.3; pointer-events: none; }
 
 /* مفتاح الإظهار/الإخفاء */
@@ -312,7 +322,9 @@ a, button, input, select { touch-action: manipulation; -webkit-tap-highlight-col
 .adm-modal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
 .adm-modal__head h2 { font-size: 1.2rem; color: var(--cream-050); }
 .adm-modal__x { background: none; border: none; color: var(--led); font-size: 1.7rem; line-height: 1; cursor: pointer; padding: 0.1rem 0.4rem; }
-.adm-modal__x:hover { color: var(--led); }
+@media (hover: hover) {
+  .adm-modal__x:hover { color: var(--led); }
+}
 .adm-modal__foot { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.2rem; }
 .adm-delete__msg { color: var(--cream-100); font-size: 0.95rem; margin: 0; }
 .adm-delete__msg span { color: var(--led); font-weight: 600; }
