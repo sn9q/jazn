@@ -1168,6 +1168,29 @@
   draw(restP(), 0);
   window.addEventListener("resize", onResize);
 
+  /* ─── رابطٌ داخليّ: نيّةُ ذهابٍ لا نيّةُ دخول ───
+     من ضغط «الحلا» أو «وين مكاننا» طلب قسماً بعينه، والمتصفح يبدأ
+     تمريره إليه — فيعبر الشريطُ الشاشةَ في الطريق، فتتسلّم الحكايةُ
+     وتقفل الصفحةَ عند الشريط، فيموت التمرير في منتصفه ويبقى الزائر
+     حيث لا يريد. (قِيس: بعد ست ثوانٍ ونصف من ضغط «الزيارة» يبقى
+     رأسُ القسم على بُعد 4597px.) فالحكاية مدخلٌ إلى الصفحة، ومن
+     نادى قسماً فقد تجاوز المدخل باختياره: تُختم فوراً، فيمضي
+     التمرير إلى غايته والكانفس شفّاف لا يحجب شيئاً.
+
+     وبالالتقاط (capture) لتسبق أيَّ معالجٍ آخر وتسبق تمريرَ
+     المتصفح نفسه. وفيها مخرجٌ ثانٍ: من ضغط رابطاً والصفحةُ مقفولة
+     انفكّ عنه القفل ومضى — فالنقر لا يمنعه touch-action. ورابط
+     اللوقو (#top) هدفه فوق الشريط فلا يمسّ شيئاً. */
+  document.addEventListener("click", function (ev) {
+    if (reduced || ph === END) return;
+    var a = ev.target && ev.target.closest ? ev.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    var id = a.getAttribute("href").slice(1);
+    var t = id && document.getElementById(id);
+    if (!t) return;
+    if (t.getBoundingClientRect().top >= band.getBoundingClientRect().top) finish();
+  }, true);
+
   if (!reduced && "IntersectionObserver" in window) {
     new IntersectionObserver(
       function (entries) {
