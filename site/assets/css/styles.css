@@ -981,14 +981,20 @@ main section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 }
 /* الاسم بلا خطٍّ تحته: يبقى رابطاً ويُعرَف بوزنه لا بخطّه.
    والخط يعود عند التحويم وحده، فلا يفقده من يتصفح بلوحة مفاتيح */
+/* الخطّ تحت الاسم هنا مقصود، بخلاف ما كان: السطر كله هادئ خافت
+   إلا كلمة واحدة، فالخطّ هو ما يقول للعين إنها رابط. ولونه أخفت من
+   الحرف نفسه فلا يزاحمه، ويشتدّ عند التحويم والتركيز. */
 .footer-bottom a {
   color: var(--cream);
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, var(--cream) 45%, transparent);
+  transition: text-decoration-color var(--t-ui) var(--ease-out);
 }
-.footer-bottom a:focus-visible { text-decoration: underline; }
-@media (hover: hover) { .footer-bottom a:hover { text-decoration: underline; } }
+.footer-bottom a:focus-visible { text-decoration-color: var(--cream); }
+@media (hover: hover) { .footer-bottom a:hover { text-decoration-color: var(--cream); } }
 
 /* شريط الحقوق: آخر ما في الصفحة، بعرضها كاملاً.
    لونه ليلٌ مدفوءٌ بالخشب فيبين شريطاً مستقلاً تحت التذييل بلا
